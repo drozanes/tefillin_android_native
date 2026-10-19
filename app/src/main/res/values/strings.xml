@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Tefillin Mirror</string>
+    <string name="app_title">Tefillin Mirror</string>
+    <string name="app_subtitle">Tefillin Detection &amp; Halachic Alignment</string>
+
+    <string name="lang_toggle">עברית</string>
+    <string name="model_int8">⚡ INT8 (Fast)</string>
+    <string name="model_fp16">🎯 FP16 (Accurate)</string>
+    <string name="toggle_guides">🎯 Guidelines</string>
+    <string name="halacha_guide_title">Halachic Guide</string>
+    <string name="bug_report_title">Report Bug</string>
+
+    <!-- States -->
+    <string name="camera_starting">Starting camera...</string>
+    <string name="searching_face">Looking for face...</string>
+    <string name="no_face">No face detected in frame</string>
+    <string name="no_tefillin">⚠️ Tefillin NOT Detected on Head!</string>
+    <string name="no_tefillin_sub">Put on your Head Tefillin above forehead to detect.</string>
+    <string name="initial_guide_title">Please put on Head Tefillin</string>
+    <string name="initial_guide_sub">System is detecting Tefillin above forehead...</string>
+
+    <!-- Guidance & Arrows -->
+    <string name="move_up_title">⬆️ Move Tefillin UP!</string>
+    <string name="move_up_sub">Tefillin touches forehead! Move up onto hair area.</string>
+    <string name="adjust_knot_guide">🎥 Guide: How to adjust the knot</string>
+    <string name="move_left_title">⬅️ Move Tefillin LEFT</string>
+    <string name="move_left_sub">Move Tefillin to your left side</string>
+    <string name="move_right_title">➡️ Move Tefillin RIGHT</string>
+    <string name="move_right_sub">Move Tefillin to your right side</string>
+    <string name="borderline_title">⚠️ Very Close to Forehead</string>
+    <string name="borderline_sub">Tefillin rests on hair area, but very close to the hairline.</string>
+    <string name="perfect_title">✨ Tefillin Properly Aligned!</string>
+    <string name="perfect_sub">Entire Tefillin is centered and resting strictly on hair area.</string>
+    <string name="camera_angle_title">📐 Adjust Camera Height</string>
+    <string name="camera_too_low">📐 Camera Too Low</string>
+    <string name="camera_too_low_sub">📐 Camera too low - please hold device at eye level</string>
+    <string name="camera_too_high">📐 Camera Too High</string>
+    <string name="camera_too_high_sub">📐 Camera too high - please hold device at eye level</string>
+
+    <!-- Badges -->
+    <string name="touches_forehead_alert">⬆️ Touches Forehead</string>
+    <string name="off_center_alert">Off-center</string>
+    <string name="borderline_alert">Borderline</string>
+    <string name="perfect_alert">Properly Aligned</string>
+
+    <!-- Halacha Modal -->
+    <string name="modal_title">Halachic Rules for Head Tefillin</string>
+    <string name="modal_rule1_title">1. Horizontal Symmetry</string>
+    <string name="modal_rule1_text">The Shel Rosh Tefillin must sit EXACTLY in the middle between your eyes. Lateral deviation invalidates the mitzvah.</string>
+    <string name="modal_rule2_title">2. Strict Hair Growth Boundary</string>
+    <string name="modal_rule2_text">The ENTIRE Tefillin and base MUST sit on scalp hair. If even a fraction touches forehead skin, the mitzvah is invalidated!</string>
+    <string name="modal_rule3_title">3. Real-Time Camera Verification</string>
+    <string name="modal_rule3_text">The system identifies the Head Tefillin and verifies that all parts rest strictly on the hair growth area.</string>
+    <string name="close">Close</string>
+
+    <!-- Bug Report -->
+    <string name="bug_modal_title">🐞 Report an Issue</string>
+    <string name="bug_intro">Having trouble with detection or stability? Capture a snapshot and diagnostic logs to share with developers.</string>
+    <string name="bug_notes_label">Brief description (optional):</string>
+    <string name="bug_notes_hint">e.g., Tefillin placed correctly but marked invalid</string>
+    <string name="capture_and_share">Capture Snapshot &amp; Share</string>
+    <string name="copy_logs">Copy Logs to Clipboard</string>
+    <string name="footer_text">Tefillin Mirror • Real-Time Halachic Tefillin Alignment</string>
+    <string name="permission_required">Camera permission is required to align Tefillin</string>
+    <string name="grant_permission">Grant Permission</string>
+</resources>

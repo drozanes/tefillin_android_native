@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">מראת תפילין</string>
+    <string name="app_title">מראת תפילין</string>
+    <string name="app_subtitle">זיהוי תפילין + בדיקת אמצע ומקום שיער</string>
+
+    <string name="lang_toggle">English</string>
+    <string name="model_int8">⚡ INT8 (מהיר)</string>
+    <string name="model_fp16">🎯 FP16 (מדויק)</string>
+    <string name="toggle_guides">🎯 קווי עזר</string>
+    <string name="halacha_guide_title">הלכות תפילין</string>
+    <string name="bug_report_title">דיווח על בעיה</string>
+
+    <!-- States -->
+    <string name="camera_starting">מפעיל מצלמה...</string>
+    <string name="searching_face">מחפש פנים...</string>
+    <string name="no_face">לא זוהו פנים בפריים</string>
+    <string name="no_tefillin">⚠️ לא זוהו תפילין על הראש!</string>
+    <string name="no_tefillin_sub">חבשו את התפילין של ראש מעל המצח כדי שהמערכת תזהה אותן.</string>
+    <string name="initial_guide_title">אנא הניחו את התפילין של ראש</string>
+    <string name="initial_guide_sub">המערכת מזהה את התפילין מעל המצח...</string>
+
+    <!-- Guidance & Arrows -->
+    <string name="move_up_title">⬆️ הרימו את התפילין למעלה!</string>
+    <string name="move_up_sub">התפילין נוגעות במצח! יש להרים אל מקום השיער.</string>
+    <string name="adjust_knot_guide">🎥 מדריך: איך להקטין את הקשר</string>
+    <string name="move_left_title">⬅️ הזיזו את התפילין שמאלה</string>
+    <string name="move_left_sub">הזיזו את התפילין שמאלה (לצד שמאל שלכם)</string>
+    <string name="move_right_title">➡️ הזיזו את התפילין ימינה</string>
+    <string name="move_right_sub">הזיזו את התפילין ימינה (לצד ימין שלכם)</string>
+    <string name="borderline_title">⚠️ קרוב מאוד למצח</string>
+    <string name="borderline_sub">התפילין במקום שיער אך קרובות מאוד לגבול.</string>
+    <string name="perfect_title">✨ התפילין מונחות כהלכה!</string>
+    <string name="perfect_sub">התפילין במרכז המדויק ומעל קו השיער.</string>
+    <string name="camera_angle_title">📐 כווננו את גובה המצלמה</string>
+    <string name="camera_too_low">📐 מצלמה נמוכה מדי</string>
+    <string name="camera_too_low_sub">📐 מצלמה נמוכה מדי - יש להחזיק את המכשיר מול הפנים בגובה העיניים</string>
+    <string name="camera_too_high">📐 מצלמה גבוהה מדי</string>
+    <string name="camera_too_high_sub">📐 מצלמה גבוהה מדי - יש להחזיק את המכשיר מול הפנים בגובה העיניים</string>
+
+    <!-- Badges -->
+    <string name="touches_forehead_alert">⬆️ נוגע במצח</string>
+    <string name="off_center_alert">לא ממורכז</string>
+    <string name="borderline_alert">גבולי</string>
+    <string name="perfect_alert">מונח כהלכה</string>
+
+    <!-- Halacha Modal -->
+    <string name="modal_title">הלכות מקום הנחת תפילין של ראש</string>
+    <string name="modal_rule1_title">1. מקום הנחה ברוחב (אמצע)</string>
+    <string name="modal_rule1_text">תפילין של ראש חייבות להיות מכוונות באמצע ממש בין שתי העיניים. חריגה לצדדים פוסלת את המצווה.</string>
+    <string name="modal_rule2_title">2. מקום הנחה בגובה (כל התפילין במקום שיער)</string>
+    <string name="modal_rule2_text">התפילין והמעברתא חייבות לשבת כולן במקום ששיער ראשו צומח. אם ירדה אפילו מקצת התפילין על המצח - אינו יוצא ידי חובה וברכתו לבטלה!</string>
+    <string name="modal_rule3_title">3. זיהוי התפילין במצלמה</string>
+    <string name="modal_rule3_text">המערכת מזהה את התפילין במרכז המצח, ומוודאת שכל שטח התפילין מונח מעל שורשי השיער.</string>
+    <string name="close">סגור</string>
+
+    <!-- Bug Report -->
+    <string name="bug_modal_title">🐞 דיווח על בעיה</string>
+    <string name="bug_intro">נתקלתם בבעיה בזיהוי התפילין או ביציבות? באפשרותכם לצלם תמונת מסך ולשתף לוגים טכניים ישירות.</string>
+    <string name="bug_notes_label">תיאור קצר (לא חובה):</string>
+    <string name="bug_notes_hint">למשל: התפילין במקום הנכון אך זוהו כפסולות</string>
+    <string name="capture_and_share">צלם תמונת מסך ולוגים ושתף</string>
+    <string name="copy_logs">העתק לוגים ללוח</string>
+    <string name="footer_text">מראת תפילין • זיהוי תפילין מדויק בזמן אמת</string>
+    <string name="permission_required">נדרשת הרשאת מצלמה לצורך כיוון התפילין</string>
+    <string name="grant_permission">אשר הרשאה</string>
+</resources>

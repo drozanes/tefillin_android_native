@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="bg_primary">#0B0F19</color>
+    <color name="bg_surface">#151C2C</color>
+    <color name="bg_surface_elevated">#1E293B</color>
+    <color name="bg_surface_translucent">#D0151C2C</color>
+    <color name="card_border">#2E384D</color>
+    
+    <color name="accent_gold">#F59E0B</color>
+    <color name="accent_gold_glow">#59F59E0B</color>
+    <color name="accent_gold_dark">#B45309</color>
+    <color name="accent_cyan">#38BDF8</color>
+    <color name="accent_green">#22C55E</color>
+    <color name="accent_green_glow">#6622C55E</color>
+    <color name="accent_red">#EF4444</color>
+    <color name="accent_red_glow">#66EF4444</color>
+    <color name="accent_yellow">#EAB308</color>
+
+    <color name="text_main">#F8FAFC</color>
+    <color name="text_muted">#94A3B8</color>
+    <color name="text_subtle">#64748B</color>
+
+    <color name="overlay_hairline">#22C55E</color>
+    <color name="overlay_midline">#FBBF24</color>
+    <color name="overlay_box_aligned">#22C55E</color>
+    <color name="overlay_box_error">#EF4444</color>
+</resources>
