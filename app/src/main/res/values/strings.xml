@@ -7,9 +7,13 @@
 
     <!-- Top Bar Controls -->
     <string name="lang_toggle">עברית</string>
-    <string name="model_fp16">🎯 FP16 (Accurate)</string>
-    <string name="model_int8">⚡ INT8 (Fast)</string>
-    <string name="toggle_guides">Guidelines</string>
+    <string name="model_fp16">🎯 FP16</string>
+    <string name="model_int8">⚡ INT8</string>
+    <string name="model_switched_fp16">🎯 Switched to FP16 (High Accuracy)</string>
+    <string name="model_switched_int8">⚡ Switched to INT8 (High Speed)</string>
+    <string name="toggle_guides">📐 Guides</string>
+    <string name="guides_on">📐 Guides</string>
+    <string name="guides_off">📐 Guides: Off</string>
     <string name="halacha_guide_title">Halachic Guide</string>
     <string name="bug_report_title">Report Bug</string>
 

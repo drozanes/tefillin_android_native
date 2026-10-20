@@ -7,9 +7,13 @@
 
     <!-- Top Bar Controls -->
     <string name="lang_toggle">English</string>
-    <string name="model_fp16">🎯 FP16 (מדויק)</string>
-    <string name="model_int8">⚡ INT8 (מהיר)</string>
-    <string name="toggle_guides">קווי עזר</string>
+    <string name="model_fp16">🎯 FP16</string>
+    <string name="model_int8">⚡ INT8</string>
+    <string name="model_switched_fp16">🎯 מודל FP16 פעיל (דיוק מרבי)</string>
+    <string name="model_switched_int8">⚡ מודל INT8 פעיל (מהירות מרבית)</string>
+    <string name="toggle_guides">📐 קווי עזר</string>
+    <string name="guides_on">📐 קווי עזר</string>
+    <string name="guides_off">📐 קווי עזר: כבוי</string>
     <string name="halacha_guide_title">הלכות תפילין</string>
     <string name="bug_report_title">דיווח על תקלה</string>
 

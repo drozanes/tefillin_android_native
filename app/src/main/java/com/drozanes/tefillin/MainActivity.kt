@@ -12,13 +12,15 @@ import android.os.Bundle
 import android.os.SystemClock
 import android.util.Log
 import android.view.View
-import android.widget.AdapterView
-import android.widget.ArrayAdapter
+import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.camera.core.*
 import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.core.content.ContextCompat
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
+import androidx.core.view.updatePadding
 import com.drozanes.tefillin.cv.GeometryStabilizer
 import com.drozanes.tefillin.cv.TefillinEngine
 import com.drozanes.tefillin.cv.YoloDetector
@@ -91,6 +93,32 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        // Apply Window Insets for modern Android edge-to-edge screens.
+        // Guarantees all buttons and titles sit comfortably below the physical status bar and camera punch-hole!
+        ViewCompat.setOnApplyWindowInsetsListener(binding.mainRoot) { _, insets ->
+            val statusBarInsets = insets.getInsets(
+                WindowInsetsCompat.Type.statusBars() or WindowInsetsCompat.Type.displayCutout()
+            )
+            val navBarInsets = insets.getInsets(
+                WindowInsetsCompat.Type.navigationBars()
+            )
+
+            val density = resources.displayMetrics.density
+            val safeTopPadding = max(statusBarInsets.top + (8 * density).toInt(), (14 * density).toInt())
+            binding.headerLayout.updatePadding(
+                top = safeTopPadding,
+                bottom = (10 * density).toInt()
+            )
+
+            val safeBottomPadding = max(navBarInsets.bottom + (8 * density).toInt(), (10 * density).toInt())
+            binding.footerLayout.updatePadding(
+                bottom = safeBottomPadding,
+                top = (8 * density).toInt()
+            )
+
+            insets
+        }
+
         cameraExecutor = Executors.newSingleThreadExecutor()
 
         initAiEngines()
@@ -123,30 +151,30 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun setupUI() {
-        // Model Selector: FP16 is default (Index 0)
-        val modelOptions = listOf(
-            getString(R.string.model_fp16),
-            getString(R.string.model_int8)
-        )
-        val spinnerAdapter = ArrayAdapter(this, android.R.layout.simple_spinner_dropdown_item, modelOptions)
-        binding.spinnerModel.adapter = spinnerAdapter
+        // 1. Model Selector Toggle Pill Button (FP16 by default)
+        val initialModel = prefs.getString(KEY_SELECTED_MODEL, YoloDetector.MODEL_FP16) ?: YoloDetector.MODEL_FP16
+        updateModelButtonUi(initialModel)
 
-        val savedModel = prefs.getString(KEY_SELECTED_MODEL, YoloDetector.MODEL_FP16)
-        binding.spinnerModel.setSelection(if (savedModel == YoloDetector.MODEL_UINT8) 1 else 0)
+        binding.btnModelSelect.setOnClickListener {
+            val currentModel = prefs.getString(KEY_SELECTED_MODEL, YoloDetector.MODEL_FP16) ?: YoloDetector.MODEL_FP16
+            val nextModel = if (currentModel == YoloDetector.MODEL_FP16) YoloDetector.MODEL_UINT8 else YoloDetector.MODEL_FP16
+            prefs.edit().putString(KEY_SELECTED_MODEL, nextModel).apply()
+            updateModelButtonUi(nextModel)
 
-        binding.spinnerModel.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-                val selectedModel = if (position == 0) YoloDetector.MODEL_FP16 else YoloDetector.MODEL_UINT8
-                prefs.edit().putString(KEY_SELECTED_MODEL, selectedModel).apply()
-                cameraExecutor.execute {
-                    yoloDetector?.loadModel(selectedModel)
-                    DiagnosticLogger.info("Model switched to: $selectedModel")
-                }
+            cameraExecutor.execute {
+                yoloDetector?.loadModel(nextModel)
+                DiagnosticLogger.info("Model switched to: $nextModel")
             }
-            override fun onNothingSelected(parent: AdapterView<*>?) {}
+
+            val toastMsg = if (nextModel == YoloDetector.MODEL_UINT8) {
+                getString(R.string.model_switched_int8)
+            } else {
+                getString(R.string.model_switched_fp16)
+            }
+            Toast.makeText(this, toastMsg, Toast.LENGTH_SHORT).show()
         }
 
-        // Language Switcher Button (Shows next target language or short name)
+        // 2. Language Switcher Button (Shows next target language)
         val nextLang = LocaleManager.getNextLanguage(this)
         binding.btnLangToggle.text = nextLang.displayName
         binding.btnLangToggle.setOnClickListener {
@@ -156,20 +184,21 @@ class MainActivity : AppCompatActivity() {
             recreate()
         }
 
-        // Guidelines Toggle
+        // 3. Guidelines Toggle Pill Button
+        updateGuidesButtonUi(binding.overlayView.showGuides)
         binding.btnToggleGuides.setOnClickListener {
-            binding.overlayView.showGuides = !binding.overlayView.showGuides
+            val nextState = !binding.overlayView.showGuides
+            binding.overlayView.showGuides = nextState
             binding.overlayView.invalidate()
-            val alpha = if (binding.overlayView.showGuides) 1.0f else 0.4f
-            binding.btnToggleGuides.alpha = alpha
+            updateGuidesButtonUi(nextState)
         }
 
-        // Halacha Guide Info
+        // 4. Halacha Guide Info
         binding.btnInfo.setOnClickListener {
             HalachaDialog(this).show()
         }
 
-        // Bug Report Dialog
+        // 5. Bug Report Dialog
         binding.btnBugReport.setOnClickListener {
             val snapshot = binding.previewView.bitmap ?: latestBitmapSnapshot
             val activeModel = yoloDetector?.getActiveModel() ?: "unknown"
@@ -177,7 +206,7 @@ class MainActivity : AppCompatActivity() {
             BugReportDialog(this, snapshot, activeModel, isGpu, lastCameraResolution).show()
         }
 
-        // Knot Guide Video Link
+        // 6. Knot Guide Video Link
         binding.tvKnotGuideLink.setOnClickListener {
             try {
                 val intent = Intent(Intent.ACTION_VIEW, Uri.parse(KNOT_GUIDE_URL))
@@ -187,9 +216,31 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
-        // Permission Button
+        // 7. Permission Button
         binding.btnGrantPermission.setOnClickListener {
             checkCameraPermission()
+        }
+    }
+
+    private fun updateModelButtonUi(model: String) {
+        if (model == YoloDetector.MODEL_UINT8) {
+            binding.btnModelSelect.text = getString(R.string.model_int8)
+            binding.btnModelSelect.setTextColor(ContextCompat.getColor(this, R.color.accent_cyan))
+        } else {
+            binding.btnModelSelect.text = getString(R.string.model_fp16)
+            binding.btnModelSelect.setTextColor(ContextCompat.getColor(this, R.color.accent_gold))
+        }
+    }
+
+    private fun updateGuidesButtonUi(showGuides: Boolean) {
+        if (showGuides) {
+            binding.btnToggleGuides.text = getString(R.string.guides_on)
+            binding.btnToggleGuides.alpha = 1.0f
+            binding.btnToggleGuides.setTextColor(ContextCompat.getColor(this, R.color.accent_gold))
+        } else {
+            binding.btnToggleGuides.text = getString(R.string.guides_off)
+            binding.btnToggleGuides.alpha = 0.55f
+            binding.btnToggleGuides.setTextColor(ContextCompat.getColor(this, R.color.text_subtle))
         }
     }
 

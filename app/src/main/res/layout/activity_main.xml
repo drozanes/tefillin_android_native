@@ -5,6 +5,7 @@
     android:id="@+id/mainRoot"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:fitsSystemWindows="false"
     android:background="@color/bg_primary">
 
     <!-- Top App Bar / Header -->
@@ -14,15 +15,15 @@
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:background="@color/bg_surface"
-        android:paddingHorizontal="12dp"
-        android:paddingTop="8dp"
-        android:paddingBottom="8dp"
+        android:paddingHorizontal="14dp"
+        android:paddingTop="12dp"
+        android:paddingBottom="10dp"
         android:elevation="8dp"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent">
 
-        <!-- Top Row: Logo & Title (Start), Actions (End) -->
+        <!-- Top Row: Logo & Title (Start), Action Buttons (End) -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -38,8 +39,8 @@
                 android:orientation="horizontal">
 
                 <TextView
-                    android:layout_width="32dp"
-                    android:layout_height="32dp"
+                    android:layout_width="34dp"
+                    android:layout_height="34dp"
                     android:gravity="center"
                     android:text="🪞"
                     android:textSize="18sp"
@@ -52,65 +53,62 @@
                     android:layout_marginStart="8dp"
                     android:text="@string/app_title"
                     android:textColor="@color/text_main"
-                    android:textSize="16sp"
+                    android:textSize="17sp"
                     android:textStyle="bold"
                     android:singleLine="true"
                     android:ellipsize="end" />
             </LinearLayout>
 
-            <!-- Compact Actions: Model, Lang, Guides, Info, Bug -->
+            <!-- Quick Action Buttons: Language, Info, Bug -->
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
                 android:gravity="center_vertical">
 
-                <Spinner
-                    android:id="@+id/spinnerModel"
-                    android:layout_width="wrap_content"
-                    android:layout_height="32dp"
-                    android:background="@drawable/bg_button_rounded"
-                    android:paddingHorizontal="4dp"
-                    android:layout_marginEnd="4dp" />
-
-                <Button
+                <!-- Language Switcher Pill Button -->
+                <com.google.android.material.button.MaterialButton
                     android:id="@+id/btnLangToggle"
                     android:layout_width="wrap_content"
-                    android:layout_height="32dp"
-                    android:minWidth="34dp"
-                    android:paddingHorizontal="8dp"
+                    android:layout_height="38dp"
+                    android:minWidth="0dp"
+                    android:minHeight="0dp"
+                    android:insetTop="0dp"
+                    android:insetBottom="0dp"
+                    android:insetLeft="0dp"
+                    android:insetRight="0dp"
+                    android:paddingHorizontal="10dp"
+                    android:paddingVertical="0dp"
                     android:text="@string/lang_toggle"
                     android:textSize="12sp"
                     android:textStyle="bold"
                     android:textColor="@color/accent_cyan"
                     android:background="@drawable/bg_button_rounded"
+                    app:backgroundTint="@null"
                     android:textAllCaps="false"
-                    android:layout_marginEnd="4dp" />
+                    app:cornerRadius="10dp"
+                    android:layout_marginEnd="6dp" />
 
-                <ImageButton
-                    android:id="@+id/btnToggleGuides"
-                    android:layout_width="32dp"
-                    android:layout_height="32dp"
-                    android:src="@android:drawable/ic_menu_compass"
-                    app:tint="@color/accent_gold"
-                    android:background="@drawable/bg_button_rounded"
-                    android:contentDescription="@string/toggle_guides"
-                    android:layout_marginEnd="4dp" />
-
+                <!-- Halacha Info -->
                 <ImageButton
                     android:id="@+id/btnInfo"
-                    android:layout_width="32dp"
-                    android:layout_height="32dp"
+                    android:layout_width="38dp"
+                    android:layout_height="38dp"
+                    android:padding="8dp"
+                    android:scaleType="fitCenter"
                     android:src="@android:drawable/ic_menu_info_details"
                     app:tint="@color/text_muted"
                     android:background="@drawable/bg_button_rounded"
                     android:contentDescription="@string/halacha_guide_title"
-                    android:layout_marginEnd="4dp" />
+                    android:layout_marginEnd="6dp" />
 
+                <!-- Bug Report -->
                 <ImageButton
                     android:id="@+id/btnBugReport"
-                    android:layout_width="32dp"
-                    android:layout_height="32dp"
+                    android:layout_width="38dp"
+                    android:layout_height="38dp"
+                    android:padding="8dp"
+                    android:scaleType="fitCenter"
                     android:src="@android:drawable/ic_menu_report_image"
                     app:tint="@color/accent_red"
                     android:background="@drawable/bg_button_rounded"
@@ -119,19 +117,73 @@
 
         </LinearLayout>
 
-        <!-- Subtitle Row: Full-width dedicated row so text NEVER squishes into 2 characters! -->
-        <TextView
-            android:id="@+id/tvAppSubTitle"
+        <!-- Subtitle & Controls Row: Subtitle (Start) & Model + Guides Toggles (End) -->
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="3dp"
-            android:layout_marginStart="40dp"
-            android:text="@string/app_subtitle"
-            android:textColor="@color/accent_gold"
-            android:textSize="11sp"
-            android:textStyle="bold"
-            android:singleLine="true"
-            android:ellipsize="end" />
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:layout_marginTop="6dp">
+
+            <TextView
+                android:id="@+id/tvAppSubTitle"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_marginStart="42dp"
+                android:text="@string/app_subtitle"
+                android:textColor="@color/accent_gold"
+                android:textSize="12sp"
+                android:textStyle="bold"
+                android:singleLine="true"
+                android:ellipsize="end" />
+
+            <!-- Model Selector Pill Button -->
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnModelSelect"
+                android:layout_width="wrap_content"
+                android:layout_height="36dp"
+                android:minWidth="0dp"
+                android:minHeight="0dp"
+                android:insetTop="0dp"
+                android:insetBottom="0dp"
+                android:insetLeft="0dp"
+                android:insetRight="0dp"
+                android:paddingHorizontal="10dp"
+                android:paddingVertical="0dp"
+                android:text="@string/model_fp16"
+                android:textSize="11sp"
+                android:textStyle="bold"
+                android:textColor="@color/accent_gold"
+                android:background="@drawable/bg_button_rounded"
+                app:backgroundTint="@null"
+                android:textAllCaps="false"
+                app:cornerRadius="10dp"
+                android:layout_marginEnd="6dp" />
+
+            <!-- Guidelines Toggle Pill Button -->
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnToggleGuides"
+                android:layout_width="wrap_content"
+                android:layout_height="36dp"
+                android:minWidth="0dp"
+                android:minHeight="0dp"
+                android:insetTop="0dp"
+                android:insetBottom="0dp"
+                android:insetLeft="0dp"
+                android:insetRight="0dp"
+                android:paddingHorizontal="10dp"
+                android:paddingVertical="0dp"
+                android:text="@string/guides_on"
+                android:textSize="11sp"
+                android:textStyle="bold"
+                android:textColor="@color/text_main"
+                android:background="@drawable/bg_button_rounded"
+                app:backgroundTint="@null"
+                android:textAllCaps="false"
+                app:cornerRadius="10dp" />
+
+        </LinearLayout>
 
     </LinearLayout>
 
@@ -161,17 +213,18 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="top|center_horizontal"
-            android:layout_marginTop="16dp"
+            android:layout_marginTop="20dp"
             android:orientation="horizontal"
             android:gravity="center_vertical"
             android:background="@drawable/bg_status_pill"
-            android:paddingHorizontal="16dp"
-            android:paddingVertical="8dp">
+            android:paddingHorizontal="18dp"
+            android:paddingVertical="9dp"
+            android:elevation="4dp">
 
             <View
                 android:id="@+id/statusDot"
-                android:layout_width="10dp"
-                android:layout_height="10dp"
+                android:layout_width="12dp"
+                android:layout_height="12dp"
                 android:background="@drawable/dot_searching"
                 android:layout_marginEnd="8dp" />
 
@@ -181,7 +234,7 @@
                 android:layout_height="wrap_content"
                 android:text="@string/camera_starting"
                 android:textColor="@color/text_main"
-                android:textSize="13sp"
+                android:textSize="14sp"
                 android:textStyle="bold" />
         </LinearLayout>
 
@@ -192,23 +245,30 @@
             android:layout_height="wrap_content"
             android:layout_gravity="bottom"
             android:layout_marginHorizontal="16dp"
-            android:layout_marginBottom="16dp"
+            android:layout_marginBottom="20dp"
             android:orientation="horizontal"
             android:gravity="center_vertical"
             android:background="@drawable/bg_glass_card"
-            android:padding="16dp">
+            android:padding="16dp"
+            android:elevation="6dp">
 
-            <!-- Big Arrow / Icon -->
-            <TextView
-                android:id="@+id/tvDirectionArrow"
-                android:layout_width="48dp"
-                android:layout_height="48dp"
-                android:gravity="center"
-                android:text="🔍"
-                android:textSize="28sp"
-                android:layout_marginEnd="12dp" />
+            <!-- Big Arrow / Icon Container -->
+            <FrameLayout
+                android:layout_width="52dp"
+                android:layout_height="52dp"
+                android:background="@drawable/bg_direction_circle"
+                android:layout_marginEnd="14dp">
 
-            <!-- Title & Subtitle -->
+                <TextView
+                    android:id="@+id/tvDirectionArrow"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:text="🔍"
+                    android:textSize="28sp" />
+            </FrameLayout>
+
+            <!-- Title & Subtitle Container -->
             <LinearLayout
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
@@ -221,7 +281,7 @@
                     android:layout_height="wrap_content"
                     android:text="@string/initial_guide_title"
                     android:textColor="@color/text_main"
-                    android:textSize="15sp"
+                    android:textSize="16sp"
                     android:textStyle="bold" />
 
                 <TextView
@@ -230,9 +290,11 @@
                     android:layout_height="wrap_content"
                     android:text="@string/initial_guide_sub"
                     android:textColor="@color/text_muted"
-                    android:textSize="12sp"
-                    android:layout_marginTop="2dp" />
+                    android:textSize="13sp"
+                    android:lineSpacingExtra="2dp"
+                    android:layout_marginTop="3dp" />
 
+                <!-- Knot Guide Link Chip -->
                 <TextView
                     android:id="@+id/tvKnotGuideLink"
                     android:layout_width="wrap_content"
@@ -241,7 +303,10 @@
                     android:textColor="#FFBBA6"
                     android:textSize="12sp"
                     android:textStyle="bold"
-                    android:layout_marginTop="4dp"
+                    android:background="@drawable/bg_chip_knot"
+                    android:paddingHorizontal="10dp"
+                    android:paddingVertical="5dp"
+                    android:layout_marginTop="6dp"
                     android:visibility="gone" />
             </LinearLayout>
 
@@ -277,7 +342,7 @@
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/btnGrantPermission"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="48dp"
                 android:text="@string/grant_permission"
                 app:backgroundTint="@color/accent_gold"
                 android:textColor="@color/bg_primary"
@@ -296,7 +361,7 @@
         android:orientation="horizontal"
         android:gravity="center"
         android:background="@color/bg_surface"
-        android:paddingVertical="8dp"
+        android:paddingVertical="10dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent">

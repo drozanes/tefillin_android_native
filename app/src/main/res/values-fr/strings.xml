@@ -5,9 +5,13 @@
     <string name="app_subtitle">Détection des Téfilines &amp; Alignement Halakhique</string>
 
     <string name="lang_toggle">Français</string>
-    <string name="model_fp16">🎯 FP16 (Précis)</string>
-    <string name="model_int8">⚡ INT8 (Rapide)</string>
-    <string name="toggle_guides">Repères</string>
+    <string name="model_fp16">🎯 FP16</string>
+    <string name="model_int8">⚡ INT8</string>
+    <string name="model_switched_fp16">🎯 Mode FP16 Actif (Haute Précision)</string>
+    <string name="model_switched_int8">⚡ Mode INT8 Actif (Haute Vitesse)</string>
+    <string name="toggle_guides">📐 Repères</string>
+    <string name="guides_on">📐 Repères</string>
+    <string name="guides_off">📐 Repères: Désactivés</string>
     <string name="halacha_guide_title">Guide Halakhique</string>
     <string name="bug_report_title">Signaler un Problème</string>
 
