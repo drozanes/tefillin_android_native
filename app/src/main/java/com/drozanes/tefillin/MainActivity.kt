@@ -15,9 +15,11 @@ import android.view.View
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatDelegate
 import androidx.camera.core.*
 import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.core.content.ContextCompat
+import androidx.core.os.LocaleListCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.updatePadding
@@ -52,6 +54,10 @@ class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
     private lateinit var cameraExecutor: ExecutorService
     private lateinit var prefs: SharedPreferences
+
+    // CameraX Lifecycle References
+    private var cameraProvider: ProcessCameraProvider? = null
+    private var imageAnalysis: ImageAnalysis? = null
 
     // AI & CV Components
     private var faceLandmarker: FaceLandmarkHelper? = null
@@ -90,6 +96,14 @@ class MainActivity : AppCompatActivity() {
         DiagnosticLogger.info("Application boot: Native Android Tefillin App")
 
         prefs = getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
+
+        // Ensure default app locale is synchronized to user choice (default Hebrew)
+        val savedLang = LocaleManager.getLanguage(this)
+        val currentAppLocales = AppCompatDelegate.getApplicationLocales()
+        if (currentAppLocales.isEmpty) {
+            AppCompatDelegate.setApplicationLocales(LocaleListCompat.forLanguageTags(savedLang))
+        }
+
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
@@ -176,12 +190,12 @@ class MainActivity : AppCompatActivity() {
 
         // 2. Language Switcher Button (Shows next target language)
         val nextLang = LocaleManager.getNextLanguage(this)
-        binding.btnLangToggle.text = nextLang.displayName
+        binding.btnLangToggle.text = if (nextLang == LocaleManager.LANG_ENGLISH) "English" else "עברית"
         binding.btnLangToggle.setOnClickListener {
             val target = LocaleManager.getNextLanguage(this)
-            LocaleManager.setLanguage(this, target.code)
-            DiagnosticLogger.info("Language changed to: ${target.code}")
-            recreate()
+            DiagnosticLogger.info("Language switching to: $target")
+            stopCameraSafely()
+            LocaleManager.setLanguage(this, target)
         }
 
         // 3. Guidelines Toggle Pill Button
@@ -256,34 +270,75 @@ class MainActivity : AppCompatActivity() {
     private fun startCamera() {
         val cameraProviderFuture = ProcessCameraProvider.getInstance(this)
         cameraProviderFuture.addListener({
-            val cameraProvider = cameraProviderFuture.get()
-
-            // Selfie front camera (mirrored by default)
-            val cameraSelector = CameraSelector.DEFAULT_FRONT_CAMERA
-
-            val preview = Preview.Builder()
-                .build()
-                .also {
-                    it.surfaceProvider = binding.previewView.surfaceProvider
-                }
-
-            val imageAnalysis = ImageAnalysis.Builder()
-                .setOutputImageFormat(ImageAnalysis.OUTPUT_IMAGE_FORMAT_RGBA_8888)
-                .setBackpressureStrategy(ImageAnalysis.STRATEGY_KEEP_ONLY_LATEST)
-                .build()
-
-            imageAnalysis.setAnalyzer(cameraExecutor) { imageProxy ->
-                processCameraFrame(imageProxy)
-            }
+            if (isFinishing || isDestroyed) return@addListener
 
             try {
-                cameraProvider.unbindAll()
-                cameraProvider.bindToLifecycle(this, cameraSelector, preview, imageAnalysis)
+                val provider = cameraProviderFuture.get()
+                cameraProvider = provider
+
+                // Selfie front camera (mirrored by default)
+                val cameraSelector = CameraSelector.DEFAULT_FRONT_CAMERA
+
+                val preview = Preview.Builder()
+                    .build()
+                    .also {
+                        it.surfaceProvider = binding.previewView.surfaceProvider
+                    }
+
+                val analysis = ImageAnalysis.Builder()
+                    .setOutputImageFormat(ImageAnalysis.OUTPUT_IMAGE_FORMAT_RGBA_8888)
+                    .setBackpressureStrategy(ImageAnalysis.STRATEGY_KEEP_ONLY_LATEST)
+                    .build()
+
+                analysis.setAnalyzer(cameraExecutor) { imageProxy ->
+                    try {
+                        if (!isFinishing && !isDestroyed && !cameraExecutor.isShutdown) {
+                            processCameraFrame(imageProxy)
+                        } else {
+                            imageProxy.close()
+                        }
+                    } catch (e: Exception) {
+                        try { imageProxy.close() } catch (_: Exception) {}
+                    }
+                }
+                imageAnalysis = analysis
+
+                provider.unbindAll()
+                provider.bindToLifecycle(this, cameraSelector, preview, analysis)
                 DiagnosticLogger.info("CameraX bound to lifecycle with front camera")
             } catch (e: Exception) {
                 DiagnosticLogger.error("Camera binding failed", e)
             }
         }, ContextCompat.getMainExecutor(this))
+    }
+
+    private fun stopCameraSafely() {
+        try {
+            imageAnalysis?.clearAnalyzer()
+            imageAnalysis = null
+        } catch (e: Exception) {
+            Log.w(TAG, "Error clearing analyzer", e)
+        }
+        try {
+            cameraProvider?.unbindAll()
+            cameraProvider = null
+        } catch (e: Exception) {
+            Log.w(TAG, "Error unbinding camera", e)
+        }
+    }
+
+    override fun onPause() {
+        super.onPause()
+        stopCameraSafely()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED) {
+            if (cameraProvider == null) {
+                startCamera()
+            }
+        }
     }
 
     private fun processCameraFrame(imageProxy: ImageProxy) {
@@ -441,9 +496,16 @@ class MainActivity : AppCompatActivity() {
     }
 
     override fun onDestroy() {
+        stopCameraSafely()
+        try {
+            cameraExecutor.shutdownNow()
+        } catch (_: Exception) {}
+        try {
+            faceLandmarker?.close()
+        } catch (_: Exception) {}
+        try {
+            yoloDetector?.close()
+        } catch (_: Exception) {}
         super.onDestroy()
-        cameraExecutor.shutdown()
-        faceLandmarker?.close()
-        yoloDetector?.close()
     }
 }

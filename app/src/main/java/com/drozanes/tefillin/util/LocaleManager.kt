@@ -4,44 +4,45 @@ import android.content.Context
 import android.content.res.Configuration
 import android.os.Build
 import android.os.LocaleList
+import androidx.appcompat.app.AppCompatDelegate
+import androidx.core.os.LocaleListCompat
 import java.util.Locale
 
 /**
- * Manages dynamic runtime switching between languages (Hebrew, English, French, etc.).
- * To add a new language, simply create `res/values-<lang>/strings.xml` and register it in SUPPORTED_LANGUAGES.
+ * Manages runtime switching between Hebrew and English.
+ * Uses official AndroidX AppCompatDelegate per-app locales API with full RTL support.
  */
 object LocaleManager {
     private const val PREF_NAME = "tefillin_prefs"
     private const val KEY_LANG = "tefillin_lang"
 
+    const val LANG_HEBREW = "he"
+    const val LANG_ENGLISH = "en"
+
     data class Language(val code: String, val displayName: String, val shortCode: String)
 
     val SUPPORTED_LANGUAGES = listOf(
-        Language(code = "he", displayName = "עברית", shortCode = "עב"),
-        Language(code = "en", displayName = "English", shortCode = "EN"),
-        Language(code = "fr", displayName = "Français", shortCode = "FR")
+        Language(code = LANG_HEBREW, displayName = "עברית", shortCode = "עב"),
+        Language(code = LANG_ENGLISH, displayName = "English", shortCode = "EN")
     )
 
     fun getLanguage(context: Context): String {
         val prefs = context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE)
-        return prefs.getString(KEY_LANG, "he") ?: "he"
+        return prefs.getString(KEY_LANG, LANG_HEBREW) ?: LANG_HEBREW
     }
 
     fun setLanguage(context: Context, langCode: String) {
         val prefs = context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE)
         prefs.edit().putString(KEY_LANG, langCode).apply()
+
+        // Apply using official AndroidX per-app locales API
+        val localeList = LocaleListCompat.forLanguageTags(langCode)
+        AppCompatDelegate.setApplicationLocales(localeList)
     }
 
-    fun getNextLanguage(context: Context): Language {
-        val currentCode = getLanguage(context)
-        val currentIndex = SUPPORTED_LANGUAGES.indexOfFirst { it.code == currentCode }
-        val nextIndex = if (currentIndex >= 0) (currentIndex + 1) % SUPPORTED_LANGUAGES.size else 0
-        return SUPPORTED_LANGUAGES[nextIndex]
-    }
-
-    fun getCurrentLanguageInfo(context: Context): Language {
-        val currentCode = getLanguage(context)
-        return SUPPORTED_LANGUAGES.find { it.code == currentCode } ?: SUPPORTED_LANGUAGES[0]
+    fun getNextLanguage(context: Context): String {
+        val current = getLanguage(context)
+        return if (current == LANG_HEBREW) LANG_ENGLISH else LANG_HEBREW
     }
 
     fun applyLocale(context: Context): Context {
