@@ -18,6 +18,7 @@ import android.widget.Toast
 import androidx.core.content.FileProvider
 import com.drozanes.tefillin.R
 import com.drozanes.tefillin.databinding.DialogBugReportBinding
+import com.drozanes.tefillin.util.CrashHandler
 import com.drozanes.tefillin.util.DiagnosticLogger
 import java.io.File
 import java.io.FileOutputStream
@@ -58,7 +59,11 @@ class BugReportDialog(
 
         binding.btnCopyLogs.setOnClickListener {
             val notes = binding.etNotes.text.toString()
-            val report = DiagnosticLogger.buildDiagnosticReport(notes, activeModel, isGpu, cameraRes)
+            var report = DiagnosticLogger.buildDiagnosticReport(notes, activeModel, isGpu, cameraRes)
+            val crashReport = CrashHandler.getPendingCrashReport(context)
+            if (!crashReport.isNullOrBlank()) {
+                report = "$crashReport\n\n$report"
+            }
             val clipboard = context.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
             clipboard.setPrimaryClip(ClipData.newPlainText("Tefillin Mirror Logs", report))
             Toast.makeText(context, context.getString(R.string.logs_copied), Toast.LENGTH_SHORT).show()
@@ -79,7 +84,11 @@ class BugReportDialog(
 
     private fun shareReport(notes: String) {
         try {
-            val report = DiagnosticLogger.buildDiagnosticReport(notes, activeModel, isGpu, cameraRes)
+            var report = DiagnosticLogger.buildDiagnosticReport(notes, activeModel, isGpu, cameraRes)
+            val crashReport = CrashHandler.getPendingCrashReport(context)
+            if (!crashReport.isNullOrBlank()) {
+                report = "$crashReport\n\n$report"
+            }
             val cacheDir = context.cacheDir
 
             // Save log file

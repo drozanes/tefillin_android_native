@@ -81,6 +81,7 @@ class FaceLandmarkHelper(private val context: Context) {
     }
 
     fun detect(bitmap: Bitmap): List<TefillinEngine.LandmarkPoint>? {
+        if (bitmap.isRecycled) return null
         val landmarker = faceLandmarker ?: return null
         try {
             val mpImage = BitmapImageBuilder(bitmap).build()

@@ -23,6 +23,7 @@ import androidx.core.os.LocaleListCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.updatePadding
+import com.drozanes.tefillin.cv.AiManager
 import com.drozanes.tefillin.cv.GeometryStabilizer
 import com.drozanes.tefillin.cv.TefillinEngine
 import com.drozanes.tefillin.cv.YoloDetector
@@ -34,6 +35,7 @@ import com.drozanes.tefillin.model.FaceGeometry
 import com.drozanes.tefillin.model.TefillinBox
 import com.drozanes.tefillin.ui.BugReportDialog
 import com.drozanes.tefillin.ui.HalachaDialog
+import com.drozanes.tefillin.util.CrashHandler
 import com.drozanes.tefillin.util.DiagnosticLogger
 import com.drozanes.tefillin.util.LocaleManager
 import java.util.concurrent.ExecutorService
@@ -58,10 +60,8 @@ class MainActivity : AppCompatActivity() {
     // CameraX Lifecycle References
     private var cameraProvider: ProcessCameraProvider? = null
     private var imageAnalysis: ImageAnalysis? = null
+    private var isCameraStarting = false
 
-    // AI & CV Components
-    private var faceLandmarker: FaceLandmarkHelper? = null
-    private var yoloDetector: YoloDetector? = null
     private val videoStabilizer = GeometryStabilizer(
         deadbandPx = 2.0f,
         angleDeadbandDeg = 0.6f,
@@ -92,6 +92,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        CrashHandler.install(this)
         super.onCreate(savedInstanceState)
         DiagnosticLogger.info("Application boot: Native Android Tefillin App")
 
@@ -106,6 +107,9 @@ class MainActivity : AppCompatActivity() {
 
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        // Prompt user if a previous session crashed so they can easily copy/share the log!
+        CrashHandler.checkAndPromptCrashReport(this)
 
         // Apply Window Insets for modern Android edge-to-edge screens.
         // Guarantees all buttons and titles sit comfortably below the physical status bar and camera punch-hole!
@@ -141,25 +145,16 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun initAiEngines() {
-        cameraExecutor.execute {
-            try {
-                faceLandmarker = FaceLandmarkHelper(this@MainActivity)
-                yoloDetector = YoloDetector(this@MainActivity)
-
-                // Load saved preferred model, default is FP16
-                val savedModel = prefs.getString(KEY_SELECTED_MODEL, YoloDetector.MODEL_FP16) ?: YoloDetector.MODEL_FP16
-                yoloDetector?.loadModel(savedModel)
-
-                val isGpu = faceLandmarker?.isGpuActive == true
-                runOnUiThread {
-                    binding.tvGpuBadge.text = getString(if (isGpu) R.string.gpu_active_badge else R.string.cpu_active_badge)
-                    binding.tvGpuBadge.setTextColor(
-                        ContextCompat.getColor(this@MainActivity, if (isGpu) R.color.accent_green else R.color.accent_gold)
-                    )
-                }
-                DiagnosticLogger.info("AI Engines initialized (Model: $savedModel, GPU: $isGpu)")
-            } catch (e: Exception) {
-                DiagnosticLogger.error("Error initializing AI engines", e)
+        val savedModel = prefs.getString(KEY_SELECTED_MODEL, YoloDetector.MODEL_FP16) ?: YoloDetector.MODEL_FP16
+        AiManager.initialize(this) { isGpu, model ->
+            if (model != savedModel) {
+                AiManager.yoloDetector?.loadModel(savedModel)
+            }
+            runOnUiThread {
+                binding.tvGpuBadge.text = getString(if (isGpu) R.string.gpu_active_badge else R.string.cpu_active_badge)
+                binding.tvGpuBadge.setTextColor(
+                    ContextCompat.getColor(this@MainActivity, if (isGpu) R.color.accent_green else R.color.accent_gold)
+                )
             }
         }
     }
@@ -175,8 +170,8 @@ class MainActivity : AppCompatActivity() {
             prefs.edit().putString(KEY_SELECTED_MODEL, nextModel).apply()
             updateModelButtonUi(nextModel)
 
-            cameraExecutor.execute {
-                yoloDetector?.loadModel(nextModel)
+            AiManager.executor.execute {
+                AiManager.yoloDetector?.loadModel(nextModel)
                 DiagnosticLogger.info("Model switched to: $nextModel")
             }
 
@@ -215,8 +210,8 @@ class MainActivity : AppCompatActivity() {
         // 5. Bug Report Dialog
         binding.btnBugReport.setOnClickListener {
             val snapshot = binding.previewView.bitmap ?: latestBitmapSnapshot
-            val activeModel = yoloDetector?.getActiveModel() ?: "unknown"
-            val isGpu = faceLandmarker?.isGpuActive == true
+            val activeModel = AiManager.yoloDetector?.getActiveModel() ?: "unknown"
+            val isGpu = AiManager.faceLandmarker?.isGpuActive == true
             BugReportDialog(this, snapshot, activeModel, isGpu, lastCameraResolution).show()
         }
 
@@ -268,8 +263,12 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun startCamera() {
+        if (isCameraStarting || cameraProvider != null || isFinishing || isDestroyed) return
+        isCameraStarting = true
+
         val cameraProviderFuture = ProcessCameraProvider.getInstance(this)
         cameraProviderFuture.addListener({
+            isCameraStarting = false
             if (isFinishing || isDestroyed) return@addListener
 
             try {
@@ -313,6 +312,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun stopCameraSafely() {
+        isCameraStarting = false
         try {
             imageAnalysis?.clearAnalyzer()
             imageAnalysis = null
@@ -342,79 +342,96 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun processCameraFrame(imageProxy: ImageProxy) {
-        val rotationDegrees = imageProxy.imageInfo.rotationDegrees
-        val rawBitmap = imageProxy.toBitmap()
-        imageProxy.close()
-
-        val bitmap = if (rotationDegrees != 0) {
-            val matrix = Matrix().apply { postRotate(rotationDegrees.toFloat()) }
-            Bitmap.createBitmap(rawBitmap, 0, 0, rawBitmap.width, rawBitmap.height, matrix, true)
-        } else {
-            rawBitmap
-        }
-
-        latestBitmapSnapshot = bitmap
-        lastCameraResolution = "${bitmap.width}x${bitmap.height}"
-
-        val landmarker = faceLandmarker
-        val yolo = yoloDetector
-
-        if (landmarker == null || yolo == null) return
-
-        // 1. Detect 478 3D Face Landmarks via MediaPipe
-        val landmarks = landmarker.detect(bitmap)
-        if (landmarks == null || landmarks.isEmpty()) {
-            videoStabilizer.reset()
-            lastYoloBox = null
-            runOnUiThread {
-                binding.overlayView.clear()
-                updateUiForNoFace()
+        try {
+            if (isFinishing || isDestroyed) {
+                imageProxy.close()
+                return
             }
-            return
-        }
 
-        // 2. Extract Geometry with Hairline Detection and Temporal Stabilization
-        val geometry = TefillinEngine.analyzeFaceGeometry(
-            landmarks = landmarks,
-            width = bitmap.width,
-            height = bitmap.height,
-            hairlineUserAdj = 0f,
-            bitmap = bitmap,
-            stabilizer = videoStabilizer
-        )
+            val rotationDegrees = imageProxy.imageInfo.rotationDegrees
+            val rawBitmap = imageProxy.toBitmap()
+            imageProxy.close()
 
-        if (geometry == null) {
-            lastYoloBox = null
-            runOnUiThread { binding.overlayView.clear() }
-            return
-        }
-
-        // 3. AI Tefillin Detection (Throttled to ~250ms, runs asynchronously without lagging preview)
-        val now = SystemClock.uptimeMillis()
-        if (!yolo.isRunning() && (now - lastYoloTime >= 250L)) {
-            lastYoloTime = now
-            val detected = yolo.detect(bitmap)
-            // Validate candidate detection against face geometry to eliminate glasses and non-Tefillin objects
-            val validated = if (detected != null && TefillinEngine.isValidTefillinBox(detected, geometry)) {
-                detected
+            val bitmap = if (rotationDegrees != 0) {
+                val matrix = Matrix().apply { postRotate(rotationDegrees.toFloat()) }
+                Bitmap.createBitmap(rawBitmap, 0, 0, rawBitmap.width, rawBitmap.height, matrix, true)
             } else {
-                null
+                rawBitmap
             }
-            // CRITICAL: Always update lastYoloBox (even when null) so tracking drops cleanly!
-            lastYoloBox = validated
-        }
 
-        // 4. Head-Anchored Real-Time Box Tracking at 60 FPS
-        // When lastYoloBox is null, tracking will cleanly expire after 6-8 frames!
-        val winner = videoStabilizer.stabilizeBox(lastYoloBox, geometry)
+            latestBitmapSnapshot = bitmap
+            lastCameraResolution = "${bitmap.width}x${bitmap.height}"
 
-        // 5. Evaluate Halachic Alignment Status
-        val alignment = TefillinEngine.evaluateAlignment(winner, geometry)
+            val landmarker = AiManager.faceLandmarker
+            val yolo = AiManager.yoloDetector
 
-        // 6. Push to UI
-        runOnUiThread {
-            binding.overlayView.setResults(geometry, alignment, bitmap.width, bitmap.height)
-            updateUiWithAlignment(alignment)
+            if (landmarker == null || yolo == null) return
+
+            // 1. Detect 478 3D Face Landmarks via MediaPipe
+            val landmarks = landmarker.detect(bitmap)
+            if (landmarks == null || landmarks.isEmpty()) {
+                videoStabilizer.reset()
+                lastYoloBox = null
+                runOnUiThread {
+                    if (!isFinishing && !isDestroyed) {
+                        binding.overlayView.clear()
+                        updateUiForNoFace()
+                    }
+                }
+                return
+            }
+
+            // 2. Extract Geometry with Hairline Detection and Temporal Stabilization
+            val geometry = TefillinEngine.analyzeFaceGeometry(
+                landmarks = landmarks,
+                width = bitmap.width,
+                height = bitmap.height,
+                hairlineUserAdj = 0f,
+                bitmap = bitmap,
+                stabilizer = videoStabilizer
+            )
+
+            if (geometry == null) {
+                lastYoloBox = null
+                runOnUiThread {
+                    if (!isFinishing && !isDestroyed) {
+                        binding.overlayView.clear()
+                    }
+                }
+                return
+            }
+
+            // 3. AI Tefillin Detection (Throttled to ~250ms, runs asynchronously without lagging preview)
+            val now = SystemClock.uptimeMillis()
+            if (!yolo.isRunning() && (now - lastYoloTime >= 250L)) {
+                lastYoloTime = now
+                val detected = yolo.detect(bitmap)
+                // Validate candidate detection against face geometry to eliminate glasses and non-Tefillin objects
+                val validated = if (detected != null && TefillinEngine.isValidTefillinBox(detected, geometry)) {
+                    detected
+                } else {
+                    null
+                }
+                // CRITICAL: Always update lastYoloBox (even when null) so tracking drops cleanly!
+                lastYoloBox = validated
+            }
+
+            // 4. Head-Anchored Real-Time Box Tracking at 60 FPS
+            // When lastYoloBox is null, tracking will cleanly expire after 6-8 frames!
+            val winner = videoStabilizer.stabilizeBox(lastYoloBox, geometry)
+
+            // 5. Evaluate Halachic Alignment Status
+            val alignment = TefillinEngine.evaluateAlignment(winner, geometry)
+
+            // 6. Push to UI
+            runOnUiThread {
+                if (!isFinishing && !isDestroyed) {
+                    binding.overlayView.setResults(geometry, alignment, bitmap.width, bitmap.height)
+                    updateUiWithAlignment(alignment)
+                }
+            }
+        } catch (e: Exception) {
+            Log.e(TAG, "Error in processCameraFrame", e)
         }
     }
 
@@ -499,12 +516,6 @@ class MainActivity : AppCompatActivity() {
         stopCameraSafely()
         try {
             cameraExecutor.shutdownNow()
-        } catch (_: Exception) {}
-        try {
-            faceLandmarker?.close()
-        } catch (_: Exception) {}
-        try {
-            yoloDetector?.close()
         } catch (_: Exception) {}
         super.onDestroy()
     }

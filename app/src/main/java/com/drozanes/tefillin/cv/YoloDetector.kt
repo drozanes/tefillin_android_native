@@ -89,6 +89,7 @@ class YoloDetector(private val context: Context) {
 
     @Synchronized
     fun detect(origBitmap: Bitmap): TefillinBox? {
+        if (origBitmap.isRecycled) return null
         val currSession = session ?: return null
         if (isBusy) return null
         isBusy = true
@@ -192,7 +193,6 @@ class YoloDetector(private val context: Context) {
         try {
             session?.close()
             session = null
-            letterboxedBitmap.recycle()
         } catch (_: Exception) {}
     }
 }

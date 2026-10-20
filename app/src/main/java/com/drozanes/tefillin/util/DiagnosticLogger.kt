@@ -39,6 +39,14 @@ object DiagnosticLogger {
         log("ERROR", detail)
     }
 
+    fun getRecentLogs(): String {
+        val sb = StringBuilder()
+        synchronized(recentLogs) {
+            recentLogs.forEach { sb.appendLine(it) }
+        }
+        return sb.toString()
+    }
+
     fun buildDiagnosticReport(userNotes: String, activeModel: String, isGpu: Boolean, cameraRes: String): String {
         val sb = StringBuilder()
         sb.appendLine("================================================================")
