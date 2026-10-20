@@ -66,4 +66,26 @@ class GeometryStabilizerTest {
         // Box must move WITH the head by 15px to X=335f!
         assertEquals(335f, locked2!!.x, 0.5f)
     }
+
+    @Test
+    fun testTrackingExpiresWhenYoloDetectsNothing() {
+        val stabilizer = GeometryStabilizer()
+        val geom = createGeometry(320f, 200f)
+
+        // 1. Initial detection
+        val rawBox = TefillinBox(x = 320f, y = 150f, boxWidth = 40f, boxHeight = 40f)
+        val initial = stabilizer.stabilizeBox(rawBox, geom)
+        assertNotNull(initial)
+
+        // 2. YOLO loses detection (e.g. glasses taken off or no tefillin in view)
+        // For the first few frames, head-relative stabilizer bridges short frame drops
+        for (i in 1..8) {
+            val bridged = stabilizer.stabilizeBox(null, geom)
+            assertNotNull("Frame $i should be bridged", bridged)
+        }
+
+        // 3. On frame 9 (consecutiveMissCount > 8), tracking MUST completely drop!
+        val dropped = stabilizer.stabilizeBox(null, geom)
+        assertNull("Tracking must cleanly clear after 8 consecutive missed frames", dropped)
+    }
 }

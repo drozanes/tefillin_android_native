@@ -3,6 +3,7 @@ package com.drozanes.tefillin
 import android.Manifest
 import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.graphics.Matrix
@@ -33,16 +34,22 @@ import com.drozanes.tefillin.util.DiagnosticLogger
 import com.drozanes.tefillin.util.LocaleManager
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
+import kotlin.math.abs
+import kotlin.math.hypot
+import kotlin.math.max
 
 class MainActivity : AppCompatActivity() {
 
     companion object {
         private const val TAG = "MainActivity"
+        private const val PREFS_NAME = "tefillin_app_prefs"
+        private const val KEY_SELECTED_MODEL = "selected_model"
         private const val KNOT_GUIDE_URL = "https://www.youtube.com/watch?v=4BEhw4g_OJI"
     }
 
     private lateinit var binding: ActivityMainBinding
     private lateinit var cameraExecutor: ExecutorService
+    private lateinit var prefs: SharedPreferences
 
     // AI & CV Components
     private var faceLandmarker: FaceLandmarkHelper? = null
@@ -57,7 +64,7 @@ class MainActivity : AppCompatActivity() {
     // State Tracking
     private var lastYoloTime = 0L
     private var lastYoloBox: TefillinBox? = null
-    private var lastCameraResolution = "640x480"
+    private var lastCameraResolution = "480x640"
     private var latestBitmapSnapshot: Bitmap? = null
 
     private val cameraPermissionLauncher = registerForActivityResult(
@@ -80,6 +87,7 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         DiagnosticLogger.info("Application boot: Native Android Tefillin App")
 
+        prefs = getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
@@ -96,14 +104,18 @@ class MainActivity : AppCompatActivity() {
                 faceLandmarker = FaceLandmarkHelper(this@MainActivity)
                 yoloDetector = YoloDetector(this@MainActivity)
 
+                // Load saved preferred model, default is FP16
+                val savedModel = prefs.getString(KEY_SELECTED_MODEL, YoloDetector.MODEL_FP16) ?: YoloDetector.MODEL_FP16
+                yoloDetector?.loadModel(savedModel)
+
                 val isGpu = faceLandmarker?.isGpuActive == true
                 runOnUiThread {
-                    binding.tvGpuBadge.text = if (isGpu) " • ⚡ GPU Active" else " • 💻 CPU Active"
+                    binding.tvGpuBadge.text = getString(if (isGpu) R.string.gpu_active_badge else R.string.cpu_active_badge)
                     binding.tvGpuBadge.setTextColor(
                         ContextCompat.getColor(this@MainActivity, if (isGpu) R.color.accent_green else R.color.accent_gold)
                     )
                 }
-                DiagnosticLogger.info("AI Engines initialized (GPU: $isGpu)")
+                DiagnosticLogger.info("AI Engines initialized (Model: $savedModel, GPU: $isGpu)")
             } catch (e: Exception) {
                 DiagnosticLogger.error("Error initializing AI engines", e)
             }
@@ -111,16 +123,21 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun setupUI() {
-        // Model Selector
+        // Model Selector: FP16 is default (Index 0)
         val modelOptions = listOf(
-            getString(R.string.model_int8),
-            getString(R.string.model_fp16)
+            getString(R.string.model_fp16),
+            getString(R.string.model_int8)
         )
         val spinnerAdapter = ArrayAdapter(this, android.R.layout.simple_spinner_dropdown_item, modelOptions)
         binding.spinnerModel.adapter = spinnerAdapter
+
+        val savedModel = prefs.getString(KEY_SELECTED_MODEL, YoloDetector.MODEL_FP16)
+        binding.spinnerModel.setSelection(if (savedModel == YoloDetector.MODEL_UINT8) 1 else 0)
+
         binding.spinnerModel.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-                val selectedModel = if (position == 0) YoloDetector.MODEL_UINT8 else YoloDetector.MODEL_FP16
+                val selectedModel = if (position == 0) YoloDetector.MODEL_FP16 else YoloDetector.MODEL_UINT8
+                prefs.edit().putString(KEY_SELECTED_MODEL, selectedModel).apply()
                 cameraExecutor.execute {
                     yoloDetector?.loadModel(selectedModel)
                     DiagnosticLogger.info("Model switched to: $selectedModel")
@@ -129,12 +146,13 @@ class MainActivity : AppCompatActivity() {
             override fun onNothingSelected(parent: AdapterView<*>?) {}
         }
 
-        // Language Toggle
+        // Language Switcher Button (Shows next target language or short name)
+        val nextLang = LocaleManager.getNextLanguage(this)
+        binding.btnLangToggle.text = nextLang.displayName
         binding.btnLangToggle.setOnClickListener {
-            val curr = LocaleManager.getLanguage(this)
-            val newLang = if (curr == "he") "en" else "he"
-            LocaleManager.setLanguage(this, newLang)
-            DiagnosticLogger.info("Language changed to: $newLang")
+            val target = LocaleManager.getNextLanguage(this)
+            LocaleManager.setLanguage(this, target.code)
+            DiagnosticLogger.info("Language changed to: ${target.code}")
             recreate()
         }
 
@@ -241,6 +259,7 @@ class MainActivity : AppCompatActivity() {
         val landmarks = landmarker.detect(bitmap)
         if (landmarks == null || landmarks.isEmpty()) {
             videoStabilizer.reset()
+            lastYoloBox = null
             runOnUiThread {
                 binding.overlayView.clear()
                 updateUiForNoFace()
@@ -259,21 +278,28 @@ class MainActivity : AppCompatActivity() {
         )
 
         if (geometry == null) {
+            lastYoloBox = null
             runOnUiThread { binding.overlayView.clear() }
             return
         }
 
-        // 3. AI Tefillin Detection (Throttled to ~300ms, runs asynchronously without lagging preview)
+        // 3. AI Tefillin Detection (Throttled to ~250ms, runs asynchronously without lagging preview)
         val now = SystemClock.uptimeMillis()
-        if (!yolo.isRunning() && (now - lastYoloTime >= 300L)) {
+        if (!yolo.isRunning() && (now - lastYoloTime >= 250L)) {
             lastYoloTime = now
             val detected = yolo.detect(bitmap)
-            if (detected != null) {
-                lastYoloBox = detected
+            // Validate candidate detection against face geometry to eliminate glasses and non-Tefillin objects
+            val validated = if (detected != null && TefillinEngine.isValidTefillinBox(detected, geometry)) {
+                detected
+            } else {
+                null
             }
+            // CRITICAL: Always update lastYoloBox (even when null) so tracking drops cleanly!
+            lastYoloBox = validated
         }
 
         // 4. Head-Anchored Real-Time Box Tracking at 60 FPS
+        // When lastYoloBox is null, tracking will cleanly expire after 6-8 frames!
         val winner = videoStabilizer.stabilizeBox(lastYoloBox, geometry)
 
         // 5. Evaluate Halachic Alignment Status

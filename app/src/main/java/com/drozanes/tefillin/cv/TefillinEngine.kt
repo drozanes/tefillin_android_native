@@ -240,6 +240,63 @@ object TefillinEngine {
     }
 
     /**
+     * Validates that a detected candidate box matches the physical and geometric
+     * criteria of a genuine Head Tefillin (Shel Rosh), rejecting glasses, frames, and background noise.
+     */
+    fun isValidTefillinBox(box: TefillinBox, geometry: FaceGeometry): Boolean {
+        val eyeDist = max(10f, geometry.eyeDist)
+
+        // 1. Eyebrow / Glasses Exclusion:
+        // Tefillin Shel Rosh sits on the scalp/hairline, never touching or below the eyebrows/eyes
+        val eyebrowThreshold = geometry.eyebrowLevelY - eyeDist * 0.05f
+        if (box.bottomY > eyebrowThreshold) {
+            return false
+        }
+
+        // 2. Ceiling / Background Exclusion:
+        // Cannot be floating way up in the ceiling
+        val ceilingThreshold = geometry.glabellaPt.y - eyeDist * 3.0f
+        if (box.y < ceilingThreshold) {
+            return false
+        }
+
+        // 3. Horizontal Midline Centering:
+        // Perpendicular distance from box center to Glabella-MeshTop symmetry axis
+        val a = geometry.glabellaPt
+        val b = geometry.meshTopPt
+        val lineLen = hypot(b.x - a.x, b.y - a.y)
+        val horizOffset = if (lineLen > 0.1f) {
+            abs(((b.x - a.x) * (a.y - box.y) - (b.y - a.y) * (a.x - box.x)) / lineLen)
+        } else {
+            abs(box.x - a.x)
+        }
+        if (horizOffset > eyeDist * 0.60f) {
+            return false
+        }
+
+        // 4. Physical Dimensions relative to Eye Distance:
+        // Real Tefillin box is ~32-40mm wide. Inter-pupillary distance is ~63mm (~0.35-0.55 * eyeDist).
+        // Glasses pushed up on head span across the entire skull (width >= 0.80 * eyeDist).
+        val minDim = eyeDist * 0.15f
+        val maxDim = eyeDist * 0.68f
+        if (box.boxWidth < minDim || box.boxWidth > maxDim) {
+            return false
+        }
+        if (box.boxHeight < minDim || box.boxHeight > maxDim) {
+            return false
+        }
+
+        // 5. Aspect Ratio (Squareness):
+        // A Tefillin box is roughly square (0.45 <= W/H <= 2.0). Glasses rims/frames are elongated.
+        val aspectRatio = box.boxWidth / box.boxHeight
+        if (aspectRatio < 0.45f || aspectRatio > 2.0f) {
+            return false
+        }
+
+        return true
+    }
+
+    /**
      * 3. Evaluate Halachic Alignment (Distance from Hairline & Horizontal Symmetry)
      */
     fun evaluateAlignment(winner: TefillinBox?, geometry: FaceGeometry?): AlignmentResult {

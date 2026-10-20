@@ -1,17 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <!-- App Branding -->
     <string name="app_name">מראת תפילין</string>
     <string name="app_title">מראת תפילין</string>
     <string name="app_subtitle">זיהוי תפילין + בדיקת אמצע ומקום שיער</string>
 
+    <!-- Top Bar Controls -->
     <string name="lang_toggle">English</string>
-    <string name="model_int8">⚡ INT8 (מהיר)</string>
     <string name="model_fp16">🎯 FP16 (מדויק)</string>
-    <string name="toggle_guides">🎯 קווי עזר</string>
+    <string name="model_int8">⚡ INT8 (מהיר)</string>
+    <string name="toggle_guides">קווי עזר</string>
     <string name="halacha_guide_title">הלכות תפילין</string>
-    <string name="bug_report_title">דיווח על בעיה</string>
+    <string name="bug_report_title">דיווח על תקלה</string>
 
-    <!-- States -->
+    <!-- Camera & Face Tracking States -->
     <string name="camera_starting">מפעיל מצלמה...</string>
     <string name="searching_face">מחפש פנים...</string>
     <string name="no_face">לא זוהו פנים בפריים</string>
@@ -20,7 +22,7 @@
     <string name="initial_guide_title">אנא הניחו את התפילין של ראש</string>
     <string name="initial_guide_sub">המערכת מזהה את התפילין מעל המצח...</string>
 
-    <!-- Guidance & Arrows -->
+    <!-- Directional Guidance & Alerts -->
     <string name="move_up_title">⬆️ הרימו את התפילין למעלה!</string>
     <string name="move_up_sub">התפילין נוגעות במצח! יש להרים אל מקום השיער.</string>
     <string name="adjust_knot_guide">🎥 מדריך: איך להקטין את הקשר</string>
@@ -34,17 +36,17 @@
     <string name="perfect_sub">התפילין במרכז המדויק ומעל קו השיער.</string>
     <string name="camera_angle_title">📐 כווננו את גובה המצלמה</string>
     <string name="camera_too_low">📐 מצלמה נמוכה מדי</string>
-    <string name="camera_too_low_sub">📐 מצלמה נמוכה מדי - יש להחזיק את המכשיר מול הפנים בגובה העיניים</string>
+    <string name="camera_too_low_sub">יש להחזיק את המכשיר מול הפנים בגובה העיניים</string>
     <string name="camera_too_high">📐 מצלמה גבוהה מדי</string>
-    <string name="camera_too_high_sub">📐 מצלמה גבוהה מדי - יש להחזיק את המכשיר מול הפנים בגובה העיניים</string>
+    <string name="camera_too_high_sub">יש להחזיק את המכשיר מול הפנים בגובה העיניים</string>
 
-    <!-- Badges -->
+    <!-- Status Badges -->
     <string name="touches_forehead_alert">⬆️ נוגע במצח</string>
     <string name="off_center_alert">לא ממורכז</string>
     <string name="borderline_alert">גבולי</string>
     <string name="perfect_alert">מונח כהלכה</string>
 
-    <!-- Halacha Modal -->
+    <!-- Halachic Guide Dialog -->
     <string name="modal_title">הלכות מקום הנחת תפילין של ראש</string>
     <string name="modal_rule1_title">1. מקום הנחה ברוחב (אמצע)</string>
     <string name="modal_rule1_text">תפילין של ראש חייבות להיות מכוונות באמצע ממש בין שתי העיניים. חריגה לצדדים פוסלת את המצווה.</string>
@@ -54,14 +56,28 @@
     <string name="modal_rule3_text">המערכת מזהה את התפילין במרכז המצח, ומוודאת שכל שטח התפילין מונח מעל שורשי השיער.</string>
     <string name="close">סגור</string>
 
-    <!-- Bug Report -->
+    <!-- Bug Report Dialog -->
     <string name="bug_modal_title">🐞 דיווח על בעיה</string>
     <string name="bug_intro">נתקלתם בבעיה בזיהוי התפילין או ביציבות? באפשרותכם לצלם תמונת מסך ולשתף לוגים טכניים ישירות.</string>
+    <string name="bug_preview_label">תמונת מסך שנתפסה:</string>
     <string name="bug_notes_label">תיאור קצר (לא חובה):</string>
-    <string name="bug_notes_hint">למשל: התפילין במקום הנכון אך זוהו כפסולות</string>
+    <string name="bug_notes_hint">למשל: משקפיים זוהו כתפילין, או זיהוי שגוי</string>
     <string name="capture_and_share">צלם תמונת מסך ולוגים ושתף</string>
     <string name="copy_logs">העתק לוגים ללוח</string>
+    <string name="logs_copied">הלוגים הועתקו ללוח בהצלחה!</string>
+    <string name="share_subject">דיווח תקלה - מראת תפילין</string>
+    <string name="share_chooser_title">שתף דיווח תקלה באמצעות...</string>
+    <string name="share_error">שגיאה בשיתוף: %s</string>
+
+    <!-- Hardware & Footer -->
     <string name="footer_text">מראת תפילין • זיהוי תפילין מדויק בזמן אמת</string>
+    <string name="gpu_active_badge"> • ⚡ מאיץ גרפי (GPU)</string>
+    <string name="cpu_active_badge"> • 💻 מעבד (CPU)</string>
+
+    <!-- Permissions -->
     <string name="permission_required">נדרשת הרשאת מצלמה לצורך כיוון התפילין</string>
     <string name="grant_permission">אשר הרשאה</string>
+
+    <!-- Language Selector -->
+    <string name="select_language">בחר שפה</string>
 </resources>

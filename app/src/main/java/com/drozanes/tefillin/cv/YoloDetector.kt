@@ -21,14 +21,14 @@ class YoloDetector(private val context: Context) {
         private const val TAG = "YoloDetector"
         const val MODEL_WIDTH = 640
         const val MODEL_HEIGHT = 640
-        const val CONF_THRESHOLD = 0.40f
-        const val MODEL_UINT8 = "best_uint8.onnx"
+        const val CONF_THRESHOLD = 0.45f
         const val MODEL_FP16 = "best_fp16.onnx"
+        const val MODEL_UINT8 = "best_uint8.onnx"
     }
 
     private var ortEnv: OrtEnvironment = OrtEnvironment.getEnvironment()
     private var session: OrtSession? = null
-    private var activeModelName: String = MODEL_UINT8
+    private var activeModelName: String = MODEL_FP16
     private var isBusy = false
 
     // Reusable buffers to eliminate garbage collection latency
@@ -39,7 +39,7 @@ class YoloDetector(private val context: Context) {
     private val floatBuffer: FloatBuffer = FloatBuffer.allocate(3 * MODEL_WIDTH * MODEL_HEIGHT)
 
     init {
-        loadModel(MODEL_UINT8)
+        loadModel(MODEL_FP16)
     }
 
     @Synchronized

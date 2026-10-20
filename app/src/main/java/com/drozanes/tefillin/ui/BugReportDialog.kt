@@ -8,11 +8,15 @@ import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
+import android.os.Bundle
+import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import android.view.Window
 import android.widget.Toast
 import androidx.core.content.FileProvider
+import com.drozanes.tefillin.R
 import com.drozanes.tefillin.databinding.DialogBugReportBinding
 import com.drozanes.tefillin.util.DiagnosticLogger
 import java.io.File
@@ -31,16 +35,19 @@ class BugReportDialog(
 
     private val binding: DialogBugReportBinding = DialogBugReportBinding.inflate(LayoutInflater.from(context))
 
-    init {
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
         requestWindowFeature(Window.FEATURE_NO_TITLE)
         setContentView(binding.root)
         window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
 
         if (snapshotBitmap != null) {
             binding.ivPreview.visibility = View.VISIBLE
+            binding.tvPreviewLabel.visibility = View.VISIBLE
             binding.ivPreview.setImageBitmap(snapshotBitmap)
         } else {
             binding.ivPreview.visibility = View.GONE
+            binding.tvPreviewLabel.visibility = View.GONE
         }
 
         binding.btnShare.setOnClickListener {
@@ -54,10 +61,20 @@ class BugReportDialog(
             val report = DiagnosticLogger.buildDiagnosticReport(notes, activeModel, isGpu, cameraRes)
             val clipboard = context.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
             clipboard.setPrimaryClip(ClipData.newPlainText("Tefillin Mirror Logs", report))
-            Toast.makeText(context, "Logs copied to clipboard!", Toast.LENGTH_SHORT).show()
+            Toast.makeText(context, context.getString(R.string.logs_copied), Toast.LENGTH_SHORT).show()
         }
 
         binding.btnCloseBug.setOnClickListener { dismiss() }
+    }
+
+    override fun onStart() {
+        super.onStart()
+        window?.let { w ->
+            val dm = context.resources.displayMetrics
+            val width = (dm.widthPixels * 0.92).toInt()
+            w.setLayout(width, ViewGroup.LayoutParams.WRAP_CONTENT)
+            w.setGravity(Gravity.CENTER)
+        }
     }
 
     private fun shareReport(notes: String) {
@@ -87,14 +104,14 @@ class BugReportDialog(
                 }
 
                 putParcelableArrayListExtra(Intent.EXTRA_STREAM, uris)
-                putExtra(Intent.EXTRA_SUBJECT, "Tefillin Mirror Bug Report")
-                putExtra(Intent.EXTRA_TEXT, "Tefillin Mirror Diagnostic Logs and Snapshot.\nNotes: $notes")
+                putExtra(Intent.EXTRA_SUBJECT, context.getString(R.string.share_subject))
+                putExtra(Intent.EXTRA_TEXT, "${context.getString(R.string.share_subject)}\n${context.getString(R.string.bug_notes_label)} $notes")
                 addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
             }
 
-            context.startActivity(Intent.createChooser(shareIntent, "Share Bug Report via..."))
+            context.startActivity(Intent.createChooser(shareIntent, context.getString(R.string.share_chooser_title)))
         } catch (e: Exception) {
-            Toast.makeText(context, "Share error: ${e.message}", Toast.LENGTH_LONG).show()
+            Toast.makeText(context, context.getString(R.string.share_error, e.message ?: ""), Toast.LENGTH_LONG).show()
         }
     }
 }

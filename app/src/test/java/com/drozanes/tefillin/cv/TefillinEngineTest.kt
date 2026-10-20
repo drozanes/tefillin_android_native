@@ -137,4 +137,72 @@ class TefillinEngineTest {
         assertTrue(result.isKosher)
         assertTrue(result.warning)
     }
+
+    @Test
+    fun testGlassesOnEyebrowsOrFaceRejected() {
+        val geometry = createMockGeometry(hairlineY = 200f, glabellaY = 280f, eyeDist = 100f)
+        // Glasses frame sitting at eyebrow/eyes level (bottomY = 285px)
+        val glassesOnFace = TefillinBox(
+            x = 320f,
+            y = 265f,
+            boxWidth = 40f,
+            boxHeight = 40f,
+            bottomY = 285f
+        )
+        assertFalse(
+            "Glasses near or below eyebrow level must be rejected",
+            TefillinEngine.isValidTefillinBox(glassesOnFace, geometry)
+        )
+    }
+
+    @Test
+    fun testGlassesSpanningAcrossHeadRejected() {
+        val geometry = createMockGeometry(hairlineY = 200f, glabellaY = 280f, eyeDist = 100f)
+        // Glasses pushed up on top of the head: wide frame spanning ear to ear (width = 90px > 0.68 * 100px)
+        val glassesOnHead = TefillinBox(
+            x = 320f,
+            y = 150f,
+            boxWidth = 90f,
+            boxHeight = 35f,
+            bottomY = 167f
+        )
+        assertFalse(
+            "Wide glasses frames on head must be rejected",
+            TefillinEngine.isValidTefillinBox(glassesOnHead, geometry)
+        )
+    }
+
+    @Test
+    fun testGlassesElongatedAspectRatioRejected() {
+        val geometry = createMockGeometry(hairlineY = 200f, glabellaY = 280f, eyeDist = 100f)
+        // Thin elongated frame (width 60px, height 18px, aspect ratio = 3.33)
+        val elongatedFrame = TefillinBox(
+            x = 320f,
+            y = 150f,
+            boxWidth = 60f,
+            boxHeight = 18f,
+            bottomY = 159f
+        )
+        assertFalse(
+            "Elongated frames with non-square aspect ratio must be rejected",
+            TefillinEngine.isValidTefillinBox(elongatedFrame, geometry)
+        )
+    }
+
+    @Test
+    fun testGenuineTefillinAccepted() {
+        val geometry = createMockGeometry(hairlineY = 200f, glabellaY = 280f, eyeDist = 100f)
+        // Typical adult Tefillin Shel Rosh (38px x 38px, centered, resting above hairline)
+        val kosherTefillin = TefillinBox(
+            x = 320f,
+            y = 150f,
+            boxWidth = 38f,
+            boxHeight = 38f,
+            bottomY = 169f
+        )
+        assertTrue(
+            "Genuine Tefillin box must be accepted",
+            TefillinEngine.isValidTefillinBox(kosherTefillin, geometry)
+        )
+    }
 }
