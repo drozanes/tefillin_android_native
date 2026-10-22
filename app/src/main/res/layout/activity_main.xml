@@ -138,9 +138,9 @@
                 android:singleLine="true"
                 android:ellipsize="end" />
 
-            <!-- Model Selector Pill Button -->
+            <!-- Tefillin Order Button -->
             <com.google.android.material.button.MaterialButton
-                android:id="@+id/btnModelSelect"
+                android:id="@+id/btnTefillinOrder"
                 android:layout_width="wrap_content"
                 android:layout_height="36dp"
                 android:minWidth="0dp"
@@ -151,10 +151,10 @@
                 android:insetRight="0dp"
                 android:paddingHorizontal="10dp"
                 android:paddingVertical="0dp"
-                android:text="@string/model_fp16"
+                android:text="@string/btn_tefillin_order"
                 android:textSize="11sp"
                 android:textStyle="bold"
-                android:textColor="@color/accent_gold"
+                android:textColor="@color/accent_cyan"
                 android:background="@drawable/bg_button_rounded"
                 app:backgroundTint="@null"
                 android:textAllCaps="false"

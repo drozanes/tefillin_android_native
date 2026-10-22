@@ -1,8 +1,6 @@
 package com.drozanes.tefillin.ui
 
 import android.app.Dialog
-import android.content.ClipData
-import android.content.ClipboardManager
 import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
@@ -18,13 +16,15 @@ import android.widget.Toast
 import androidx.core.content.FileProvider
 import com.drozanes.tefillin.R
 import com.drozanes.tefillin.databinding.DialogBugReportBinding
+import com.drozanes.tefillin.util.BugReporter
 import com.drozanes.tefillin.util.CrashHandler
 import com.drozanes.tefillin.util.DiagnosticLogger
 import java.io.File
 import java.io.FileOutputStream
 
 /**
- * Bug reporting dialog with snapshot capture and native Android share sheet.
+ * Bug reporting dialog with snapshot capture and direct anonymous transmission to developer.
+ * The user's report is submitted directly without exposing developer's personal email or identity.
  */
 class BugReportDialog(
     context: Context,
@@ -51,25 +51,51 @@ class BugReportDialog(
             binding.tvPreviewLabel.visibility = View.GONE
         }
 
-        binding.btnShare.setOnClickListener {
+        binding.btnSendReport.setOnClickListener {
             val notes = binding.etNotes.text.toString()
-            shareReport(notes)
-            dismiss()
+
+            if (BugReporter.isConfigured()) {
+                setSendingState(true)
+                BugReporter.sendReport(
+                    context = context,
+                    notes = notes,
+                    activeModel = activeModel,
+                    isGpu = isGpu,
+                    cameraRes = cameraRes,
+                    snapshotBitmap = snapshotBitmap,
+                    onSuccess = {
+                        setSendingState(false)
+                        Toast.makeText(context, context.getString(R.string.report_sent_success), Toast.LENGTH_LONG).show()
+                        dismiss()
+                    },
+                    onError = { errMsg, canFallback ->
+                        setSendingState(false)
+                        Toast.makeText(context, context.getString(R.string.report_send_error, errMsg), Toast.LENGTH_LONG).show()
+                        if (canFallback) {
+                            binding.btnShareFallback.visibility = View.VISIBLE
+                        }
+                    }
+                )
+            } else {
+                // If webhook endpoint is not configured yet, notify and allow fallback sharing
+                Toast.makeText(context, context.getString(R.string.report_offline_or_failed), Toast.LENGTH_SHORT).show()
+                binding.btnShareFallback.visibility = View.VISIBLE
+                shareReport(notes)
+            }
         }
 
-        binding.btnCopyLogs.setOnClickListener {
+        binding.btnShareFallback.setOnClickListener {
             val notes = binding.etNotes.text.toString()
-            var report = DiagnosticLogger.buildDiagnosticReport(notes, activeModel, isGpu, cameraRes)
-            val crashReport = CrashHandler.getPendingCrashReport(context)
-            if (!crashReport.isNullOrBlank()) {
-                report = "$crashReport\n\n$report"
-            }
-            val clipboard = context.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
-            clipboard.setPrimaryClip(ClipData.newPlainText("Tefillin Mirror Logs", report))
-            Toast.makeText(context, context.getString(R.string.logs_copied), Toast.LENGTH_SHORT).show()
+            shareReport(notes)
         }
 
         binding.btnCloseBug.setOnClickListener { dismiss() }
+    }
+
+    private fun setSendingState(isSending: Boolean) {
+        binding.pbSending.visibility = if (isSending) View.VISIBLE else View.GONE
+        binding.btnSendReport.isEnabled = !isSending
+        binding.btnSendReport.text = if (isSending) context.getString(R.string.sending_report) else context.getString(R.string.send_report)
     }
 
     override fun onStart() {

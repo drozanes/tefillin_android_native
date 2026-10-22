@@ -13,7 +13,7 @@ import kotlin.math.roundToInt
 /**
  * High-Performance YOLOv8 Tefillin Box Neural Network Detector
  * Supports GPU / NNAPI hardware acceleration and multi-threading on Android devices.
- * Uses exact ONNX models from tefillin_app (best_uint8.onnx and best_fp16.onnx).
+ * Uses optimized FP16 ONNX model (best_fp16.onnx).
  */
 class YoloDetector(private val context: Context) {
 
@@ -23,12 +23,10 @@ class YoloDetector(private val context: Context) {
         const val MODEL_HEIGHT = 640
         const val CONF_THRESHOLD = 0.45f
         const val MODEL_FP16 = "best_fp16.onnx"
-        const val MODEL_UINT8 = "best_uint8.onnx"
     }
 
     private var ortEnv: OrtEnvironment = OrtEnvironment.getEnvironment()
     private var session: OrtSession? = null
-    private var activeModelName: String = MODEL_FP16
     private var isBusy = false
 
     // Reusable buffers to eliminate garbage collection latency
@@ -39,13 +37,12 @@ class YoloDetector(private val context: Context) {
     private val floatBuffer: FloatBuffer = FloatBuffer.allocate(3 * MODEL_WIDTH * MODEL_HEIGHT)
 
     init {
-        loadModel(MODEL_FP16)
+        loadModel()
     }
 
     @Synchronized
-    fun loadModel(modelFileName: String): Boolean {
+    fun loadModel(modelFileName: String = MODEL_FP16): Boolean {
         try {
-            activeModelName = modelFileName
             session?.close()
 
             val sessionOptions = OrtSession.SessionOptions().apply {
@@ -83,7 +80,7 @@ class YoloDetector(private val context: Context) {
         }
     }
 
-    fun getActiveModel(): String = activeModelName
+    fun getActiveModel(): String = MODEL_FP16
 
     fun isRunning(): Boolean = isBusy
 

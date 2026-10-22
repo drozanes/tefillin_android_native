@@ -7,10 +7,7 @@
 
     <!-- Top Bar Controls -->
     <string name="lang_toggle">עברית</string>
-    <string name="model_fp16">🎯 FP16</string>
-    <string name="model_int8">⚡ INT8</string>
-    <string name="model_switched_fp16">🎯 Switched to FP16 (High Accuracy)</string>
-    <string name="model_switched_int8">⚡ Switched to INT8 (High Speed)</string>
+    <string name="btn_tefillin_order">📜 Order</string>
     <string name="toggle_guides">📐 Guides</string>
     <string name="guides_on">📐 Guides</string>
     <string name="guides_off">📐 Guides: Off</string>
@@ -50,6 +47,40 @@
     <string name="borderline_alert">Borderline</string>
     <string name="perfect_alert">Properly Aligned</string>
 
+    <!-- Seder Hanachat Tefillin Dialog -->
+    <string name="tefillin_order_title">Order of Putting on Tefillin</string>
+    <string name="tefillin_order_nusach_label">Select Nusach:</string>
+    <string name="nusach_ashkenaz">Ashkenaz</string>
+    <string name="nusach_sefard">Sefard</string>
+    <string name="nusach_edot_hamizrach">Edot HaMizrach</string>
+
+    <string name="step1_yad_title">1. Shel Yad (Hand Tefillin)</string>
+    <string name="step1_yad_desc">Place the Shel Yad on the bicep of the weaker arm (left arm for right-handed, right arm for left-handed), tilted slightly toward the heart. Before tightening the knot, recite:</string>
+    <string name="blessing_shel_yad">בָּרוּךְ אַתָּה יְהֹוָה אֱלֹהֵינוּ מֶלֶךְ הָעוֹלָם, אֲשֶׁר קִדְּשָׁנוּ בְּמִצְוֹתָיו וְצִוָּנוּ לְהָנִיחַ תְּפִלִּין.\n(Baruch atah Adonai Eloheinu Melech ha\'olam, asher kid\'shanu b\'mitzvotav v\'tzivanu l\'hani\'ach tefillin.)</string>
+    <string name="step1_yad_action">Tighten the knot and wrap the strap seven times around the forearm. Caution: Do NOT speak or interrupt until the Shel Rosh is completely in place!</string>
+
+    <string name="step2_rosh_title">2. Shel Rosh (Head Tefillin)</string>
+    <string name="step2_rosh_desc">Place the Shel Rosh above the forehead, resting entirely on the hair growth area and centered exactly between your eyes. The back knot rests in the hollow of the nape.</string>
+
+    <string name="step2_rosh_ashkenaz_blessing_title">Blessing before tightening:</string>
+    <string name="blessing_shel_rosh">בָּרוּךְ אַתָּה יְהֹוָה אֱלֹהֵינוּ מֶלֶךְ הָעוֹלָם, אֲשֶׁר קִדְּשָׁנוּ בְּמִצְוֹתָיו וְצִוָּנוּ עַל מִצְוַת תְּפִלִּין.\n(Baruch atah Adonai Eloheinu Melech ha\'olam, asher kid\'shanu b\'mitzvotav v\'tzivanu al mitzvat tefillin.)</string>
+    <string name="step2_rosh_after_tightening">After tightening, recite:</string>
+    <string name="blessing_baruch_shem">בָּרוּךְ שֵׁם כְּבוֹד מַלְכוּתוֹ לְעוֹלָם וָעֶד.\n(Baruch shem k\'vod malchuto l\'olam va\'ed.)</string>
+
+    <string name="step2_rosh_sefard_rule">If no interruption occurred between Shel Yad and Shel Rosh – do not bless on Shel Rosh, but recite after tightening:</string>
+    <string name="step2_rosh_sefard_interrupted">If interrupted by speaking: recite \"על מצות תפילין\" and then \"ברוך שם כבוד מלכוותו לעולם ועד\".</string>
+
+    <string name="step2_rosh_edot_rule">If no interruption occurred – do not recite a blessing on Shel Rosh, nor \"ברוך שם כבוד מלכוותו לעולם ועד\".</string>
+    <string name="step2_rosh_edot_interrupted">If interrupted by speaking: recite \"על מצות תפילין\" and \"ברוך שם כבוד מלכותו לעולם ועד\".</string>
+
+    <string name="step3_hand_title">3. Finger Coils &amp; Betrothal Verses</string>
+    <string name="step3_hand_desc">Wrap the strap three times around the middle finger (one on the middle joint, two on the lower joint), wrap the palm, and recite:</string>
+    <string name="verses_erusin">וְאֵרַשְׂתִּיךְ לִי לְעוֹלָם, וְאֵרַשְׂתִּיךְ לִי בְּצֶדֶק וּבְמִשְׁפָּט וּבְחֶסֶד וּבְרַחֲמִים. וְאֵרַשְׂתִּיךְ לִי בֶּאֱמוּנָה, וְיָדַעַתְּ אֶת יְהֹוָה.\n(\"And I will betroth thee unto Me forever; yea, I will betroth thee unto Me in righteousness, and in justice, and in lovingkindness, and in compassion. And I will betroth thee unto Me in faithfulness; and thou shalt know the Lord.\")</string>
+
+    <string name="step4_parashot_title">4. Torah Portions (Kadesh Li &amp; Vehaya Ki Yeviacha)</string>
+    <string name="parashat_kadesh">וַיְדַבֵּר יְהֹוָה אֶל מֹשֶׁה לֵּאמֹר: קַדֶּשׁ לִי כָל בְּכוֹר פֶּטֶר כָּל רֶחֶם בִּבְנֵי יִשְׂרָאֵל בָּאָדָם וּבַבְּהֵמָה לִי הוּא. וַיֹּאמֶר מֹשֶׁה אֶל הָעָם זָכוֹר אֶת הַיּוֹם הַזֶּה אֲשֶׁר יְצָאתֶם מִמִּצְרַיִם מִבֵּית עֲבָדִים כִּי בְּחֹזֶק יָד הוֹצִיא יְהֹוָה אֶתְכֶם מִזֶּה וְלֹא יֵאָכֵל חָמֵץ. הַיּוֹם אַתֶּם יֹצְאִים בְּחֹדֶשׁ הָאָבִיב. וְהָיָה כִי יְבִיאֲךָ יְהֹוָה אֶל אֶרֶץ הַכְּנַעֲנִי וְהַחִתִּי וְהָאֱמֹרִי וְהַחִוִּי וְהַיְבוּסִי אֲשֶׁר נִשְׁבַּע לַאֲבֹתֶיךָ לָתֶת לָךְ אֶרֶץ זָבַת חָלָב וּדְבָשׁ וְעָבַדְתָּ אֶת הָעֲבֹדָה הַזֹּאת בַּחֹדֶשׁ הַזֶּה. שִׁבְעַת יָמִים תֹּאכַל מַצֹּת וּבַיּוֹם הַשְּׁבִיעִי חַג לַיהֹוָה. מַצּוֹת יֵאָכֵל אֵת שִׁבְעַת הַיָּמִים וְלֹא יֵרָאֶה לְךָ חָמֵץ וְלֹא יֵרָאֶה לְךָ שְׂאֹר בְּכָל גְּבֻלֶךָ. וְהִגַּדְתָּ לְבִנְךָ בַּיּוֹם הַהוּא לֵאמֹר בַּעֲבוּר זֶה עָשָׂה יְהֹוָה לִי בְּצֵאתִי מִמִּצְרָיִם. וְהָיָה לְךָ לְאוֹת עַל יָדְךָ וּלְזִכָּרוֹן בֵּין עֵינֶיךָ לְמַעַן תִּהְיֶה תּוֹרַת יְהֹוָה בְּפִיךָ כִּי בְּיָד חֲזָקָה הוֹצִאֲךָ יְהֹוָה מִמִּצְרָיִם. וְשָׁמַרְתָּ אֶת הַחֻקָּה הַזֹּאת לְמוֹעֲדָהּ מִיָּמִים יָמִימָה.</string>
+    <string name="parashat_vehaya">וְהָיָה כִּי יְבִאֲךָ יְהֹוָה אֶל אֶרֶץ הַכְּנַעֲנִי כַּאֲשֶׁר נִשְׁבַּע לְךָ וְלַאֲבֹתֶיךָ וּנְתָנָהּ לָךְ. וְהַעֲבַרְתָּ כָל פֶּטֶר רֶחֶם לַיהֹוָה וְכָל פֶּטֶר שֶׁגֶר בְּהֵמָה אֲשֶׁר יִהְיֶה לְךָ הַזְּכָרִים לַיהֹוָה. וְכָל פֶּטֶר חֲמֹר תִּפְדֶּה בְשֶׂה וְאִם לֹא תִפְדֶּה וַעֲרַפְתּוֹ וְכֹל בְּכוֹר אָדָם בְּבָנֶיךָ תִּפְדֶּה. וְהָיָה כִּי יִשְׁאָלְךָ בִנְךָ מָחָר לֵאמֹר מַה זֹּאת וְאָמַרְתָּ אֵלָיו בְּחֹזֶק יָד הוֹצִיאָנוּ יְהֹוָה מִמִּצְרַיִם מִבֵּית עֲבָדִים. וַיְהִי כִּי הִקְשָׁה פַרְעֹה לְשַׁלְּחֵנוּ וַיַּהֲרֹג יְהֹוָה כָּל בְּכוֹר בְּאֶרֶץ מִצְרַיִם מִבְּכֹר אָדָם וְעַד בְּכוֹר בְּהֵמָה עַל כֵּן אֲנִי זֹבֵחַ לַיהֹוָה כָּל פֶּטֶר רֶחֶם הַזְּכָרִים וְכָל בְּכוֹר בָּנַי אֶפְדֶּה. וְהָיָה לְאוֹת עַל יָדְכָה וּלְטוֹטָפֹת בֵּין עֵינֶיךָ כִּי בְּחֹזֶק יָד הוֹצִיאָנוּ יְהֹוָה מִמִּצְרָיִם.</string>
+
     <!-- Halachic Guide Dialog -->
     <string name="modal_title">Halachic Rules for Head Tefillin</string>
     <string name="modal_rule1_title">1. Horizontal Symmetry (Middle)</string>
@@ -62,13 +93,16 @@
 
     <!-- Bug Report Dialog -->
     <string name="bug_modal_title">🐞 Report an Issue</string>
-    <string name="bug_intro">Having trouble with detection or stability? Capture a snapshot and diagnostic logs to share with developers.</string>
+    <string name="bug_intro">Having trouble with detection or stability? Send a report directly. The snapshot and diagnostics will be sent to the developer.</string>
     <string name="bug_preview_label">Captured Snapshot:</string>
     <string name="bug_notes_label">Brief description (optional):</string>
     <string name="bug_notes_hint">e.g., Glasses detected as Tefillin, or wrong alignment</string>
-    <string name="capture_and_share">Capture Snapshot &amp; Share</string>
-    <string name="copy_logs">Copy Logs to Clipboard</string>
-    <string name="logs_copied">Logs copied to clipboard!</string>
+    <string name="send_report">Send Report</string>
+    <string name="sending_report">Sending report...</string>
+    <string name="report_sent_success">Report sent successfully! Thank you.</string>
+    <string name="report_send_error">Error sending report: %s</string>
+    <string name="report_offline_or_failed">Report endpoint not configured or offline. You can share via an external app.</string>
+    <string name="share_fallback">Share via External App</string>
     <string name="share_subject">Tefillin Mirror Bug Report</string>
     <string name="share_chooser_title">Share Bug Report via...</string>
     <string name="share_error">Share error: %s</string>

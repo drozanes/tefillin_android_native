@@ -35,6 +35,7 @@ import com.drozanes.tefillin.model.FaceGeometry
 import com.drozanes.tefillin.model.TefillinBox
 import com.drozanes.tefillin.ui.BugReportDialog
 import com.drozanes.tefillin.ui.HalachaDialog
+import com.drozanes.tefillin.ui.TefillinOrderDialog
 import com.drozanes.tefillin.util.CrashHandler
 import com.drozanes.tefillin.util.DiagnosticLogger
 import com.drozanes.tefillin.util.LocaleManager
@@ -49,7 +50,6 @@ class MainActivity : AppCompatActivity() {
     companion object {
         private const val TAG = "MainActivity"
         private const val PREFS_NAME = "tefillin_app_prefs"
-        private const val KEY_SELECTED_MODEL = "selected_model"
         private const val KNOT_GUIDE_URL = "https://www.youtube.com/watch?v=4BEhw4g_OJI"
     }
 
@@ -145,11 +145,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun initAiEngines() {
-        val savedModel = prefs.getString(KEY_SELECTED_MODEL, YoloDetector.MODEL_FP16) ?: YoloDetector.MODEL_FP16
-        AiManager.initialize(this) { isGpu, model ->
-            if (model != savedModel) {
-                AiManager.yoloDetector?.loadModel(savedModel)
-            }
+        AiManager.initialize(this) { isGpu, _ ->
             runOnUiThread {
                 binding.tvGpuBadge.text = getString(if (isGpu) R.string.gpu_active_badge else R.string.cpu_active_badge)
                 binding.tvGpuBadge.setTextColor(
@@ -160,27 +156,9 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun setupUI() {
-        // 1. Model Selector Toggle Pill Button (FP16 by default)
-        val initialModel = prefs.getString(KEY_SELECTED_MODEL, YoloDetector.MODEL_FP16) ?: YoloDetector.MODEL_FP16
-        updateModelButtonUi(initialModel)
-
-        binding.btnModelSelect.setOnClickListener {
-            val currentModel = prefs.getString(KEY_SELECTED_MODEL, YoloDetector.MODEL_FP16) ?: YoloDetector.MODEL_FP16
-            val nextModel = if (currentModel == YoloDetector.MODEL_FP16) YoloDetector.MODEL_UINT8 else YoloDetector.MODEL_FP16
-            prefs.edit().putString(KEY_SELECTED_MODEL, nextModel).apply()
-            updateModelButtonUi(nextModel)
-
-            AiManager.executor.execute {
-                AiManager.yoloDetector?.loadModel(nextModel)
-                DiagnosticLogger.info("Model switched to: $nextModel")
-            }
-
-            val toastMsg = if (nextModel == YoloDetector.MODEL_UINT8) {
-                getString(R.string.model_switched_int8)
-            } else {
-                getString(R.string.model_switched_fp16)
-            }
-            Toast.makeText(this, toastMsg, Toast.LENGTH_SHORT).show()
+        // 1. Seder Hanachat Tefillin (Order of Putting on Tefillin) Dialog
+        binding.btnTefillinOrder.setOnClickListener {
+            TefillinOrderDialog(this).show()
         }
 
         // 2. Language Switcher Button (Shows next target language)
@@ -228,16 +206,6 @@ class MainActivity : AppCompatActivity() {
         // 7. Permission Button
         binding.btnGrantPermission.setOnClickListener {
             checkCameraPermission()
-        }
-    }
-
-    private fun updateModelButtonUi(model: String) {
-        if (model == YoloDetector.MODEL_UINT8) {
-            binding.btnModelSelect.text = getString(R.string.model_int8)
-            binding.btnModelSelect.setTextColor(ContextCompat.getColor(this, R.color.accent_cyan))
-        } else {
-            binding.btnModelSelect.text = getString(R.string.model_fp16)
-            binding.btnModelSelect.setTextColor(ContextCompat.getColor(this, R.color.accent_gold))
         }
     }
 
