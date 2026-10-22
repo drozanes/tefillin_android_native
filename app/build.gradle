@@ -30,11 +30,27 @@ android {
         buildConfigField "String", "BUG_REPORT_WEBHOOK_URL", "\"${bugReportWebhookUrl}\""
     }
 
+    signingConfigs {
+        release {
+            def keystorePath = localProperties.getProperty('release.storeFile') ?: 'release.keystore'
+            def keystoreFile = rootProject.file(keystorePath)
+            if (keystoreFile.exists()) {
+                storeFile keystoreFile
+                storePassword localProperties.getProperty('release.storePassword') ?: 'tefillin123'
+                keyAlias localProperties.getProperty('release.keyAlias') ?: 'tefillin'
+                keyPassword localProperties.getProperty('release.keyPassword') ?: 'tefillin123'
+                v1SigningEnabled true
+                v2SigningEnabled true
+            }
+        }
+    }
+
     buildTypes {
         release {
             minifyEnabled true
             shrinkResources false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.release
         }
         debug {
             applicationIdSuffix ".debug"
