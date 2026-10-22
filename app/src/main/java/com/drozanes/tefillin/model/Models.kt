@@ -1,7 +1,5 @@
 package com.drozanes.tefillin.model
 
-import android.graphics.RectF
-
 data class Point2D(
     val x: Float,
     val y: Float
@@ -12,8 +10,6 @@ data class FaceGeometry(
     val midEyesPt: Point2D,
     val nosePt: Point2D,
     val meshTopPt: Point2D,
-    val subnasalePt: Point2D?,
-    val mentonPt: Point2D?,
     val hairlinePt: Point2D,
     val eyeLeftPt: Point2D,
     val eyeRightPt: Point2D,
@@ -22,8 +18,7 @@ data class FaceGeometry(
     val uUp: Point2D,
     val pitchAngle: Float,
     val pitchCompression: Float,
-    val eyebrowLevelY: Float,
-    val searchArea: RectF
+    val eyebrowLevelY: Float
 )
 
 data class TefillinBox(

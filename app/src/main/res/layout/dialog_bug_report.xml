@@ -50,6 +50,27 @@
             android:adjustViewBounds="true"
             android:scaleType="fitCenter"
             android:background="#151C2C"
+            android:layout_marginBottom="8dp" />
+
+        <com.google.android.material.checkbox.MaterialCheckBox
+            android:id="@+id/cbAttachSnapshot"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/bug_attach_snapshot_label"
+            android:textColor="@color/text_main"
+            android:textSize="12.5sp"
+            android:checked="true"
+            app:buttonTint="@color/accent_gold"
+            android:layout_marginBottom="4dp" />
+
+        <TextView
+            android:id="@+id/tvPrivacyNotice"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/bug_privacy_notice"
+            android:textColor="@color/text_subtle"
+            android:textSize="11sp"
+            android:lineSpacingExtra="2dp"
             android:layout_marginBottom="12dp" />
 
         <TextView

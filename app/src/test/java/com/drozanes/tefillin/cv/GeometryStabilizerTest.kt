@@ -15,8 +15,6 @@ class GeometryStabilizerTest {
             midEyesPt = Point2D(320f, 290f),
             nosePt = Point2D(320f, 320f),
             meshTopPt = Point2D(320f, 150f),
-            subnasalePt = null,
-            mentonPt = null,
             hairlinePt = Point2D(hairlineX, hairlineY),
             eyeLeftPt = Point2D(270f, 290f),
             eyeRightPt = Point2D(370f, 290f),
@@ -25,8 +23,7 @@ class GeometryStabilizerTest {
             uUp = Point2D(0f, -1f),
             pitchAngle = 0f,
             pitchCompression = 1f,
-            eyebrowLevelY = 280f,
-            searchArea = RectF(270f, 100f, 370f, 250f)
+            eyebrowLevelY = 280f
         )
     }
 

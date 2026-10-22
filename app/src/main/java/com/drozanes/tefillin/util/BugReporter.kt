@@ -6,6 +6,7 @@ import android.os.Build
 import android.os.Handler
 import android.os.Looper
 import android.util.Log
+import com.drozanes.tefillin.BuildConfig
 import java.io.ByteArrayOutputStream
 import java.io.DataOutputStream
 import java.net.HttpURLConnection
@@ -30,16 +31,12 @@ object BugReporter {
     private val mainHandler = Handler(Looper.getMainLooper())
 
     /**
-     * Paste your incoming Webhook URL here.
-     * Examples:
-     * - Discord Webhook: "https://discord.com/api/webhooks/YOUR_WEBHOOK_ID/YOUR_WEBHOOK_TOKEN"
-     * - Telegram Bot: "https://api.telegram.org/bot<TOKEN>/sendPhoto?chat_id=<CHAT_ID>"
-     * - Web3Forms / Relay: "https://api.web3forms.com/submit"
-     *
-     * If left blank, the app will gracefully offer the native Android share sheet as a fallback.
+     * Webhook endpoint for direct anonymous bug reports.
+     * Configured via local.properties (tefillin.bug_report_webhook_url) or environment variable.
+     * If left blank, the app gracefully offers the native Android share sheet as a fallback.
      */
     @Volatile
-    var WEBHOOK_URL: String = "https://discord.com/api/webhooks/1562703388796522506/NvB2H8tOIDRt-OE3f68oDd2OrQIbZ8ogPwi9P4bL_j7D4PR1hFhhdLm6tCKvPhhgKtvN"
+    var WEBHOOK_URL: String = BuildConfig.BUG_REPORT_WEBHOOK_URL
 
     fun isConfigured(): Boolean = WEBHOOK_URL.isNotBlank() && WEBHOOK_URL.startsWith("http")
 

@@ -9,6 +9,8 @@ import android.os.Build
 import android.util.Log
 import android.widget.Toast
 import androidx.core.content.FileProvider
+import com.drozanes.tefillin.BuildConfig
+import com.drozanes.tefillin.R
 import java.io.File
 import java.io.PrintWriter
 import java.io.StringWriter
@@ -68,7 +70,7 @@ object CrashHandler {
             appendLine("Timestamp: $timestamp")
             appendLine("Device: ${Build.MANUFACTURER} ${Build.MODEL} (${Build.DEVICE})")
             appendLine("Android OS: ${Build.VERSION.RELEASE} (SDK ${Build.VERSION.SDK_INT})")
-            appendLine("App Version: 1.0.0")
+            appendLine("App Version: ${BuildConfig.VERSION_NAME} (${BuildConfig.VERSION_CODE})")
             appendLine("Crashing Thread: ${thread.name} (ID: ${thread.id})")
             appendLine("Memory: Used ${usedMem}MB / Max ${maxMem}MB")
             appendLine("Active Language: ${LocaleManager.getLanguage(context)}")
@@ -120,18 +122,12 @@ object CrashHandler {
     fun checkAndPromptCrashReport(context: Context) {
         val report = getPendingCrashReport(context) ?: return
 
-        val isHebrew = LocaleManager.getLanguage(context) == LocaleManager.LANG_HEBREW
-
-        val title = if (isHebrew) "⚠️ זוהתה קריסה קודמת באפליקציה" else "⚠️ Previous Crash Detected"
-        val message = if (isHebrew) {
-            "האפליקציה נסגרה באופן בלתי צפוי בהפעלה הקודמת.\nבאפשרותך להעתיק או לשתף את דוח השגיאה כדי שנוכל לתקן זאת מיד."
-        } else {
-            "The app closed unexpectedly during the previous session.\nYou can copy or share this report to help developers fix it immediately."
-        }
-
-        val btnCopy = if (isHebrew) "📋 העתק דוח שגיאה" else "📋 Copy Report"
-        val btnShare = if (isHebrew) "📤 שתף דוח" else "📤 Share"
-        val btnDismiss = if (isHebrew) "סגור" else "Dismiss"
+        val title = context.getString(R.string.crash_dialog_title)
+        val message = context.getString(R.string.crash_dialog_message)
+        val btnCopy = context.getString(R.string.crash_dialog_btn_copy)
+        val btnShare = context.getString(R.string.crash_dialog_btn_share)
+        val btnDismiss = context.getString(R.string.crash_dialog_btn_dismiss)
+        val copiedMsg = context.getString(R.string.crash_dialog_copied_toast)
 
         AlertDialog.Builder(context)
             .setTitle(title)
@@ -139,7 +135,6 @@ object CrashHandler {
             .setPositiveButton(btnCopy) { _, _ ->
                 val clipboard = context.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
                 clipboard.setPrimaryClip(ClipData.newPlainText("Tefillin Mirror Crash Report", report))
-                val copiedMsg = if (isHebrew) "דוח הקריסה הועתק ללוח בהצלחה!" else "Crash report copied to clipboard!"
                 Toast.makeText(context, copiedMsg, Toast.LENGTH_LONG).show()
                 clearPendingCrashReport(context)
             }
@@ -167,7 +162,7 @@ object CrashHandler {
                 putExtra(Intent.EXTRA_STREAM, uri)
                 addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
             }
-            context.startActivity(Intent.createChooser(intent, "Share Crash Report via..."))
+            context.startActivity(Intent.createChooser(intent, context.getString(R.string.crash_dialog_chooser_title)))
         } catch (e: Exception) {
             Log.e(TAG, "Error sharing crash report", e)
         }

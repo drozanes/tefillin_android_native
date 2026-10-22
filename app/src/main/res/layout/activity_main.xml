@@ -123,17 +123,18 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             android:gravity="center_vertical"
-            android:layout_marginTop="6dp">
+            android:layout_marginTop="5dp">
 
             <TextView
                 android:id="@+id/tvAppSubTitle"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:layout_marginStart="42dp"
+                android:layout_marginStart="2dp"
+                android:layout_marginEnd="6dp"
                 android:text="@string/app_subtitle"
                 android:textColor="@color/accent_gold"
-                android:textSize="12sp"
+                android:textSize="11.5sp"
                 android:textStyle="bold"
                 android:singleLine="true"
                 android:ellipsize="end" />
@@ -142,14 +143,14 @@
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/btnTefillinOrder"
                 android:layout_width="wrap_content"
-                android:layout_height="36dp"
+                android:layout_height="34dp"
                 android:minWidth="0dp"
                 android:minHeight="0dp"
                 android:insetTop="0dp"
                 android:insetBottom="0dp"
                 android:insetLeft="0dp"
                 android:insetRight="0dp"
-                android:paddingHorizontal="10dp"
+                android:paddingHorizontal="8dp"
                 android:paddingVertical="0dp"
                 android:text="@string/btn_tefillin_order"
                 android:textSize="11sp"
@@ -158,21 +159,21 @@
                 android:background="@drawable/bg_button_rounded"
                 app:backgroundTint="@null"
                 android:textAllCaps="false"
-                app:cornerRadius="10dp"
-                android:layout_marginEnd="6dp" />
+                app:cornerRadius="8dp"
+                android:layout_marginEnd="5dp" />
 
             <!-- Guidelines Toggle Pill Button -->
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/btnToggleGuides"
                 android:layout_width="wrap_content"
-                android:layout_height="36dp"
+                android:layout_height="34dp"
                 android:minWidth="0dp"
                 android:minHeight="0dp"
                 android:insetTop="0dp"
                 android:insetBottom="0dp"
                 android:insetLeft="0dp"
                 android:insetRight="0dp"
-                android:paddingHorizontal="10dp"
+                android:paddingHorizontal="8dp"
                 android:paddingVertical="0dp"
                 android:text="@string/guides_on"
                 android:textSize="11sp"
@@ -181,7 +182,7 @@
                 android:background="@drawable/bg_button_rounded"
                 app:backgroundTint="@null"
                 android:textAllCaps="false"
-                app:cornerRadius="10dp" />
+                app:cornerRadius="8dp" />
 
         </LinearLayout>
 

@@ -26,8 +26,6 @@ class TefillinEngineTest {
             midEyesPt = Point2D(midX, glabellaY + 10f),
             nosePt = Point2D(midX, glabellaY + 40f),
             meshTopPt = meshTop,
-            subnasalePt = Point2D(midX, glabellaY + 60f),
-            mentonPt = Point2D(midX, glabellaY + 120f),
             hairlinePt = hairline,
             eyeLeftPt = Point2D(midX - eyeDist / 2f, glabellaY + 10f),
             eyeRightPt = Point2D(midX + eyeDist / 2f, glabellaY + 10f),
@@ -36,8 +34,7 @@ class TefillinEngineTest {
             uUp = uUp,
             pitchAngle = pitchAngle,
             pitchCompression = 1.0f,
-            eyebrowLevelY = glabellaY,
-            searchArea = RectF(midX - 50f, 100f, midX + 50f, 250f)
+            eyebrowLevelY = glabellaY
         )
     }
 

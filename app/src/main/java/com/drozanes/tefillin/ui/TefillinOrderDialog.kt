@@ -56,6 +56,15 @@ class TefillinOrderDialog(context: Context) : Dialog(context) {
             selectNusach(NUSACH_EDOT_MIZRACH)
         }
 
+        var isParashotExpanded = false
+        binding.layoutParashotToggle.setOnClickListener {
+            isParashotExpanded = !isParashotExpanded
+            binding.layoutParashotContent.visibility = if (isParashotExpanded) View.VISIBLE else View.GONE
+            binding.tvParashotToggleHint.text = context.getString(
+                if (isParashotExpanded) R.string.parashot_toggle_collapse else R.string.parashot_toggle_expand
+            )
+        }
+
         binding.btnCloseOrder.setOnClickListener {
             dismiss()
         }

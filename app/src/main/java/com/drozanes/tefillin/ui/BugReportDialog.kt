@@ -45,14 +45,21 @@ class BugReportDialog(
         if (snapshotBitmap != null) {
             binding.ivPreview.visibility = View.VISIBLE
             binding.tvPreviewLabel.visibility = View.VISIBLE
+            binding.cbAttachSnapshot.visibility = View.VISIBLE
             binding.ivPreview.setImageBitmap(snapshotBitmap)
+            binding.cbAttachSnapshot.setOnCheckedChangeListener { _, isChecked ->
+                binding.ivPreview.visibility = if (isChecked) View.VISIBLE else View.GONE
+                binding.tvPreviewLabel.visibility = if (isChecked) View.VISIBLE else View.GONE
+            }
         } else {
             binding.ivPreview.visibility = View.GONE
             binding.tvPreviewLabel.visibility = View.GONE
+            binding.cbAttachSnapshot.visibility = View.GONE
         }
 
         binding.btnSendReport.setOnClickListener {
             val notes = binding.etNotes.text.toString()
+            val effectiveSnapshot = if (binding.cbAttachSnapshot.isChecked) snapshotBitmap else null
 
             if (BugReporter.isConfigured()) {
                 setSendingState(true)
@@ -62,7 +69,7 @@ class BugReportDialog(
                     activeModel = activeModel,
                     isGpu = isGpu,
                     cameraRes = cameraRes,
-                    snapshotBitmap = snapshotBitmap,
+                    snapshotBitmap = effectiveSnapshot,
                     onSuccess = {
                         setSendingState(false)
                         Toast.makeText(context, context.getString(R.string.report_sent_success), Toast.LENGTH_LONG).show()
@@ -80,13 +87,14 @@ class BugReportDialog(
                 // If webhook endpoint is not configured yet, notify and allow fallback sharing
                 Toast.makeText(context, context.getString(R.string.report_offline_or_failed), Toast.LENGTH_SHORT).show()
                 binding.btnShareFallback.visibility = View.VISIBLE
-                shareReport(notes)
+                shareReport(notes, effectiveSnapshot)
             }
         }
 
         binding.btnShareFallback.setOnClickListener {
             val notes = binding.etNotes.text.toString()
-            shareReport(notes)
+            val effectiveSnapshot = if (binding.cbAttachSnapshot.isChecked) snapshotBitmap else null
+            shareReport(notes, effectiveSnapshot)
         }
 
         binding.btnCloseBug.setOnClickListener { dismiss() }
@@ -108,7 +116,7 @@ class BugReportDialog(
         }
     }
 
-    private fun shareReport(notes: String) {
+    private fun shareReport(notes: String, effectiveSnapshot: Bitmap?) {
         try {
             var report = DiagnosticLogger.buildDiagnosticReport(notes, activeModel, isGpu, cameraRes)
             val crashReport = CrashHandler.getPendingCrashReport(context)
@@ -127,11 +135,11 @@ class BugReportDialog(
                 val uris = ArrayList<android.net.Uri>()
                 uris.add(logUri)
 
-                // Save snapshot if present
-                if (snapshotBitmap != null) {
+                // Save snapshot if present and permitted
+                if (effectiveSnapshot != null) {
                     val imgFile = File(cacheDir, "tefillin_mirror_snapshot.jpg")
                     val fos = FileOutputStream(imgFile)
-                    snapshotBitmap.compress(Bitmap.CompressFormat.JPEG, 92, fos)
+                    effectiveSnapshot.compress(Bitmap.CompressFormat.JPEG, 92, fos)
                     fos.flush()
                     fos.close()
                     val imgUri = FileProvider.getUriForFile(context, "${context.packageName}.fileprovider", imgFile)

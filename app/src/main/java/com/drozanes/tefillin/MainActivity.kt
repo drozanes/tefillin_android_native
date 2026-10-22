@@ -14,6 +14,7 @@ import android.util.Log
 import android.view.View
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.camera.core.*
@@ -35,9 +36,11 @@ import com.drozanes.tefillin.model.FaceGeometry
 import com.drozanes.tefillin.model.TefillinBox
 import com.drozanes.tefillin.ui.BugReportDialog
 import com.drozanes.tefillin.ui.HalachaDialog
+import com.drozanes.tefillin.ui.MainViewModel
 import com.drozanes.tefillin.ui.TefillinOrderDialog
 import com.drozanes.tefillin.util.CrashHandler
 import com.drozanes.tefillin.util.DiagnosticLogger
+import com.drozanes.tefillin.util.HapticFeedbackHelper
 import com.drozanes.tefillin.util.LocaleManager
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
@@ -54,8 +57,10 @@ class MainActivity : AppCompatActivity() {
     }
 
     private lateinit var binding: ActivityMainBinding
+    private val viewModel: MainViewModel by viewModels()
     private lateinit var cameraExecutor: ExecutorService
     private lateinit var prefs: SharedPreferences
+    private lateinit var hapticHelper: HapticFeedbackHelper
 
     // CameraX Lifecycle References
     private var cameraProvider: ProcessCameraProvider? = null
@@ -72,7 +77,6 @@ class MainActivity : AppCompatActivity() {
     // State Tracking
     private var lastYoloTime = 0L
     private var lastYoloBox: TefillinBox? = null
-    private var lastCameraResolution = "480x640"
     private var latestBitmapSnapshot: Bitmap? = null
 
     private val cameraPermissionLauncher = registerForActivityResult(
@@ -97,6 +101,7 @@ class MainActivity : AppCompatActivity() {
         DiagnosticLogger.info("Application boot: Native Android Tefillin App")
 
         prefs = getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
+        hapticHelper = HapticFeedbackHelper(this)
 
         // Ensure default app locale is synchronized to user choice (default Hebrew)
         val savedLang = LocaleManager.getLanguage(this)
@@ -112,7 +117,6 @@ class MainActivity : AppCompatActivity() {
         CrashHandler.checkAndPromptCrashReport(this)
 
         // Apply Window Insets for modern Android edge-to-edge screens.
-        // Guarantees all buttons and titles sit comfortably below the physical status bar and camera punch-hole!
         ViewCompat.setOnApplyWindowInsetsListener(binding.mainRoot) { _, insets ->
             val statusBarInsets = insets.getInsets(
                 WindowInsetsCompat.Type.statusBars() or WindowInsetsCompat.Type.displayCutout()
@@ -122,16 +126,16 @@ class MainActivity : AppCompatActivity() {
             )
 
             val density = resources.displayMetrics.density
-            val safeTopPadding = max(statusBarInsets.top + (8 * density).toInt(), (14 * density).toInt())
+            val safeTopPadding = max(statusBarInsets.top + (6 * density).toInt(), (12 * density).toInt())
             binding.headerLayout.updatePadding(
                 top = safeTopPadding,
-                bottom = (10 * density).toInt()
+                bottom = (8 * density).toInt()
             )
 
-            val safeBottomPadding = max(navBarInsets.bottom + (8 * density).toInt(), (10 * density).toInt())
+            val safeBottomPadding = max(navBarInsets.bottom + (6 * density).toInt(), (8 * density).toInt())
             binding.footerLayout.updatePadding(
                 bottom = safeBottomPadding,
-                top = (8 * density).toInt()
+                top = (6 * density).toInt()
             )
 
             insets
@@ -145,7 +149,8 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun initAiEngines() {
-        AiManager.initialize(this) { isGpu, _ ->
+        AiManager.initialize(this) { isGpu, modelName ->
+            viewModel.setAiStatus(isGpu, modelName)
             runOnUiThread {
                 binding.tvGpuBadge.text = getString(if (isGpu) R.string.gpu_active_badge else R.string.cpu_active_badge)
                 binding.tvGpuBadge.setTextColor(
@@ -174,7 +179,7 @@ class MainActivity : AppCompatActivity() {
         // 3. Guidelines Toggle Pill Button
         updateGuidesButtonUi(binding.overlayView.showGuides)
         binding.btnToggleGuides.setOnClickListener {
-            val nextState = !binding.overlayView.showGuides
+            val nextState = viewModel.toggleGuides()
             binding.overlayView.showGuides = nextState
             binding.overlayView.invalidate()
             updateGuidesButtonUi(nextState)
@@ -187,10 +192,11 @@ class MainActivity : AppCompatActivity() {
 
         // 5. Bug Report Dialog
         binding.btnBugReport.setOnClickListener {
-            val snapshot = binding.previewView.bitmap ?: latestBitmapSnapshot
-            val activeModel = AiManager.yoloDetector?.getActiveModel() ?: "unknown"
-            val isGpu = AiManager.faceLandmarker?.isGpuActive == true
-            BugReportDialog(this, snapshot, activeModel, isGpu, lastCameraResolution).show()
+            val snapshot = binding.previewView.bitmap ?: synchronized(this) { latestBitmapSnapshot?.copy(Bitmap.Config.ARGB_8888, false) }
+            val activeModel = viewModel.activeModel.value
+            val isGpu = viewModel.isGpuActive.value
+            val cameraRes = viewModel.cameraResolution.value
+            BugReportDialog(this, snapshot, activeModel, isGpu, cameraRes).show()
         }
 
         // 6. Knot Guide Video Link
@@ -298,6 +304,10 @@ class MainActivity : AppCompatActivity() {
     override fun onPause() {
         super.onPause()
         stopCameraSafely()
+        synchronized(this) {
+            latestBitmapSnapshot?.recycle()
+            latestBitmapSnapshot = null
+        }
     }
 
     override fun onResume() {
@@ -320,15 +330,24 @@ class MainActivity : AppCompatActivity() {
             val rawBitmap = imageProxy.toBitmap()
             imageProxy.close()
 
+            // Handle sensor rotation with zero-leak immediate recycling of unrotated buffer
             val bitmap = if (rotationDegrees != 0) {
                 val matrix = Matrix().apply { postRotate(rotationDegrees.toFloat()) }
-                Bitmap.createBitmap(rawBitmap, 0, 0, rawBitmap.width, rawBitmap.height, matrix, true)
+                val rotated = Bitmap.createBitmap(rawBitmap, 0, 0, rawBitmap.width, rawBitmap.height, matrix, true)
+                rawBitmap.recycle()
+                rotated
             } else {
                 rawBitmap
             }
 
-            latestBitmapSnapshot = bitmap
-            lastCameraResolution = "${bitmap.width}x${bitmap.height}"
+            viewModel.setCameraResolution(bitmap.width, bitmap.height)
+
+            // Cache fallback snapshot for bug reporting with safe recycling of previous frame
+            synchronized(this) {
+                val old = latestBitmapSnapshot
+                latestBitmapSnapshot = bitmap.copy(bitmap.config ?: Bitmap.Config.ARGB_8888, false)
+                old?.recycle()
+            }
 
             val landmarker = AiManager.faceLandmarker
             val yolo = AiManager.yoloDetector
@@ -340,6 +359,7 @@ class MainActivity : AppCompatActivity() {
             if (landmarks == null || landmarks.isEmpty()) {
                 videoStabilizer.reset()
                 lastYoloBox = null
+                viewModel.clearResults()
                 runOnUiThread {
                     if (!isFinishing && !isDestroyed) {
                         binding.overlayView.clear()
@@ -361,6 +381,7 @@ class MainActivity : AppCompatActivity() {
 
             if (geometry == null) {
                 lastYoloBox = null
+                viewModel.clearResults()
                 runOnUiThread {
                     if (!isFinishing && !isDestroyed) {
                         binding.overlayView.clear()
@@ -390,8 +411,9 @@ class MainActivity : AppCompatActivity() {
 
             // 5. Evaluate Halachic Alignment Status
             val alignment = TefillinEngine.evaluateAlignment(winner, geometry)
+            viewModel.updateResults(geometry, alignment)
 
-            // 6. Push to UI
+            // 6. Push to UI & trigger tactile haptic confirmation if status changed
             runOnUiThread {
                 if (!isFinishing && !isDestroyed) {
                     binding.overlayView.setResults(geometry, alignment, bitmap.width, bitmap.height)
@@ -404,6 +426,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun updateUiForNoFace() {
+        hapticHelper.onAlignmentChanged(AlignmentStatus.NO_TEFILLIN)
         binding.statusDot.setBackgroundResource(R.drawable.dot_searching)
         binding.tvStatus.text = getString(R.string.no_face)
         binding.tvDirectionArrow.text = "🔍"
@@ -415,6 +438,7 @@ class MainActivity : AppCompatActivity() {
     private fun updateUiWithAlignment(alignment: AlignmentResult) {
         val winner = alignment.winner
         if (winner == null) {
+            hapticHelper.onAlignmentChanged(AlignmentStatus.NO_TEFILLIN)
             binding.statusDot.setBackgroundResource(R.drawable.dot_searching)
             binding.tvStatus.text = getString(R.string.no_tefillin)
             binding.tvDirectionArrow.text = "🔳"
@@ -423,6 +447,9 @@ class MainActivity : AppCompatActivity() {
             binding.tvKnotGuideLink.visibility = View.GONE
             return
         }
+
+        // Deliver tactile feedback on state transition (e.g. perfect alignment confirmation, forehead error alert)
+        hapticHelper.onAlignmentChanged(alignment.status)
 
         when (alignment.status) {
             AlignmentStatus.CAMERA_TOO_LOW -> {
@@ -485,6 +512,10 @@ class MainActivity : AppCompatActivity() {
         try {
             cameraExecutor.shutdownNow()
         } catch (_: Exception) {}
+        synchronized(this) {
+            latestBitmapSnapshot?.recycle()
+            latestBitmapSnapshot = null
+        }
         super.onDestroy()
     }
 }

@@ -2,15 +2,46 @@ package com.drozanes.tefillin.cv
 
 import android.graphics.Bitmap
 import android.graphics.Color
-import android.graphics.RectF
 import com.drozanes.tefillin.model.*
 import kotlin.math.*
 
 /**
  * TefillinEngine - Computer Vision & Halachic Alignment Engine
- * Direct, faithful Kotlin port of tefillin_engine.js from tefillin_app.
+ * Direct, faithful Kotlin port of tefillin_engine.js from tefillin_app with
+ * named constants, optimized memory safety, and halachic boundary verification.
  */
 object TefillinEngine {
+
+    // --- Named Constants for Visual Hairline Detection ---
+    const val HAIRLINE_SCAN_START_RATIO = 0.64f
+    const val HAIRLINE_SCAN_END_RATIO = 0.94f
+    const val HAIRLINE_BASELINE_START_RATIO = 0.40f
+    const val HAIRLINE_BASELINE_STEP_RATIO = 0.015f
+    const val HAIRLINE_PROBE_LATERAL_OFFSET_RATIO = 0.15f
+    const val HAIRLINE_CENTER_DIFF_THRESHOLD = 26
+    const val HAIRLINE_CENTER_RATIO_THRESHOLD = 0.74f
+    const val HAIRLINE_SIDE_DIFF_THRESHOLD = 22
+    const val HAIRLINE_SIDE_RATIO_THRESHOLD = 0.78f
+    const val HAIRLINE_TEXTURE_STD_DEV_MIN = 18f
+    const val HAIRLINE_TEXTURE_SKIN_DIFF = 15
+
+    // --- Anthropometric & Perspective Foreshortening Priors ---
+    const val ANATOMICAL_HAIRLINE_RATIO = 0.82f
+    const val MIN_PITCH_FACTOR = 0.60f
+    const val PITCH_REF_ANGLE_DEG = 25f
+
+    // --- Halachic Alignment & Candidate Box Verification ---
+    const val HALACHIC_CENTER_TOLERANCE_RATIO = 0.18f
+    const val HALACHIC_BORDERLINE_MARGIN_RATIO = 0.04f
+    const val CAMERA_PITCH_TOO_LOW_DEG = 35f
+    const val CAMERA_PITCH_TOO_HIGH_DEG = -20f
+    const val BOX_EYEBROW_EXCLUSION_MARGIN_RATIO = 0.05f
+    const val BOX_CEILING_MAX_DISTANCE_RATIO = 3.0f
+    const val BOX_HORIZONTAL_MAX_DEVIATION_RATIO = 0.60f
+    const val BOX_MIN_DIMENSION_RATIO = 0.15f
+    const val BOX_MAX_DIMENSION_RATIO = 0.68f
+    const val BOX_MIN_ASPECT_RATIO = 0.45f
+    const val BOX_MAX_ASPECT_RATIO = 2.0f
 
     data class LandmarkPoint(
         val x: Float, // Normalized 0..1
@@ -34,12 +65,12 @@ object TefillinEngine {
     ): Float? {
         if (bitmap == null || width < 10 || height < 10) return null
         try {
-            val pitchFactor = max(0.60f, cos(25f * (Math.PI / 180f).toFloat() + pitchAngle) / cos(25f * (Math.PI / 180f).toFloat()))
+            val refRad = PITCH_REF_ANGLE_DEG * (Math.PI / 180f).toFloat()
+            val pitchFactor = max(MIN_PITCH_FACTOR, cos(refRad + pitchAngle) / cos(refRad))
             val uCross = Point2D(-uUp.y, uUp.x)
 
-            val scanStart = 0.64f * eyeDist * pitchFactor
-            val scanEnd = 0.94f * eyeDist * pitchFactor
-            val corridorHalfW = (eyeDist * 0.25f).roundToInt()
+            val scanStart = HAIRLINE_SCAN_START_RATIO * eyeDist * pitchFactor
+            val scanEnd = HAIRLINE_SCAN_END_RATIO * eyeDist * pitchFactor
 
             fun getGray(px: Float, py: Float): Int {
                 val rx = px.roundToInt()
@@ -56,7 +87,7 @@ object TefillinEngine {
             var skinSum = 0
             var skinCount = 0
             for (s in 0 until 10) {
-                val d = (0.40f + s * 0.015f) * eyeDist
+                val d = (HAIRLINE_BASELINE_START_RATIO + s * HAIRLINE_BASELINE_STEP_RATIO) * eyeDist
                 val g = getGray(glabellaPt.x + uUp.x * d, glabellaPt.y + uUp.y * d)
                 if (g >= 0) {
                     skinSum += g
@@ -77,17 +108,18 @@ object TefillinEngine {
                 val cVal = getGray(cx, cy)
                 if (cVal < 0) continue
 
-                val lx = cx - uCross.x * (eyeDist * 0.15f)
-                val ly = cy - uCross.y * (eyeDist * 0.15f)
-                val rx = cx + uCross.x * (eyeDist * 0.15f)
-                val ry = cy + uCross.y * (eyeDist * 0.15f)
+                val lateralOffset = eyeDist * HAIRLINE_PROBE_LATERAL_OFFSET_RATIO
+                val lx = cx - uCross.x * lateralOffset
+                val ly = cy - uCross.y * lateralOffset
+                val rx = cx + uCross.x * lateralOffset
+                val ry = cy + uCross.y * lateralOffset
 
                 val lVal = getGray(lx, ly)
                 val rVal = getGray(rx, ry)
 
-                val isDarkCenter = (cVal < skinMed - 26) || (cVal < skinMed * 0.74f)
-                val isDarkLeft = lVal >= 0 && ((lVal < skinMed - 22) || (lVal < skinMed * 0.78f))
-                val isDarkRight = rVal >= 0 && ((rVal < skinMed - 22) || (rVal < skinMed * 0.78f))
+                val isDarkCenter = (cVal < skinMed - HAIRLINE_CENTER_DIFF_THRESHOLD) || (cVal < skinMed * HAIRLINE_CENTER_RATIO_THRESHOLD)
+                val isDarkLeft = lVal >= 0 && ((lVal < skinMed - HAIRLINE_SIDE_DIFF_THRESHOLD) || (lVal < skinMed * HAIRLINE_SIDE_RATIO_THRESHOLD))
+                val isDarkRight = rVal >= 0 && ((rVal < skinMed - HAIRLINE_SIDE_DIFF_THRESHOLD) || (rVal < skinMed * HAIRLINE_SIDE_RATIO_THRESHOLD))
 
                 // 5-point local texture std dev
                 var sum = 0
@@ -107,7 +139,8 @@ object TefillinEngine {
                 val variance = if (count > 0) (sumSq.toFloat() / count) - (mean * mean) else 0f
                 val stdDev = sqrt(max(0f, variance))
 
-                if ((isDarkCenter && (isDarkLeft || isDarkRight)) || (stdDev > 18f && cVal < skinMed - 15)) {
+                if ((isDarkCenter && (isDarkLeft || isDarkRight)) ||
+                    (stdDev > HAIRLINE_TEXTURE_STD_DEV_MIN && cVal < skinMed - HAIRLINE_TEXTURE_SKIN_DIFF)) {
                     return d
                 }
             }
@@ -137,8 +170,6 @@ object TefillinEngine {
         val meshTop = landmarks[10]
         val eyeLeft = landmarks[33]
         val eyeRight = landmarks[263]
-        val subnasale = landmarks.getOrNull(2)
-        val menton = landmarks.getOrNull(152)
 
         val eyeLeftPt = Point2D(eyeLeft.x * width, eyeLeft.y * height)
         val eyeRightPt = Point2D(eyeRight.x * width, eyeRight.y * height)
@@ -146,9 +177,6 @@ object TefillinEngine {
         val midEyesPt = Point2D(midEyes.x * width, midEyes.y * height)
         val nosePt = Point2D(noseBridge.x * width, noseBridge.y * height)
         val meshTopPt = Point2D(meshTop.x * width, meshTop.y * height)
-
-        val subnasalePt = subnasale?.let { Point2D(it.x * width, it.y * height) }
-        val mentonPt = menton?.let { Point2D(it.x * width, it.y * height) }
 
         // Eye distance scale (invariant to camera distance)
         val eyeVector = Point2D(eyeRightPt.x - eyeLeftPt.x, eyeRightPt.y - eyeLeftPt.y)
@@ -165,7 +193,8 @@ object TefillinEngine {
         val dy = (meshTopPt.y - nosePt.y)
         val pitchAngle = atan2(dz, abs(dy))
         val pitchCompression = max(0.7f, cos(pitchAngle))
-        val pitchFactor = max(0.60f, cos(25f * (Math.PI / 180f).toFloat() + pitchAngle) / cos(25f * (Math.PI / 180f).toFloat()))
+        val refRad = PITCH_REF_ANGLE_DEG * (Math.PI / 180f).toFloat()
+        val pitchFactor = max(MIN_PITCH_FACTOR, cos(refRad + pitchAngle) / cos(refRad))
 
         // Adaptive visual hairline detection
         var visualHairDist = detectVisualHairline(bitmap, width, height, glabellaPt, uUp, eyeDist, pitchAngle)
@@ -191,7 +220,7 @@ object TefillinEngine {
         }
 
         // Baseline anatomical prior for natural hairline (trichion ~0.82 * eyeDist with pitch foreshortening)
-        val baseAnatomicalRatio = max(0.40f, 0.82f * pitchFactor)
+        val baseAnatomicalRatio = max(0.40f, ANATOMICAL_HAIRLINE_RATIO * pitchFactor)
         val distFromGlabella = if (visualHairDist != null) {
             visualHairDist + (hairlineUserAdj * 0.15f * eyeDist)
         } else {
@@ -207,23 +236,13 @@ object TefillinEngine {
         val leftBrowTopY = landmarks.getOrNull(107)?.let { it.y * height } ?: (glabellaPt.y - eyeDist * 0.10f)
         val rightBrowTopY = landmarks.getOrNull(336)?.let { it.y * height } ?: (glabellaPt.y - eyeDist * 0.10f)
         val highestBrowY = min(leftBrowTopY, rightBrowTopY)
-        val strictForeheadLimitY = highestBrowY - (eyeDist * 0.15f).roundToInt()
         val eyebrowLevelY = highestBrowY
-
-        // Search window for Ketzitzah box
-        val searchW = (eyeDist * 1.10f).roundToInt().toFloat()
-        val searchX = max(0f, midEyesPt.x - searchW / 2f)
-        val searchY = max(0f, hairlinePt.y - eyeDist * 2.5f)
-        val searchBottom = min(strictForeheadLimitY, hairlinePt.y + eyeDist * 0.35f)
-        val searchH = max(25f, searchBottom - searchY)
 
         val rawGeometry = FaceGeometry(
             glabellaPt = glabellaPt,
             midEyesPt = midEyesPt,
             nosePt = nosePt,
             meshTopPt = meshTopPt,
-            subnasalePt = subnasalePt,
-            mentonPt = mentonPt,
             hairlinePt = hairlinePt,
             eyeLeftPt = eyeLeftPt,
             eyeRightPt = eyeRightPt,
@@ -232,8 +251,7 @@ object TefillinEngine {
             uUp = uUp,
             pitchAngle = pitchAngle,
             pitchCompression = pitchCompression,
-            eyebrowLevelY = eyebrowLevelY,
-            searchArea = RectF(searchX, searchY, searchX + searchW, searchY + searchH)
+            eyebrowLevelY = eyebrowLevelY
         )
 
         return stabilizer?.update(rawGeometry) ?: rawGeometry
@@ -248,14 +266,14 @@ object TefillinEngine {
 
         // 1. Eyebrow / Glasses Exclusion:
         // Tefillin Shel Rosh sits on the scalp/hairline, never touching or below the eyebrows/eyes
-        val eyebrowThreshold = geometry.eyebrowLevelY - eyeDist * 0.05f
+        val eyebrowThreshold = geometry.eyebrowLevelY - eyeDist * BOX_EYEBROW_EXCLUSION_MARGIN_RATIO
         if (box.bottomY > eyebrowThreshold) {
             return false
         }
 
         // 2. Ceiling / Background Exclusion:
         // Cannot be floating way up in the ceiling
-        val ceilingThreshold = geometry.glabellaPt.y - eyeDist * 3.0f
+        val ceilingThreshold = geometry.glabellaPt.y - eyeDist * BOX_CEILING_MAX_DISTANCE_RATIO
         if (box.y < ceilingThreshold) {
             return false
         }
@@ -270,15 +288,15 @@ object TefillinEngine {
         } else {
             abs(box.x - a.x)
         }
-        if (horizOffset > eyeDist * 0.60f) {
+        if (horizOffset > eyeDist * BOX_HORIZONTAL_MAX_DEVIATION_RATIO) {
             return false
         }
 
         // 4. Physical Dimensions relative to Eye Distance:
         // Real Tefillin box is ~32-40mm wide. Inter-pupillary distance is ~63mm (~0.35-0.55 * eyeDist).
         // Glasses pushed up on head span across the entire skull (width >= 0.80 * eyeDist).
-        val minDim = eyeDist * 0.15f
-        val maxDim = eyeDist * 0.68f
+        val minDim = eyeDist * BOX_MIN_DIMENSION_RATIO
+        val maxDim = eyeDist * BOX_MAX_DIMENSION_RATIO
         if (box.boxWidth < minDim || box.boxWidth > maxDim) {
             return false
         }
@@ -289,7 +307,7 @@ object TefillinEngine {
         // 5. Aspect Ratio (Squareness):
         // A Tefillin box is roughly square (0.45 <= W/H <= 2.0). Glasses rims/frames are elongated.
         val aspectRatio = box.boxWidth / box.boxHeight
-        if (aspectRatio < 0.45f || aspectRatio > 2.0f) {
+        if (aspectRatio < BOX_MIN_ASPECT_RATIO || aspectRatio > BOX_MAX_ASPECT_RATIO) {
             return false
         }
 
@@ -336,12 +354,12 @@ object TefillinEngine {
         if (lineLen > 0.1f) {
             horizOffsetLocal = ((b.x - a.x) * (a.y - p.y) - (b.y - a.y) * (a.x - p.x)) / lineLen
         }
-        val isCentered = abs(horizOffsetLocal) < (eyeDist * 0.18f)
+        val isCentered = abs(horizOffsetLocal) < (eyeDist * HALACHIC_CENTER_TOLERANCE_RATIO)
 
         // Camera Pose / Angle Limits
         val pitchDeg = (geometry.pitchAngle * 180f) / Math.PI.toFloat()
-        val isCameraTooLow = pitchDeg > 35f
-        val isCameraTooHigh = pitchDeg < -20f
+        val isCameraTooLow = pitchDeg > CAMERA_PITCH_TOO_LOW_DEG
+        val isCameraTooHigh = pitchDeg < CAMERA_PITCH_TOO_HIGH_DEG
 
         var status = AlignmentStatus.ALIGNED
         var warning = false
@@ -363,7 +381,7 @@ object TefillinEngine {
             direction = if (horizOffsetLocal > 0) "⬅️ Move Left" else "➡️ Move Right"
         } else {
             status = AlignmentStatus.ALIGNED
-            if (distAboveHairline < (eyeDist * 0.04f)) {
+            if (distAboveHairline < (eyeDist * HALACHIC_BORDERLINE_MARGIN_RATIO)) {
                 warning = true
                 direction = "⚠️ Borderline"
             } else {

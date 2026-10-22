@@ -296,52 +296,123 @@
             android:padding="14dp"
             android:layout_marginBottom="18dp">
 
-            <TextView
-                android:id="@+id/tvParashotHeader"
+            <LinearLayout
+                android:id="@+id/layoutParashotToggle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/step4_parashot_title"
-                android:textColor="@color/accent_cyan"
-                android:textSize="16sp"
-                android:textStyle="bold"
-                android:layout_marginBottom="8dp" />
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:clickable="true"
+                android:focusable="true">
 
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="פרשת קדש לי:"
-                android:textColor="@color/text_main"
-                android:textSize="14sp"
-                android:textStyle="bold"
-                android:layout_marginBottom="4dp" />
+                <TextView
+                    android:id="@+id/tvParashotHeader"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="@string/step4_parashot_title"
+                    android:textColor="@color/accent_cyan"
+                    android:textSize="16sp"
+                    android:textStyle="bold" />
 
-            <TextView
-                android:id="@+id/tvParashatKadesh"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/parashat_kadesh"
-                android:textColor="@color/text_muted"
-                android:textSize="13sp"
-                android:lineSpacingExtra="3dp"
-                android:layout_marginBottom="10dp" />
+                <TextView
+                    android:id="@+id/tvParashotToggleHint"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/parashot_toggle_expand"
+                    android:textColor="@color/accent_gold"
+                    android:textSize="12sp"
+                    android:textStyle="bold" />
+            </LinearLayout>
 
-            <TextView
+            <!-- Collapsible Portions Container (Hidden by default, tap to expand) -->
+            <LinearLayout
+                android:id="@+id/layoutParashotContent"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="פרשת והיה כי יביאך:"
-                android:textColor="@color/text_main"
-                android:textSize="14sp"
-                android:textStyle="bold"
-                android:layout_marginBottom="4dp" />
+                android:orientation="vertical"
+                android:visibility="gone"
+                android:layout_marginTop="10dp">
 
-            <TextView
-                android:id="@+id/tvParashatVehaya"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/parashat_vehaya"
-                android:textColor="@color/text_muted"
-                android:textSize="13sp"
-                android:lineSpacingExtra="3dp" />
+                <!-- Parashah 1: Kadesh Li -->
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/parashat_kadesh_title"
+                    android:textColor="@color/text_main"
+                    android:textSize="14sp"
+                    android:textStyle="bold"
+                    android:layout_marginBottom="4dp" />
+
+                <TextView
+                    android:id="@+id/tvParashatKadesh"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/parashat_kadesh"
+                    android:textColor="@color/text_muted"
+                    android:textSize="13sp"
+                    android:lineSpacingExtra="3dp"
+                    android:layout_marginBottom="12dp" />
+
+                <!-- Parashah 2: Vehaya Ki Yeviacha -->
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/parashat_vehaya_title"
+                    android:textColor="@color/text_main"
+                    android:textSize="14sp"
+                    android:textStyle="bold"
+                    android:layout_marginBottom="4dp" />
+
+                <TextView
+                    android:id="@+id/tvParashatVehaya"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/parashat_vehaya"
+                    android:textColor="@color/text_muted"
+                    android:textSize="13sp"
+                    android:lineSpacingExtra="3dp"
+                    android:layout_marginBottom="12dp" />
+
+                <!-- Parashah 3: Shema Yisrael -->
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/parashat_shema_title"
+                    android:textColor="@color/text_main"
+                    android:textSize="14sp"
+                    android:textStyle="bold"
+                    android:layout_marginBottom="4dp" />
+
+                <TextView
+                    android:id="@+id/tvParashatShema"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/parashat_shema"
+                    android:textColor="@color/text_muted"
+                    android:textSize="13sp"
+                    android:lineSpacingExtra="3dp"
+                    android:layout_marginBottom="12dp" />
+
+                <!-- Parashah 4: Vehaya Im Shamoa -->
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/parashat_vehaya_im_shamoa_title"
+                    android:textColor="@color/text_main"
+                    android:textSize="14sp"
+                    android:textStyle="bold"
+                    android:layout_marginBottom="4dp" />
+
+                <TextView
+                    android:id="@+id/tvParashatVehayaImShamoa"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/parashat_vehaya_im_shamoa"
+                    android:textColor="@color/text_muted"
+                    android:textSize="13sp"
+                    android:lineSpacingExtra="3dp" />
+            </LinearLayout>
         </LinearLayout>
 
         <!-- Close Button -->
