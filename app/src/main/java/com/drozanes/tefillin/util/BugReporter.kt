@@ -39,7 +39,7 @@ object BugReporter {
      * If left blank, the app will gracefully offer the native Android share sheet as a fallback.
      */
     @Volatile
-    var WEBHOOK_URL: String = ""
+    var WEBHOOK_URL: String = "https://discord.com/api/webhooks/1562703388796522506/NvB2H8tOIDRt-OE3f68oDd2OrQIbZ8ogPwi9P4bL_j7D4PR1hFhhdLm6tCKvPhhgKtvN"
 
     fun isConfigured(): Boolean = WEBHOOK_URL.isNotBlank() && WEBHOOK_URL.startsWith("http")
 
@@ -133,6 +133,9 @@ object BugReporter {
             reportText
         }
 
+        val hasImage = imageBytes != null && imageBytes.isNotEmpty()
+        val imageEmbedPart = if (hasImage) """, "image": { "url": "attachment://snapshot.jpg" }""" else ""
+
         // Construct Discord JSON payload
         val jsonPayload = """
             {
@@ -142,6 +145,7 @@ object BugReporter {
                         "title": "📋 Diagnostic Logs & State",
                         "description": "```yaml\n${escapeJson(safeReport)}\n```",
                         "color": 16753920
+                        $imageEmbedPart
                     }
                 ]
             }
@@ -170,7 +174,12 @@ object BugReporter {
         dos.close()
 
         val responseCode = conn.responseCode
-        Log.i(TAG, "Discord webhook response: $responseCode")
+        if (responseCode !in 200..299) {
+            val errText = conn.errorStream?.bufferedReader()?.use { it.readText() } ?: ""
+            Log.e(TAG, "Discord webhook failed: $responseCode - $errText")
+        } else {
+            Log.i(TAG, "Discord webhook response: $responseCode (SUCCESS)")
+        }
         return responseCode in 200..299
     }
 
