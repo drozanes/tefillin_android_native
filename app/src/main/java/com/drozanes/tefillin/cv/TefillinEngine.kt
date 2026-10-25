@@ -13,15 +13,15 @@ import kotlin.math.*
 object TefillinEngine {
 
     // --- Named Constants for Visual Hairline Detection ---
-    const val HAIRLINE_SCAN_START_RATIO = 0.64f
-    const val HAIRLINE_SCAN_END_RATIO = 0.94f
-    const val HAIRLINE_BASELINE_START_RATIO = 0.40f
-    const val HAIRLINE_BASELINE_STEP_RATIO = 0.015f
+    const val HAIRLINE_SCAN_START_RATIO = 0.52f
+    const val HAIRLINE_SCAN_END_RATIO = 0.95f
+    const val HAIRLINE_BASELINE_START_RATIO = 0.35f
+    const val HAIRLINE_BASELINE_STEP_RATIO = 0.02f
     const val HAIRLINE_PROBE_LATERAL_OFFSET_RATIO = 0.15f
-    const val HAIRLINE_CENTER_DIFF_THRESHOLD = 26
-    const val HAIRLINE_CENTER_RATIO_THRESHOLD = 0.74f
-    const val HAIRLINE_SIDE_DIFF_THRESHOLD = 22
-    const val HAIRLINE_SIDE_RATIO_THRESHOLD = 0.78f
+    const val HAIRLINE_CENTER_DIFF_THRESHOLD = 24
+    const val HAIRLINE_CENTER_RATIO_THRESHOLD = 0.76f
+    const val HAIRLINE_SIDE_DIFF_THRESHOLD = 20
+    const val HAIRLINE_SIDE_RATIO_THRESHOLD = 0.80f
     const val HAIRLINE_TEXTURE_STD_DEV_MIN = 18f
     const val HAIRLINE_TEXTURE_SKIN_DIFF = 15
 
@@ -29,6 +29,8 @@ object TefillinEngine {
     const val ANATOMICAL_HAIRLINE_RATIO = 0.82f
     const val MIN_PITCH_FACTOR = 0.60f
     const val PITCH_REF_ANGLE_DEG = 25f
+    const val TRICHION_MIN_FACTOR = 0.88f
+    const val TRICHION_MAX_FACTOR = 1.15f
 
     // --- Halachic Alignment & Candidate Box Verification ---
     const val HALACHIC_CENTER_TOLERANCE_RATIO = 0.18f
@@ -83,10 +85,10 @@ object TefillinEngine {
                 return (r * 77 + g * 150 + b * 29) shr 8
             }
 
-            // Sample baseline forehead skin tone (between 0.40 and 0.55 * eyeDist)
+            // Sample baseline forehead skin tone (between 0.35 and 0.50 * eyeDist)
             var skinSum = 0
             var skinCount = 0
-            for (s in 0 until 10) {
+            for (s in 0 until 8) {
                 val d = (HAIRLINE_BASELINE_START_RATIO + s * HAIRLINE_BASELINE_STEP_RATIO) * eyeDist
                 val g = getGray(glabellaPt.x + uUp.x * d, glabellaPt.y + uUp.y * d)
                 if (g >= 0) {
@@ -219,12 +221,32 @@ object TefillinEngine {
             }
         }
 
-        // Baseline anatomical prior for natural hairline (trichion ~0.82 * eyeDist with pitch foreshortening)
-        val baseAnatomicalRatio = max(0.40f, ANATOMICAL_HAIRLINE_RATIO * pitchFactor)
-        val distFromGlabella = if (visualHairDist != null) {
-            visualHairDist + (hairlineUserAdj * 0.15f * eyeDist)
+        // Skeletal Facial Third (Subnasale -> Glabella)
+        val subnasale = landmarks.getOrNull(2)
+        val midfaceDist = if (subnasale != null) {
+            val subnasalePt = Point2D(subnasale.x * width, subnasale.y * height)
+            hypot(glabellaPt.x - subnasalePt.x, glabellaPt.y - subnasalePt.y)
         } else {
-            eyeDist * (baseAnatomicalRatio + hairlineUserAdj * 0.20f)
+            eyeDist * 0.68f
+        }
+        val anatomicalTrichionDist = midfaceDist * 1.08f
+
+        // Dynamic Clamping Bounds:
+        // Anti-Poni / Anti-Cap Visor: Hair roots cannot physically grow below 88% of anatomical midface
+        val minTrichionDist = max(eyeDist * 0.55f, anatomicalTrichionDist * TRICHION_MIN_FACTOR)
+        // Anti-Balding: Caps hairline so receding hair doesn't force tefillin past the crown
+        val maxTrichionDist = min(eyeDist * 0.90f, anatomicalTrichionDist * TRICHION_MAX_FACTOR)
+
+        val boundedVisualDist = if (visualHairDist != null) {
+            visualHairDist.coerceIn(minTrichionDist, maxTrichionDist)
+        } else {
+            null
+        }
+
+        val distFromGlabella = if (boundedVisualDist != null) {
+            boundedVisualDist + (hairlineUserAdj * 0.15f * eyeDist)
+        } else {
+            anatomicalTrichionDist + (hairlineUserAdj * 0.20f * eyeDist)
         }
 
         val hairlinePt = Point2D(
