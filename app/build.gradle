@@ -15,7 +15,7 @@ android {
     compileSdk 35
 
     defaultConfig {
-        applicationId "com.drozanes.tefillin.nativeapp"
+        applicationId "com.tefillin.mirror"
         minSdk 24
         targetSdk 35
         versionCode 1
