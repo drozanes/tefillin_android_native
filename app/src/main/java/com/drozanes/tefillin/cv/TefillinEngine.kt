@@ -13,7 +13,7 @@ import kotlin.math.*
 object TefillinEngine {
 
     // --- Named Constants for Visual Hairline Detection ---
-    const val HAIRLINE_SCAN_START_RATIO = 0.52f
+    const val HAIRLINE_SCAN_START_RATIO = 0.60f
     const val HAIRLINE_SCAN_END_RATIO = 0.95f
     const val HAIRLINE_BASELINE_START_RATIO = 0.35f
     const val HAIRLINE_BASELINE_STEP_RATIO = 0.02f
@@ -29,8 +29,10 @@ object TefillinEngine {
     const val ANATOMICAL_HAIRLINE_RATIO = 0.82f
     const val MIN_PITCH_FACTOR = 0.60f
     const val PITCH_REF_ANGLE_DEG = 25f
-    const val TRICHION_MIN_FACTOR = 0.88f
+    const val TRICHION_MIN_FACTOR = 0.90f
     const val TRICHION_MAX_FACTOR = 1.15f
+    const val MIN_MIDFACE_RATIO = 0.65f
+    const val MIN_HAIRLINE_RATIO = 0.66f
 
     // --- Halachic Alignment & Candidate Box Verification ---
     const val HALACHIC_CENTER_TOLERANCE_RATIO = 0.18f
@@ -223,17 +225,19 @@ object TefillinEngine {
 
         // Skeletal Facial Third (Subnasale -> Glabella)
         val subnasale = landmarks.getOrNull(2)
-        val midfaceDist = if (subnasale != null) {
+        val rawMidfaceDist = if (subnasale != null) {
             val subnasalePt = Point2D(subnasale.x * width, subnasale.y * height)
             hypot(glabellaPt.x - subnasalePt.x, glabellaPt.y - subnasalePt.y)
         } else {
             eyeDist * 0.68f
         }
+        // Protect against 2D perspective foreshortening under upward camera pitch
+        val midfaceDist = max(rawMidfaceDist, eyeDist * MIN_MIDFACE_RATIO)
         val anatomicalTrichionDist = midfaceDist * 1.08f
 
         // Dynamic Clamping Bounds:
-        // Anti-Poni / Anti-Cap Visor: Hair roots cannot physically grow below 88% of anatomical midface
-        val minTrichionDist = max(eyeDist * 0.55f, anatomicalTrichionDist * TRICHION_MIN_FACTOR)
+        // Anti-Poni / Anti-Cap Visor: Hair roots cannot physically grow below 90% of anatomical midface
+        val minTrichionDist = max(eyeDist * MIN_HAIRLINE_RATIO * pitchFactor, anatomicalTrichionDist * TRICHION_MIN_FACTOR)
         // Anti-Balding: Caps hairline so receding hair doesn't force tefillin past the crown
         val maxTrichionDist = min(eyeDist * 0.90f, anatomicalTrichionDist * TRICHION_MAX_FACTOR)
 
