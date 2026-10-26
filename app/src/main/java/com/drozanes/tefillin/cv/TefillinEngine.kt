@@ -35,7 +35,8 @@ object TefillinEngine {
     const val MIN_HAIRLINE_RATIO = 0.66f
 
     // --- Halachic Alignment & Candidate Box Verification ---
-    const val HALACHIC_CENTER_TOLERANCE_RATIO = 0.18f
+    // Stiff center tolerance: ~8% of eye distance (~5mm real-world deviation) for exact middle alignment
+    const val HALACHIC_CENTER_TOLERANCE_RATIO = 0.08f
     const val HALACHIC_BORDERLINE_MARGIN_RATIO = 0.04f
     const val CAMERA_PITCH_TOO_LOW_DEG = 35f
     const val CAMERA_PITCH_TOO_HIGH_DEG = -20f

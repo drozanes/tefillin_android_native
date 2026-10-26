@@ -23,6 +23,7 @@ class HalachaDialog(context: Context) : Dialog(context) {
         requestWindowFeature(Window.FEATURE_NO_TITLE)
         setContentView(binding.root)
         window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+        binding.tvHalachaVersion.text = "${context.getString(com.drozanes.tefillin.R.string.app_title)} • v${com.drozanes.tefillin.BuildConfig.VERSION_NAME}"
         binding.btnClose.setOnClickListener { dismiss() }
     }
 

@@ -78,7 +78,18 @@ class TefillinEngineTest {
     fun testOffCenterLeftAndRight() {
         val geometry = createMockGeometry(hairlineY = 200f, eyeDist = 100f)
 
-        // Tefillin shifted far to the left (X = 350, offset = +30 > 18)
+        // Tefillin shifted slightly to the left (X = 330, offset = +10 > 8, triggers stiff center rule)
+        val slightLeftWinner = TefillinBox(
+            x = 330f,
+            y = 150f,
+            boxWidth = 40f,
+            boxHeight = 40f,
+            bottomY = 170f
+        )
+        val slightLeftResult = TefillinEngine.evaluateAlignment(slightLeftWinner, geometry)
+        assertEquals(AlignmentStatus.OFF_CENTER, slightLeftResult.status)
+
+        // Tefillin shifted far to the left (X = 350, offset = +30 > 8)
         val leftWinner = TefillinBox(
             x = 350f,
             y = 150f,

@@ -35,6 +35,7 @@ import com.drozanes.tefillin.model.AlignmentStatus
 import com.drozanes.tefillin.model.FaceGeometry
 import com.drozanes.tefillin.model.TefillinBox
 import com.drozanes.tefillin.ui.BugReportDialog
+import com.drozanes.tefillin.ui.DisclaimerDialog
 import com.drozanes.tefillin.ui.HalachaDialog
 import com.drozanes.tefillin.ui.MainViewModel
 import com.drozanes.tefillin.ui.TefillinOrderDialog
@@ -146,6 +147,15 @@ class MainActivity : AppCompatActivity() {
         initAiEngines()
         setupUI()
         checkCameraPermission()
+        checkFirstLaunchDisclaimer()
+    }
+
+    private fun checkFirstLaunchDisclaimer() {
+        if (!prefs.getBoolean("has_seen_disclaimer", false)) {
+            DisclaimerDialog(this) {
+                prefs.edit().putBoolean("has_seen_disclaimer", true).apply()
+            }.show()
+        }
     }
 
     private fun initAiEngines() {
@@ -161,6 +171,8 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun setupUI() {
+        binding.tvAppVersion.text = "v${BuildConfig.VERSION_NAME}"
+
         // 1. Seder Hanachat Tefillin (Order of Putting on Tefillin) Dialog
         binding.btnTefillinOrder.setOnClickListener {
             TefillinOrderDialog(this).show()
@@ -310,6 +322,11 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    override fun onStop() {
+        super.onStop()
+        stopCameraSafely()
+    }
+
     override fun onResume() {
         super.onResume()
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED) {
@@ -321,7 +338,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun processCameraFrame(imageProxy: ImageProxy) {
         try {
-            if (isFinishing || isDestroyed) {
+            if (cameraProvider == null || isFinishing || isDestroyed) {
                 imageProxy.close()
                 return
             }

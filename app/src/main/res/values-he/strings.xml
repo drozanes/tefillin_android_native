@@ -14,6 +14,15 @@
     <string name="halacha_guide_title">הלכות תפילין</string>
     <string name="bug_report_title">דיווח על תקלה</string>
 
+    <!-- First-Launch Disclaimer Dialog -->
+    <string name="disclaimer_welcome_title">ברוכים הבאים למראת תפילין 🪞</string>
+    <string name="disclaimer_edition_badge">מהדורת פיתוח • כלי עזר מבוסס AI</string>
+    <string name="disclaimer_ai_title">💡 לתשומת לבכם</string>
+    <string name="disclaimer_ai_desc">אפליקציה זו משתמשת בבינה מלאכותית (AI) ובראייה ממוחשבת כדי לסייע בכוונון התפילין של ראש.\n\nהטכנולוגיה עשויה לשגות בשל תנאי תאורה או זווית, ואינה מהווה פסיקה הלכתית מוחלטת אלא כלי עזר והמלצה בלבד.</string>
+    <string name="disclaimer_feedback_title">🐛 עזרו לנו להשתפר!</string>
+    <string name="disclaimer_feedback_desc">נתקלתם באי-דיוק, זיהוי שגוי, באג, או שיש לכם הצעה לשיפור?\nנשמח מאוד שתשתמשו בכפתור הדיווח (🐛) בראש המסך. כל דיווח עוזר לנו לדייק את המודל לכולם!</string>
+    <string name="disclaimer_confirm_btn">הבנתי, בואו נתחיל ✨</string>
+
     <!-- Camera & Face Tracking States -->
     <string name="camera_starting">מפעיל מצלמה...</string>
     <string name="searching_face">מחפש פנים...</string>
@@ -24,15 +33,15 @@
     <string name="initial_guide_sub">המערכת מזהה את התפילין מעל המצח...</string>
 
     <!-- Directional Guidance & Alerts -->
-    <string name="move_up_title">⬆️ הרימו את התפילין למעלה!</string>
-    <string name="move_up_sub">התפילין נוגעות במצח! יש להרים אל מקום השיער.</string>
-    <string name="adjust_knot_guide">🎥 מדריך: איך להקטין את הקשר</string>
-    <string name="move_left_title">⬅️ הזיזו את התפילין שמאלה</string>
-    <string name="move_left_sub">הזיזו את התפילין שמאלה (לצד שמאל שלכם)</string>
-    <string name="move_right_title">➡️ הזיזו את התפילין ימינה</string>
-    <string name="move_right_sub">הזיזו את התפילין ימינה (לצד ימין שלכם)</string>
+    <string name="move_up_title">⬆️ כדאי להרים את התפילין מעט</string>
+    <string name="move_up_sub">התפילין נמוכות ונוגעות במצח – כדאי להרים אל מקום צמיחת השיער.</string>
+    <string name="adjust_knot_guide">🎥 מדריך קצר: איך להקטין את הקשר</string>
+    <string name="move_left_title">⬅️ כדאי להזיז מעט שמאלה</string>
+    <string name="move_left_sub">לכוונן מעט שמאלה (לצד שמאל שלכם) למרכז מדויק בין העיניים</string>
+    <string name="move_right_title">➡️ כדאי להזיז מעט ימינה</string>
+    <string name="move_right_sub">לכוונן מעט ימינה (לצד ימין שלכם) למרכז מדויק בין העיניים</string>
     <string name="borderline_title">⚠️ קרוב מאוד למצח</string>
-    <string name="borderline_sub">התפילין במקום שיער אך קרובות מאוד לגבול.</string>
+    <string name="borderline_sub">התפילין במקום שיער אך קרובות מאוד לגבול המצח.</string>
     <string name="perfect_title">✨ התפילין מונחות כהלכה!</string>
     <string name="perfect_sub">התפילין במרכז המדויק ומעל קו השיער.</string>
     <string name="camera_angle_title">📐 כווננו את גובה המצלמה</string>
@@ -42,8 +51,8 @@
     <string name="camera_too_high_sub">יש להחזיק את המכשיר מול הפנים בגובה העיניים</string>
 
     <!-- Status Badges -->
-    <string name="touches_forehead_alert">⬆️ נוגע במצח</string>
-    <string name="off_center_alert">לא ממורכז</string>
+    <string name="touches_forehead_alert">⬆️ להרים למעלה</string>
+    <string name="off_center_alert">להזיז לאמצע</string>
     <string name="borderline_alert">גבולי</string>
     <string name="perfect_alert">מונח כהלכה</string>
 
@@ -91,10 +100,10 @@
 
     <!-- Halachic Guide Dialog -->
     <string name="modal_title">הלכות מקום הנחת תפילין של ראש</string>
-    <string name="modal_rule1_title">1. מקום הנחה ברוחב (אמצע)</string>
-    <string name="modal_rule1_text">תפילין של ראש חייבות להיות מכוונות באמצע ממש בין שתי העיניים. חריגה לצדדים פוסלת את המצווה.</string>
-    <string name="modal_rule2_title">2. מקום הנחה בגובה (כל התפילין במקום שיער)</string>
-    <string name="modal_rule2_text">התפילין והמעברתא חייבות לשבת כולן במקום ששיער ראשו צומח. אם ירדה אפילו מקצת התפילין על המצח - אינו יוצא ידי חובה וברכתו לבטלה!</string>
+    <string name="modal_rule1_title">1. מקום הנחה ברוחב (באמצע)</string>
+    <string name="modal_rule1_text">תפילין של ראש צריכות להיות מכוונות בדיוק באמצע בין שתי העיניים, לקיום המצווה כהלכתה.</string>
+    <string name="modal_rule2_title">2. מקום הנחה בגובה (מקום גידול שיער)</string>
+    <string name="modal_rule2_text">בית התפילין כולו צריך לשבת במקום שבו שיער הראש מתחיל לצמוח. יש לשים לב שהקצה התחתון של התפילין אינו גולש למטה אל עור המצח החלק.</string>
     <string name="modal_rule3_title">3. זיהוי התפילין במצלמה</string>
     <string name="modal_rule3_text">המערכת מזהה את התפילין במרכז המצח, ומוודאת שכל שטח התפילין מונח מעל שורשי השיער.</string>
     <string name="close">סגור</string>
@@ -127,7 +136,7 @@
     <string name="crash_dialog_chooser_title">שתף דוח קריסה באמצעות...</string>
 
     <!-- Hardware & Footer -->
-    <string name="footer_text">מראת תפילין • זיהוי תפילין מדויק בזמן אמת</string>
+    <string name="footer_text">מראת תפילין • כלי עזר לדיוק הנחת תפילין בזמן אמת</string>
     <string name="gpu_active_badge"> • ⚡ מאיץ גרפי (GPU)</string>
     <string name="cpu_active_badge"> • 💻 מעבד (CPU)</string>
 
