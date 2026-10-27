@@ -166,13 +166,13 @@ class TefillinEngineTest {
     @Test
     fun testGlassesSpanningAcrossHeadRejected() {
         val geometry = createMockGeometry(hairlineY = 200f, glabellaY = 280f, eyeDist = 100f)
-        // Glasses pushed up on top of the head: wide frame spanning ear to ear (width = 90px > 0.68 * 100px)
+        // Glasses pushed up on top of the head: wide ear-to-ear frame (width = 150px > 1.35 * 100px, aspect ratio 3.75)
         val glassesOnHead = TefillinBox(
             x = 320f,
             y = 150f,
-            boxWidth = 90f,
-            boxHeight = 35f,
-            bottomY = 167f
+            boxWidth = 150f,
+            boxHeight = 40f,
+            bottomY = 170f
         )
         assertFalse(
             "Wide glasses frames on head must be rejected",
@@ -183,7 +183,7 @@ class TefillinEngineTest {
     @Test
     fun testGlassesElongatedAspectRatioRejected() {
         val geometry = createMockGeometry(hairlineY = 200f, glabellaY = 280f, eyeDist = 100f)
-        // Thin elongated frame (width 60px, height 18px, aspect ratio = 3.33)
+        // Thin elongated frame (width 60px, height 18px, aspect ratio = 3.33 > 2.20)
         val elongatedFrame = TefillinBox(
             x = 320f,
             y = 150f,
@@ -211,6 +211,40 @@ class TefillinEngineTest {
         assertTrue(
             "Genuine Tefillin box must be accepted",
             TefillinEngine.isValidTefillinBox(kosherTefillin, geometry)
+        )
+    }
+
+    @Test
+    fun testSmallTefillin2cmAccepted() {
+        val geometry = createMockGeometry(hairlineY = 200f, glabellaY = 280f, eyeDist = 100f)
+        // Small ~2cm pocket / youth Tefillin (width 12px, height 12px, ratio = 0.12 >= 0.10)
+        val smallTefillin = TefillinBox(
+            x = 320f,
+            y = 150f,
+            boxWidth = 12f,
+            boxHeight = 12f,
+            bottomY = 156f
+        )
+        assertTrue(
+            "Small ~2cm Tefillin must be accepted",
+            TefillinEngine.isValidTefillinBox(smallTefillin, geometry)
+        )
+    }
+
+    @Test
+    fun testLargeTefillin4cmWithCoverOnSmallFaceAccepted() {
+        val geometry = createMockGeometry(hairlineY = 200f, glabellaY = 280f, eyeDist = 100f)
+        // Large ~4cm Gasot Tefillin with plastic cover on small face / close-up angle (width = 85px, height = 82px, ratio = 0.85 <= 1.35)
+        val largeTefillinWithCover = TefillinBox(
+            x = 320f,
+            y = 150f,
+            boxWidth = 85f,
+            boxHeight = 82f,
+            bottomY = 191f
+        )
+        assertTrue(
+            "Large ~4cm Tefillin with protective cover on small face must be accepted",
+            TefillinEngine.isValidTefillinBox(largeTefillinWithCover, geometry)
         )
     }
 }

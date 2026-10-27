@@ -41,12 +41,13 @@ object TefillinEngine {
     const val CAMERA_PITCH_TOO_LOW_DEG = 35f
     const val CAMERA_PITCH_TOO_HIGH_DEG = -20f
     const val BOX_EYEBROW_EXCLUSION_MARGIN_RATIO = 0.05f
-    const val BOX_CEILING_MAX_DISTANCE_RATIO = 3.0f
-    const val BOX_HORIZONTAL_MAX_DEVIATION_RATIO = 0.60f
-    const val BOX_MIN_DIMENSION_RATIO = 0.15f
-    const val BOX_MAX_DIMENSION_RATIO = 0.68f
-    const val BOX_MIN_ASPECT_RATIO = 0.45f
-    const val BOX_MAX_ASPECT_RATIO = 2.0f
+    const val BOX_CEILING_MAX_DISTANCE_RATIO = 3.5f
+    const val BOX_HORIZONTAL_MAX_DEVIATION_RATIO = 0.70f
+    // Supports 2cm small tefillin up to 4cm+ large Gasot with protective covers on smaller/youth faces
+    const val BOX_MIN_DIMENSION_RATIO = 0.10f
+    const val BOX_MAX_DIMENSION_RATIO = 1.35f
+    const val BOX_MIN_ASPECT_RATIO = 0.40f
+    const val BOX_MAX_ASPECT_RATIO = 2.20f
 
     data class LandmarkPoint(
         val x: Float, // Normalized 0..1
