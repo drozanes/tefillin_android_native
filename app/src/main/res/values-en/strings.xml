@@ -87,15 +87,16 @@
     <string name="step2_rosh_desc">Place the Shel Rosh above the forehead, resting entirely on the hair growth area and centered exactly between your eyes. The back knot rests in the hollow of the nape.</string>
 
     <string name="step2_rosh_ashkenaz_blessing_title">Blessing before tightening:</string>
+    <string name="step2_rosh_ashkenaz_interrupted">If interrupted by speech: recite both \'להניח תפילין\' and \'על מצות תפילין\' on Shel Rosh.</string>
     <string name="blessing_shel_rosh">בָּרוּךְ אַתָּה יְהֹוָה אֱלֹהֵינוּ מֶלֶךְ הָעוֹלָם, אֲשֶׁר קִדְּשָׁנוּ בְּמִצְוֹתָיו וְצִוָּנוּ עַל מִצְוַת תְּפִלִּין.\n(Baruch atah Adonai Eloheinu Melech ha\'olam, asher kid\'shanu b\'mitzvotav v\'tzivanu al mitzvat tefillin.)</string>
     <string name="step2_rosh_after_tightening">After tightening, recite:</string>
     <string name="blessing_baruch_shem">בָּרוּךְ שֵׁם כְּבוֹד מַלְכוּתוֹ לְעוֹלָם וָעֶד.\n(Baruch shem k\'vod malchuto l\'olam va\'ed.)</string>
 
-    <string name="step2_rosh_sefard_rule">If no interruption occurred between Shel Yad and Shel Rosh – do not bless on Shel Rosh, but recite after tightening:</string>
-    <string name="step2_rosh_sefard_interrupted">If interrupted by speaking: recite \"על מצות תפילין\" and then \"ברוך שם כבוד מלכותו לעולם ועד\".</string>
+    <string name="step2_rosh_sefard_blessing_title">Blessing before tightening (Hasidic custom):</string>
+    <string name="step2_rosh_sefard_note">Most Hasidic communities (Nusach Sefard) recite the blessing on Shel Rosh and \'Baruch Shem\'. (Exception: Chabad custom blesses only if interrupted).</string>
 
-    <string name="step2_rosh_edot_rule">If no interruption occurred – do not recite a blessing on Shel Rosh, nor \"ברוך שם כבוד מלכותו לעולם ועד\".</string>
-    <string name="step2_rosh_edot_interrupted">If interrupted by speaking: recite \"על מצות תפילין\" and \"ברוך שם כבוד מלכותו לעולם ועד\".</string>
+    <string name="step2_rosh_edot_rule">According to Sephardic / Edot HaMizrach tradition: No blessing is recited on Shel Rosh (the Shel Yad blessing covers both), nor is \'Baruch Shem\' recited.</string>
+    <string name="step2_rosh_edot_interrupted">If interrupted by speech: recite \"על מצות תפילין\" and \"ברוך שם כבוד מלכותו לעולם ועד\".</string>
 
     <string name="step3_hand_title">3. Palm &amp; Finger Coils</string>
     <string name="step3_hand_desc">Wrap the strap three times around the middle finger (one on the middle joint, two on the lower joint), wrap the palm, and recite:</string>

@@ -171,8 +171,6 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun setupUI() {
-        binding.tvAppVersion.text = "v${BuildConfig.VERSION_NAME}"
-
         // 1. Seder Hanachat Tefillin (Order of Putting on Tefillin) Dialog
         binding.btnTefillinOrder.setOnClickListener {
             TefillinOrderDialog(this).show()

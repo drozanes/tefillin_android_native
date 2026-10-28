@@ -103,16 +103,18 @@ class TefillinOrderDialog(context: Context) : Dialog(context) {
                 binding.tvRoshAfterLead.visibility = View.VISIBLE
                 binding.tvRoshAfterLead.text = context.getString(R.string.step2_rosh_after_tightening)
                 binding.tvBlessingBaruchShem.visibility = View.VISIBLE
-                binding.tvRoshInterruptedRule.visibility = View.GONE
+                binding.tvRoshInterruptedRule.visibility = View.VISIBLE
+                binding.tvRoshInterruptedRule.text = context.getString(R.string.step2_rosh_ashkenaz_interrupted)
             }
             NUSACH_SEFARD -> {
                 binding.tvRoshBlessingLead.visibility = View.VISIBLE
-                binding.tvRoshBlessingLead.text = context.getString(R.string.step2_rosh_sefard_rule)
-                binding.tvBlessingShelRosh.visibility = View.GONE
-                binding.tvRoshAfterLead.visibility = View.GONE
+                binding.tvRoshBlessingLead.text = context.getString(R.string.step2_rosh_sefard_blessing_title)
+                binding.tvBlessingShelRosh.visibility = View.VISIBLE
+                binding.tvRoshAfterLead.visibility = View.VISIBLE
+                binding.tvRoshAfterLead.text = context.getString(R.string.step2_rosh_after_tightening)
                 binding.tvBlessingBaruchShem.visibility = View.VISIBLE
                 binding.tvRoshInterruptedRule.visibility = View.VISIBLE
-                binding.tvRoshInterruptedRule.text = context.getString(R.string.step2_rosh_sefard_interrupted)
+                binding.tvRoshInterruptedRule.text = context.getString(R.string.step2_rosh_sefard_note)
             }
             NUSACH_EDOT_MIZRACH -> {
                 binding.tvRoshBlessingLead.visibility = View.VISIBLE

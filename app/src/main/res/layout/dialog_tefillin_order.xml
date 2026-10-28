@@ -249,7 +249,7 @@
                     android:id="@+id/tvRoshInterruptedRule"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="@string/step2_rosh_sefard_interrupted"
+                    android:text="@string/step2_rosh_ashkenaz_interrupted"
                     android:textColor="@color/text_subtle"
                     android:textSize="12sp"
                     android:lineSpacingExtra="2dp" />
