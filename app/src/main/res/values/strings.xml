@@ -23,6 +23,21 @@
     <string name="disclaimer_feedback_desc">נתקלתם באי-דיוק, זיהוי שגוי, באג, או שיש לכם הצעה לשיפור?\nנשמח מאוד שתשתמשו בכפתור הדיווח (🐛) בראש המסך. כל דיווח עוזר לנו לדייק את המודל לכולם!</string>
     <string name="disclaimer_confirm_btn">הבנתי, בואו נתחיל ✨</string>
 
+    <!-- Halacha Dialog Actions -->
+    <string name="btn_ai_disclaimer">💡 הבהרת AI</string>
+    <string name="btn_privacy_policy">🔒 מדיניות פרטיות</string>
+
+    <!-- Privacy Policy Dialog -->
+    <string name="privacy_modal_title">מדיניות פרטיות 🔒</string>
+    <string name="privacy_edge_badge">100% עיבוד מקומי במכשיר (Edge AI)</string>
+    <string name="privacy_camera_title">📷 שימוש במצלמה</string>
+    <string name="privacy_camera_desc">המצלמה משמשת אך ורק למראה בזמן אמת ולזיהוי תפילין ונקודות ציון בפנים. הווידאו מעובד מקומית בזיכרון המכשיר (RAM) בלבד ואינו מוקלט, נשמר או נשלח לשום שרת.</string>
+    <string name="privacy_no_tracking_title">🛡️ אפס מעקב ופרסום</string>
+    <string name="privacy_no_tracking_desc">האפליקציה נקייה לחלוטין מפרסומות, כלי מעקב (Analytics) או יצירת חשבונות. אין איסוף של נתונים ביומטריים מזהים.</string>
+    <string name="privacy_bug_reports_title">🐛 דיווחי תקלות</string>
+    <string name="privacy_bug_reports_desc">צילום מסך או נתוני אבחון נשלחים אך ורק אם המשתמש יזם ולחץ על שליחת דיווח במסך הדיווח (לצורך שיפור המודל בלבד).</string>
+    <string name="privacy_open_online">🌐 פתח מדיניות מלאה באינטרנט</string>
+
     <!-- Camera & Face Tracking States -->
     <string name="camera_starting">מפעיל מצלמה...</string>
     <string name="searching_face">מחפש פנים...</string>

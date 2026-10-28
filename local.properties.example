@@ -7,6 +7,6 @@ release.storePassword=YOUR_KEYSTORE_PASSWORD
 release.keyAlias=tefillin
 release.keyPassword=YOUR_KEY_PASSWORD
 
-# Optional: Anonymous Bug Reporting Webhook (Discord / Telegram / Generic HTTP POST)
-# Leave blank to fallback to the native Android system share sheet.
-tefillin.bug_report_webhook_url=
+# Anonymous Bug Reporting Webhook (Discord / Telegram / Generic HTTP POST)
+# Configured by default to the Discord webhook endpoint.
+tefillin.bug_report_webhook_url=https://discord.com/api/webhooks/...

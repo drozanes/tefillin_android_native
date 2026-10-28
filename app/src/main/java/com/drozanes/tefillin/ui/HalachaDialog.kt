@@ -24,6 +24,12 @@ class HalachaDialog(context: Context) : Dialog(context) {
         setContentView(binding.root)
         window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
         binding.tvHalachaVersion.text = "${context.getString(com.drozanes.tefillin.R.string.app_title)} • v${com.drozanes.tefillin.BuildConfig.VERSION_NAME}"
+        binding.btnShowDisclaimer.setOnClickListener {
+            DisclaimerDialog(context, isFirstLaunch = false).show()
+        }
+        binding.btnPrivacyPolicy.setOnClickListener {
+            PrivacyPolicyDialog(context).show()
+        }
         binding.btnClose.setOnClickListener { dismiss() }
     }
 

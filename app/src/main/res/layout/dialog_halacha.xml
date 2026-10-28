@@ -98,6 +98,46 @@
                 android:layout_marginTop="3dp" />
         </LinearLayout>
 
+        <!-- Secondary Actions Row: AI Disclaimer & Privacy Policy -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginBottom="14dp">
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnShowDisclaimer"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:minHeight="42dp"
+                android:text="@string/btn_ai_disclaimer"
+                android:textColor="@color/accent_cyan"
+                android:background="@drawable/bg_button_rounded"
+                app:backgroundTint="@null"
+                android:textStyle="bold"
+                android:textSize="12sp"
+                android:textAllCaps="false"
+                app:cornerRadius="10dp"
+                android:layout_marginEnd="6dp" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnPrivacyPolicy"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:minHeight="42dp"
+                android:text="@string/btn_privacy_policy"
+                android:textColor="@color/accent_gold"
+                android:background="@drawable/bg_button_rounded"
+                app:backgroundTint="@null"
+                android:textStyle="bold"
+                android:textSize="12sp"
+                android:textAllCaps="false"
+                app:cornerRadius="10dp"
+                android:layout_marginStart="6dp" />
+        </LinearLayout>
+
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btnClose"
             android:layout_width="match_parent"

@@ -152,7 +152,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun checkFirstLaunchDisclaimer() {
         if (!prefs.getBoolean("has_seen_disclaimer", false)) {
-            DisclaimerDialog(this) {
+            DisclaimerDialog(this, isFirstLaunch = true) {
                 prefs.edit().putBoolean("has_seen_disclaimer", true).apply()
             }.show()
         }

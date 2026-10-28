@@ -23,6 +23,21 @@
     <string name="disclaimer_feedback_desc">Encountered an inaccuracy, false detection, bug, or have ideas for improvement?\nPlease tap the Bug Report button (🐛) at the top of the screen. Every report helps us refine the model!</string>
     <string name="disclaimer_confirm_btn">Understood, Let\'s Begin ✨</string>
 
+    <!-- Halacha Dialog Actions -->
+    <string name="btn_ai_disclaimer">💡 AI Disclaimer</string>
+    <string name="btn_privacy_policy">🔒 Privacy Policy</string>
+
+    <!-- Privacy Policy Dialog -->
+    <string name="privacy_modal_title">Privacy Policy 🔒</string>
+    <string name="privacy_edge_badge">100% On-Device Processing (Edge AI)</string>
+    <string name="privacy_camera_title">📷 Camera Usage</string>
+    <string name="privacy_camera_desc">The camera is used solely for the real-time mirror feed and on-device Tefillin detection. Frames are processed in volatile device RAM and are never recorded, saved, or uploaded to any server.</string>
+    <string name="privacy_no_tracking_title">🛡️ Zero Tracking &amp; No Ads</string>
+    <string name="privacy_no_tracking_desc">The app contains zero ads, no third-party tracking/analytics SDKs, and requires no account. No biometric identifiers are ever stored or shared.</string>
+    <string name="privacy_bug_reports_title">🐛 Voluntary Bug Reporting</string>
+    <string name="privacy_bug_reports_desc">Diagnostic logs and snapshots are only transmitted if explicitly initiated and approved by the user via the Bug Report screen.</string>
+    <string name="privacy_open_online">🌐 View Full Policy Online</string>
+
     <!-- Camera & Face Tracking States -->
     <string name="camera_starting">Starting camera...</string>
     <string name="searching_face">Looking for face...</string>
