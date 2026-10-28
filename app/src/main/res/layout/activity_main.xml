@@ -145,7 +145,7 @@
                 android:textColor="@color/accent_gold"
                 android:textSize="11.5sp"
                 android:textStyle="bold"
-                android:singleLine="true"
+                android:maxLines="2"
                 android:ellipsize="end" />
 
             <!-- Tefillin Order Button -->

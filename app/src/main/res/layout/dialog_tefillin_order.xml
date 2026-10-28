@@ -1,17 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:fillViewport="true"
-    android:scrollbars="vertical">
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@drawable/bg_glass_card"
-        android:orientation="vertical"
-        android:padding="20dp">
+    android:background="@drawable/bg_glass_card"
+    android:orientation="vertical"
+    android:padding="20dp">
 
         <!-- Title -->
         <TextView
@@ -99,9 +93,25 @@
             android:layout_width="match_parent"
             android:layout_height="1dp"
             android:background="@color/card_border"
-            android:layout_marginBottom="16dp" />
+            android:layout_marginBottom="14dp" />
 
-        <!-- Step 1: Shel Yad -->
+        <!-- Scrollable Body with Prominent Scrollbar -->
+        <com.drozanes.tefillin.ui.MaxHeightScrollView
+            android:id="@+id/scrollBody"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fillViewport="true"
+            android:scrollbars="vertical"
+            android:fadeScrollbars="false"
+            android:scrollbarThumbVertical="@drawable/bg_scrollbar_thumb"
+            android:scrollbarSize="4dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <!-- Step 1: Shel Yad -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -415,11 +425,15 @@
             </LinearLayout>
         </LinearLayout>
 
-        <!-- Close Button -->
+            </LinearLayout>
+        </com.drozanes.tefillin.ui.MaxHeightScrollView>
+
+        <!-- Close Button (Pinned Footer) -->
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btnCloseOrder"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="14dp"
             android:minHeight="48dp"
             android:text="@string/close"
             app:backgroundTint="@color/accent_gold"
@@ -430,4 +444,3 @@
             app:cornerRadius="10dp" />
 
     </LinearLayout>
-</ScrollView>

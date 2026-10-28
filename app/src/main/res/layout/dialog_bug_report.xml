@@ -1,111 +1,133 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:fillViewport="true"
-    android:scrollbars="vertical">
+    android:background="@drawable/bg_glass_card"
+    android:orientation="vertical"
+    android:padding="20dp">
 
+    <!-- Modal Title (Pinned Header) -->
+    <TextView
+        android:id="@+id/tvModalTitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/bug_modal_title"
+        android:textColor="@color/accent_gold"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        android:gravity="center"
+        android:layout_marginBottom="12dp" />
+
+    <!-- Scrollable Body with Prominent Scrollbar -->
+    <com.drozanes.tefillin.ui.MaxHeightScrollView
+        android:id="@+id/scrollBody"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:fillViewport="true"
+        android:scrollbars="vertical"
+        android:fadeScrollbars="false"
+        android:scrollbarThumbVertical="@drawable/bg_scrollbar_thumb"
+        android:scrollbarSize="4dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/bug_intro"
+                android:textColor="@color/text_muted"
+                android:textSize="13sp"
+                android:lineSpacingExtra="2dp"
+                android:layout_marginBottom="12dp" />
+
+            <TextView
+                android:id="@+id/tvPreviewLabel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/bug_preview_label"
+                android:textColor="@color/text_main"
+                android:textSize="12sp"
+                android:textStyle="bold"
+                android:layout_marginBottom="4dp" />
+
+            <ImageView
+                android:id="@+id/ivPreview"
+                android:layout_width="match_parent"
+                android:layout_height="140dp"
+                android:adjustViewBounds="true"
+                android:scaleType="fitCenter"
+                android:background="#151C2C"
+                android:layout_marginBottom="8dp" />
+
+            <com.google.android.material.checkbox.MaterialCheckBox
+                android:id="@+id/cbAttachSnapshot"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/bug_attach_snapshot_label"
+                android:textColor="@color/text_main"
+                android:textSize="12.5sp"
+                android:checked="true"
+                app:buttonTint="@color/accent_gold"
+                android:layout_marginBottom="4dp" />
+
+            <TextView
+                android:id="@+id/tvPrivacyNotice"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/bug_privacy_notice"
+                android:textColor="@color/text_subtle"
+                android:textSize="11sp"
+                android:lineSpacingExtra="2dp"
+                android:layout_marginBottom="12dp" />
+
+            <TextView
+                android:id="@+id/tvNotesLabel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/bug_notes_label"
+                android:textColor="@color/text_main"
+                android:textSize="13sp"
+                android:textStyle="bold" />
+
+            <EditText
+                android:id="@+id/etNotes"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:minLines="2"
+                android:maxLines="3"
+                android:gravity="top|start"
+                android:hint="@string/bug_notes_hint"
+                android:textColorHint="@color/text_subtle"
+                android:textColor="@color/text_main"
+                android:background="@drawable/bg_button_rounded"
+                android:padding="10dp"
+                android:textSize="13sp"
+                android:layout_marginTop="6dp"
+                android:layout_marginBottom="8dp" />
+
+            <!-- Sending Progress Indicator -->
+            <ProgressBar
+                android:id="@+id/pbSending"
+                style="?android:attr/progressBarStyle"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:layout_gravity="center"
+                android:visibility="gone"
+                android:layout_marginBottom="12dp" />
+
+        </LinearLayout>
+    </com.drozanes.tefillin.ui.MaxHeightScrollView>
+
+    <!-- Pinned Footer Buttons -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@drawable/bg_glass_card"
         android:orientation="vertical"
-        android:padding="20dp">
-
-        <TextView
-            android:id="@+id/tvModalTitle"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/bug_modal_title"
-            android:textColor="@color/accent_gold"
-            android:textSize="18sp"
-            android:textStyle="bold"
-            android:gravity="center"
-            android:layout_marginBottom="12dp" />
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/bug_intro"
-            android:textColor="@color/text_muted"
-            android:textSize="13sp"
-            android:lineSpacingExtra="2dp"
-            android:layout_marginBottom="12dp" />
-
-        <TextView
-            android:id="@+id/tvPreviewLabel"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/bug_preview_label"
-            android:textColor="@color/text_main"
-            android:textSize="12sp"
-            android:textStyle="bold"
-            android:layout_marginBottom="4dp" />
-
-        <ImageView
-            android:id="@+id/ivPreview"
-            android:layout_width="match_parent"
-            android:layout_height="140dp"
-            android:adjustViewBounds="true"
-            android:scaleType="fitCenter"
-            android:background="#151C2C"
-            android:layout_marginBottom="8dp" />
-
-        <com.google.android.material.checkbox.MaterialCheckBox
-            android:id="@+id/cbAttachSnapshot"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/bug_attach_snapshot_label"
-            android:textColor="@color/text_main"
-            android:textSize="12.5sp"
-            android:checked="true"
-            app:buttonTint="@color/accent_gold"
-            android:layout_marginBottom="4dp" />
-
-        <TextView
-            android:id="@+id/tvPrivacyNotice"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/bug_privacy_notice"
-            android:textColor="@color/text_subtle"
-            android:textSize="11sp"
-            android:lineSpacingExtra="2dp"
-            android:layout_marginBottom="12dp" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/bug_notes_label"
-            android:textColor="@color/text_main"
-            android:textSize="13sp"
-            android:textStyle="bold" />
-
-        <EditText
-            android:id="@+id/etNotes"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:minLines="2"
-            android:maxLines="3"
-            android:gravity="top|start"
-            android:hint="@string/bug_notes_hint"
-            android:textColorHint="@color/text_subtle"
-            android:textColor="@color/text_main"
-            android:background="@drawable/bg_button_rounded"
-            android:padding="10dp"
-            android:textSize="13sp"
-            android:layout_marginTop="6dp"
-            android:layout_marginBottom="14dp" />
-
-        <!-- Sending Progress Indicator -->
-        <ProgressBar
-            android:id="@+id/pbSending"
-            style="?android:attr/progressBarStyle"
-            android:layout_width="32dp"
-            android:layout_height="32dp"
-            android:layout_gravity="center"
-            android:visibility="gone"
-            android:layout_marginBottom="12dp" />
+        android:layout_marginTop="8dp">
 
         <!-- Primary Action: Direct Anonymous Send -->
         <com.google.android.material.button.MaterialButton
@@ -120,7 +142,7 @@
             android:textSize="14sp"
             android:textAllCaps="false"
             app:cornerRadius="10dp"
-            android:layout_marginBottom="8dp" />
+            android:layout_marginBottom="6dp" />
 
         <!-- Optional Fallback: Share via external app -->
         <com.google.android.material.button.MaterialButton
@@ -136,13 +158,13 @@
             android:textAllCaps="false"
             app:cornerRadius="10dp"
             android:visibility="gone"
-            android:layout_marginBottom="8dp" />
+            android:layout_marginBottom="4dp" />
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btnCloseBug"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:minHeight="44dp"
+            android:minHeight="40dp"
             android:text="@string/close"
             style="@style/Widget.Material3.Button.TextButton"
             android:textColor="@color/text_muted"
@@ -150,4 +172,5 @@
             android:textAllCaps="false" />
 
     </LinearLayout>
-</ScrollView>
+
+</LinearLayout>

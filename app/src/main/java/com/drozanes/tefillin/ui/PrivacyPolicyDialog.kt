@@ -10,7 +10,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.Window
 import android.widget.Toast
-import com.drozanes.tefillin.R
 import com.drozanes.tefillin.databinding.DialogPrivacyPolicyBinding
 
 class PrivacyPolicyDialog(context: Context) : Dialog(context) {
@@ -38,5 +37,15 @@ class PrivacyPolicyDialog(context: Context) : Dialog(context) {
         }
 
         binding.btnClosePrivacy.setOnClickListener { dismiss() }
+    }
+
+    override fun onStart() {
+        super.onStart()
+        DialogUtils.configureResponsiveDialog(
+            dialog = this,
+            rootView = binding.root,
+            scrollBody = binding.scrollBody,
+            estimatedChromeDp = 135
+        )
     }
 }

@@ -1,165 +1,181 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:fillViewport="true">
+    android:background="@drawable/bg_glass_card"
+    android:orientation="vertical"
+    android:padding="20dp">
 
-    <LinearLayout
+    <!-- Title (Pinned Header) -->
+    <TextView
+        android:id="@+id/tvModalTitle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@drawable/bg_glass_card"
-        android:orientation="vertical"
-        android:padding="20dp">
+        android:text="@string/modal_title"
+        android:textColor="@color/accent_gold"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        android:gravity="center"
+        android:layout_marginBottom="14dp" />
 
-        <TextView
-            android:id="@+id/tvModalTitle"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/modal_title"
-            android:textColor="@color/accent_gold"
-            android:textSize="18sp"
-            android:textStyle="bold"
-            android:gravity="center"
-            android:layout_marginBottom="16dp" />
+    <!-- Scrollable Rules & Actions Body with Prominent Scrollbar -->
+    <com.drozanes.tefillin.ui.MaxHeightScrollView
+        android:id="@+id/scrollBody"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:fillViewport="true"
+        android:scrollbars="vertical"
+        android:fadeScrollbars="false"
+        android:scrollbarThumbVertical="@drawable/bg_scrollbar_thumb"
+        android:scrollbarSize="4dp">
 
-        <!-- Rule 1 -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:layout_marginBottom="14dp">
+            android:orientation="vertical">
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/modal_rule1_title"
-                android:textColor="@color/text_main"
-                android:textSize="15sp"
-                android:textStyle="bold" />
-
-            <TextView
+            <!-- Rule 1 -->
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/modal_rule1_text"
-                android:textColor="@color/text_muted"
-                android:textSize="13sp"
-                android:lineSpacingExtra="2dp"
-                android:layout_marginTop="3dp" />
-        </LinearLayout>
+                android:orientation="vertical"
+                android:layout_marginBottom="14dp">
 
-        <!-- Rule 2 -->
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:layout_marginBottom="14dp">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/modal_rule1_title"
+                    android:textColor="@color/text_main"
+                    android:textSize="15sp"
+                    android:textStyle="bold" />
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/modal_rule2_title"
-                android:textColor="@color/text_main"
-                android:textSize="15sp"
-                android:textStyle="bold" />
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/modal_rule1_text"
+                    android:textColor="@color/text_muted"
+                    android:textSize="13sp"
+                    android:lineSpacingExtra="2dp"
+                    android:layout_marginTop="3dp" />
+            </LinearLayout>
 
-            <TextView
+            <!-- Rule 2 -->
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/modal_rule2_text"
-                android:textColor="@color/text_muted"
-                android:textSize="13sp"
-                android:lineSpacingExtra="2dp"
-                android:layout_marginTop="3dp" />
-        </LinearLayout>
+                android:orientation="vertical"
+                android:layout_marginBottom="14dp">
 
-        <!-- Rule 3 -->
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:layout_marginBottom="18dp">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/modal_rule2_title"
+                    android:textColor="@color/text_main"
+                    android:textSize="15sp"
+                    android:textStyle="bold" />
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/modal_rule3_title"
-                android:textColor="@color/text_main"
-                android:textSize="15sp"
-                android:textStyle="bold" />
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/modal_rule2_text"
+                    android:textColor="@color/text_muted"
+                    android:textSize="13sp"
+                    android:lineSpacingExtra="2dp"
+                    android:layout_marginTop="3dp" />
+            </LinearLayout>
 
-            <TextView
+            <!-- Rule 3 -->
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/modal_rule3_text"
-                android:textColor="@color/text_muted"
-                android:textSize="13sp"
-                android:lineSpacingExtra="2dp"
-                android:layout_marginTop="3dp" />
-        </LinearLayout>
+                android:orientation="vertical"
+                android:layout_marginBottom="16dp">
 
-        <!-- Secondary Actions Row: AI Disclaimer & Privacy Policy -->
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_marginBottom="14dp">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/modal_rule3_title"
+                    android:textColor="@color/text_main"
+                    android:textSize="15sp"
+                    android:textStyle="bold" />
 
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/btnShowDisclaimer"
-                android:layout_width="0dp"
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/modal_rule3_text"
+                    android:textColor="@color/text_muted"
+                    android:textSize="13sp"
+                    android:lineSpacingExtra="2dp"
+                    android:layout_marginTop="3dp" />
+            </LinearLayout>
+
+            <!-- Action Buttons: AI Disclaimer & Privacy Policy -->
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:minHeight="42dp"
-                android:text="@string/btn_ai_disclaimer"
-                android:textColor="@color/accent_cyan"
-                android:background="@drawable/bg_button_rounded"
-                app:backgroundTint="@null"
-                android:textStyle="bold"
-                android:textSize="12sp"
-                android:textAllCaps="false"
-                app:cornerRadius="10dp"
-                android:layout_marginEnd="6dp" />
+                android:orientation="horizontal"
+                android:layout_marginBottom="6dp">
 
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/btnPrivacyPolicy"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:minHeight="42dp"
-                android:text="@string/btn_privacy_policy"
-                android:textColor="@color/accent_gold"
-                android:background="@drawable/bg_button_rounded"
-                app:backgroundTint="@null"
-                android:textStyle="bold"
-                android:textSize="12sp"
-                android:textAllCaps="false"
-                app:cornerRadius="10dp"
-                android:layout_marginStart="6dp" />
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btnShowDisclaimer"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:minHeight="42dp"
+                    android:text="@string/btn_ai_disclaimer"
+                    android:textColor="@color/accent_cyan"
+                    android:background="@drawable/bg_button_rounded"
+                    app:backgroundTint="@null"
+                    android:textStyle="bold"
+                    android:textSize="12sp"
+                    android:textAllCaps="false"
+                    app:cornerRadius="10dp"
+                    android:layout_marginEnd="6dp" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btnPrivacyPolicy"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:minHeight="42dp"
+                    android:text="@string/btn_privacy_policy"
+                    android:textColor="@color/accent_gold"
+                    android:background="@drawable/bg_button_rounded"
+                    app:backgroundTint="@null"
+                    android:textStyle="bold"
+                    android:textSize="12sp"
+                    android:textAllCaps="false"
+                    app:cornerRadius="10dp"
+                    android:layout_marginStart="6dp" />
+            </LinearLayout>
+
         </LinearLayout>
+    </com.drozanes.tefillin.ui.MaxHeightScrollView>
 
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/btnClose"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:minHeight="48dp"
-            android:text="@string/close"
-            app:backgroundTint="@color/accent_gold"
-            android:textColor="@color/bg_primary"
-            android:textStyle="bold"
-            android:textSize="15sp"
-            android:textAllCaps="false"
-            app:cornerRadius="10dp" />
+    <!-- Close Button & Version (Pinned Footer) -->
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btnClose"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:minHeight="48dp"
+        android:text="@string/close"
+        app:backgroundTint="@color/accent_gold"
+        android:textColor="@color/bg_primary"
+        android:textStyle="bold"
+        android:textSize="15sp"
+        android:textAllCaps="false"
+        app:cornerRadius="10dp" />
 
-        <TextView
-            android:id="@+id/tvHalachaVersion"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="v1.0.0"
-            android:textColor="@color/text_muted"
-            android:textSize="11sp"
-            android:gravity="center"
-            android:layout_marginTop="12dp" />
+    <TextView
+        android:id="@+id/tvHalachaVersion"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="v1.0.0"
+        android:textColor="@color/text_muted"
+        android:textSize="11sp"
+        android:gravity="center"
+        android:layout_marginTop="8dp" />
 
-    </LinearLayout>
-</ScrollView>
+</LinearLayout>

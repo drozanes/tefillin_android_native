@@ -1,151 +1,167 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:fillViewport="true">
+    android:background="@drawable/bg_glass_card"
+    android:orientation="vertical"
+    android:padding="20dp">
 
-    <LinearLayout
+    <!-- Title & Icon (Pinned Header) -->
+    <TextView
+        android:id="@+id/tvPrivacyTitle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@drawable/bg_glass_card"
-        android:orientation="vertical"
-        android:padding="22dp">
+        android:text="@string/privacy_modal_title"
+        android:textColor="@color/accent_gold"
+        android:textSize="19sp"
+        android:textStyle="bold"
+        android:gravity="center" />
 
-        <!-- Title & Icon -->
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/privacy_modal_title"
-            android:textColor="@color/accent_gold"
-            android:textSize="20sp"
-            android:textStyle="bold"
-            android:gravity="center" />
+    <TextView
+        android:id="@+id/tvPrivacyBadge"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="4dp"
+        android:layout_marginBottom="12dp"
+        android:background="@drawable/bg_button_rounded"
+        android:paddingHorizontal="10dp"
+        android:paddingVertical="3dp"
+        android:text="@string/privacy_edge_badge"
+        android:textColor="@color/accent_green"
+        android:textSize="11sp"
+        android:textStyle="bold" />
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginTop="4dp"
-            android:layout_marginBottom="16dp"
-            android:background="@drawable/bg_button_rounded"
-            android:paddingHorizontal="10dp"
-            android:paddingVertical="3dp"
-            android:text="@string/privacy_edge_badge"
-            android:textColor="@color/accent_green"
-            android:textSize="11sp"
-            android:textStyle="bold" />
+    <!-- Scrollable Body with Prominent Scrollbar -->
+    <com.drozanes.tefillin.ui.MaxHeightScrollView
+        android:id="@+id/scrollBody"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:fillViewport="true"
+        android:scrollbars="vertical"
+        android:fadeScrollbars="false"
+        android:scrollbarThumbVertical="@drawable/bg_scrollbar_thumb"
+        android:scrollbarSize="4dp">
 
-        <!-- Section 1: Camera Usage -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:background="@drawable/bg_button_rounded"
-            android:padding="14dp"
-            android:layout_marginBottom="12dp">
+            android:orientation="vertical">
 
-            <TextView
-                android:layout_width="wrap_content"
+            <!-- Section 1: Camera Usage -->
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/privacy_camera_title"
+                android:orientation="vertical"
+                android:background="@drawable/bg_button_rounded"
+                android:padding="14dp"
+                android:layout_marginBottom="12dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/privacy_camera_title"
+                    android:textColor="@color/accent_cyan"
+                    android:textSize="14sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/privacy_camera_desc"
+                    android:textColor="@color/text_main"
+                    android:textSize="13sp"
+                    android:lineSpacingExtra="3dp"
+                    android:layout_marginTop="4dp" />
+            </LinearLayout>
+
+            <!-- Section 2: Zero Tracking & Ads -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:background="@drawable/bg_button_rounded"
+                android:padding="14dp"
+                android:layout_marginBottom="12dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/privacy_no_tracking_title"
+                    android:textColor="@color/accent_gold"
+                    android:textSize="14sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/privacy_no_tracking_desc"
+                    android:textColor="@color/text_muted"
+                    android:textSize="13sp"
+                    android:lineSpacingExtra="3dp"
+                    android:layout_marginTop="4dp" />
+            </LinearLayout>
+
+            <!-- Section 3: Bug Reports & Data -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:background="@drawable/bg_button_rounded"
+                android:padding="14dp"
+                android:layout_marginBottom="12dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/privacy_bug_reports_title"
+                    android:textColor="@color/accent_yellow"
+                    android:textSize="14sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/privacy_bug_reports_desc"
+                    android:textColor="@color/text_muted"
+                    android:textSize="13sp"
+                    android:lineSpacingExtra="3dp"
+                    android:layout_marginTop="4dp" />
+            </LinearLayout>
+
+            <!-- View Full Policy Online Button -->
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnOpenOnlinePolicy"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:minHeight="44dp"
+                android:text="@string/privacy_open_online"
                 android:textColor="@color/accent_cyan"
-                android:textSize="14sp"
-                android:textStyle="bold" />
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/privacy_camera_desc"
-                android:textColor="@color/text_main"
+                android:background="@drawable/bg_button_rounded"
+                app:backgroundTint="@null"
+                android:textStyle="bold"
                 android:textSize="13sp"
-                android:lineSpacingExtra="3dp"
-                android:layout_marginTop="4dp" />
+                android:textAllCaps="false"
+                app:cornerRadius="10dp"
+                android:layout_marginBottom="4dp" />
+
         </LinearLayout>
+    </com.drozanes.tefillin.ui.MaxHeightScrollView>
 
-        <!-- Section 2: Zero Tracking & Ads -->
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:background="@drawable/bg_button_rounded"
-            android:padding="14dp"
-            android:layout_marginBottom="12dp">
+    <!-- Close Button (Pinned Footer) -->
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btnClosePrivacy"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:minHeight="48dp"
+        android:text="@string/close"
+        app:backgroundTint="@color/accent_gold"
+        android:textColor="@color/bg_primary"
+        android:textStyle="bold"
+        android:textSize="15sp"
+        android:textAllCaps="false"
+        app:cornerRadius="10dp" />
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/privacy_no_tracking_title"
-                android:textColor="@color/accent_gold"
-                android:textSize="14sp"
-                android:textStyle="bold" />
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/privacy_no_tracking_desc"
-                android:textColor="@color/text_muted"
-                android:textSize="13sp"
-                android:lineSpacingExtra="3dp"
-                android:layout_marginTop="4dp" />
-        </LinearLayout>
-
-        <!-- Section 3: Bug Reports & Data -->
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:background="@drawable/bg_button_rounded"
-            android:padding="14dp"
-            android:layout_marginBottom="16dp">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/privacy_bug_reports_title"
-                android:textColor="@color/accent_yellow"
-                android:textSize="14sp"
-                android:textStyle="bold" />
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/privacy_bug_reports_desc"
-                android:textColor="@color/text_muted"
-                android:textSize="13sp"
-                android:lineSpacingExtra="3dp"
-                android:layout_marginTop="4dp" />
-        </LinearLayout>
-
-        <!-- View Full Policy Online Button -->
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/btnOpenOnlinePolicy"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:minHeight="44dp"
-            android:text="@string/privacy_open_online"
-            android:textColor="@color/accent_cyan"
-            android:background="@drawable/bg_button_rounded"
-            app:backgroundTint="@null"
-            android:textStyle="bold"
-            android:textSize="13sp"
-            android:textAllCaps="false"
-            app:cornerRadius="10dp"
-            android:layout_marginBottom="10dp" />
-
-        <!-- Close Button -->
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/btnClosePrivacy"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:minHeight="48dp"
-            android:text="@string/close"
-            app:backgroundTint="@color/accent_gold"
-            android:textColor="@color/bg_primary"
-            android:textStyle="bold"
-            android:textSize="15sp"
-            android:textAllCaps="false"
-            app:cornerRadius="10dp" />
-
-    </LinearLayout>
-</ScrollView>
+</LinearLayout>

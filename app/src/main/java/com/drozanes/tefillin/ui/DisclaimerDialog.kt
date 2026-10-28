@@ -34,4 +34,14 @@ class DisclaimerDialog(
             dismiss()
         }
     }
+
+    override fun onStart() {
+        super.onStart()
+        DialogUtils.configureResponsiveDialog(
+            dialog = this,
+            rootView = binding.root,
+            scrollBody = binding.scrollBody,
+            estimatedChromeDp = 135
+        )
+    }
 }

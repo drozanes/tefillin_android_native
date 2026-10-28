@@ -108,12 +108,12 @@ class BugReportDialog(
 
     override fun onStart() {
         super.onStart()
-        window?.let { w ->
-            val dm = context.resources.displayMetrics
-            val width = (dm.widthPixels * 0.92).toInt()
-            w.setLayout(width, ViewGroup.LayoutParams.WRAP_CONTENT)
-            w.setGravity(Gravity.CENTER)
-        }
+        DialogUtils.configureResponsiveDialog(
+            dialog = this,
+            rootView = binding.root,
+            scrollBody = binding.scrollBody,
+            estimatedChromeDp = 180
+        )
     }
 
     private fun shareReport(notes: String, effectiveSnapshot: Bitmap?) {

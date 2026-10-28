@@ -1,108 +1,126 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:fillViewport="true">
+    android:background="@drawable/bg_glass_card"
+    android:orientation="vertical"
+    android:padding="20dp">
 
-    <LinearLayout
+    <!-- Title & Icon (Pinned Header) -->
+    <TextView
+        android:id="@+id/tvDisclaimerTitle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@drawable/bg_glass_card"
-        android:orientation="vertical"
-        android:padding="22dp">
+        android:text="@string/disclaimer_welcome_title"
+        android:textColor="@color/accent_gold"
+        android:textSize="19sp"
+        android:textStyle="bold"
+        android:gravity="center" />
 
-        <!-- Title & Icon -->
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/disclaimer_welcome_title"
-            android:textColor="@color/accent_gold"
-            android:textSize="20sp"
-            android:textStyle="bold"
-            android:gravity="center" />
+    <TextView
+        android:id="@+id/tvDisclaimerBadge"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="4dp"
+        android:layout_marginBottom="12dp"
+        android:background="@drawable/bg_button_rounded"
+        android:paddingHorizontal="10dp"
+        android:paddingVertical="3dp"
+        android:text="@string/disclaimer_edition_badge"
+        android:textColor="@color/accent_cyan"
+        android:textSize="11sp"
+        android:textStyle="bold" />
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginTop="4dp"
-            android:layout_marginBottom="16dp"
-            android:background="@drawable/bg_button_rounded"
-            android:paddingHorizontal="10dp"
-            android:paddingVertical="3dp"
-            android:text="@string/disclaimer_edition_badge"
-            android:textColor="@color/accent_cyan"
-            android:textSize="11sp"
-            android:textStyle="bold" />
+    <!-- Scrollable Body with Prominent Scrollbar -->
+    <com.drozanes.tefillin.ui.MaxHeightScrollView
+        android:id="@+id/scrollBody"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:fillViewport="true"
+        android:scrollbars="vertical"
+        android:fadeScrollbars="false"
+        android:scrollbarThumbVertical="@drawable/bg_scrollbar_thumb"
+        android:scrollbarSize="4dp">
 
-        <!-- AI Advisory Section -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:background="@drawable/bg_button_rounded"
-            android:padding="14dp"
-            android:layout_marginBottom="14dp">
+            android:orientation="vertical">
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/disclaimer_ai_title"
-                android:textColor="@color/accent_yellow"
-                android:textSize="14sp"
-                android:textStyle="bold" />
-
-            <TextView
+            <!-- AI Advisory Section -->
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/disclaimer_ai_desc"
-                android:textColor="@color/text_main"
-                android:textSize="13sp"
-                android:lineSpacingExtra="3dp"
-                android:layout_marginTop="4dp" />
-        </LinearLayout>
+                android:orientation="vertical"
+                android:background="@drawable/bg_button_rounded"
+                android:padding="14dp"
+                android:layout_marginBottom="12dp">
 
-        <!-- Feedback & Bug Report Section -->
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:background="@drawable/bg_button_rounded"
-            android:padding="14dp"
-            android:layout_marginBottom="20dp">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/disclaimer_ai_title"
+                    android:textColor="@color/accent_yellow"
+                    android:textSize="14sp"
+                    android:textStyle="bold" />
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/disclaimer_feedback_title"
-                android:textColor="@color/accent_cyan"
-                android:textSize="14sp"
-                android:textStyle="bold" />
+                <TextView
+                    android:id="@+id/tvAiDesc"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/disclaimer_ai_desc"
+                    android:textColor="@color/text_main"
+                    android:textSize="13sp"
+                    android:lineSpacingExtra="3dp"
+                    android:layout_marginTop="4dp" />
+            </LinearLayout>
 
-            <TextView
+            <!-- Feedback & Bug Report Section -->
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/disclaimer_feedback_desc"
-                android:textColor="@color/text_muted"
-                android:textSize="13sp"
-                android:lineSpacingExtra="3dp"
-                android:layout_marginTop="4dp" />
+                android:orientation="vertical"
+                android:background="@drawable/bg_button_rounded"
+                android:padding="14dp"
+                android:layout_marginBottom="4dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/disclaimer_feedback_title"
+                    android:textColor="@color/accent_cyan"
+                    android:textSize="14sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/tvFeedbackDesc"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/disclaimer_feedback_desc"
+                    android:textColor="@color/text_muted"
+                    android:textSize="13sp"
+                    android:lineSpacingExtra="3dp"
+                    android:layout_marginTop="4dp" />
+            </LinearLayout>
+
         </LinearLayout>
+    </com.drozanes.tefillin.ui.MaxHeightScrollView>
 
-        <!-- Confirm Button -->
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/btnConfirmDisclaimer"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:minHeight="50dp"
-            android:text="@string/disclaimer_confirm_btn"
-            app:backgroundTint="@color/accent_gold"
-            android:textColor="@color/bg_primary"
-            android:textStyle="bold"
-            android:textSize="15sp"
-            android:textAllCaps="false"
-            app:cornerRadius="12dp" />
+    <!-- Confirm Button (Pinned Footer) -->
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btnConfirmDisclaimer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:minHeight="48dp"
+        android:text="@string/disclaimer_confirm_btn"
+        app:backgroundTint="@color/accent_gold"
+        android:textColor="@color/bg_primary"
+        android:textStyle="bold"
+        android:textSize="15sp"
+        android:textAllCaps="false"
+        app:cornerRadius="10dp" />
 
-    </LinearLayout>
-</ScrollView>
+</LinearLayout>
