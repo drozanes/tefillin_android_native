@@ -4,6 +4,7 @@
     <color name="bg_surface">#151C2C</color>
     <color name="bg_surface_elevated">#1E293B</color>
     <color name="bg_surface_translucent">#D0151C2C</color>
+    <color name="bg_dialog_solid">#161E30</color>
     <color name="card_border">#2E384D</color>
     
     <color name="accent_gold">#F59E0B</color>

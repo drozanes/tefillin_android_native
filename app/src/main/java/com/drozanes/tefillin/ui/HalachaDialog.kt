@@ -24,10 +24,16 @@ class HalachaDialog(context: Context) : Dialog(context) {
         binding.tvHalachaVersion.text = "v${BuildConfig.VERSION_NAME}"
 
         binding.btnShowDisclaimer.setOnClickListener {
-            DisclaimerDialog(context, isFirstLaunch = false).show()
+            dismiss()
+            DisclaimerDialog(context, isFirstLaunch = false) {
+                HalachaDialog(context).show()
+            }.show()
         }
         binding.btnPrivacyPolicy.setOnClickListener {
-            PrivacyPolicyDialog(context).show()
+            dismiss()
+            PrivacyPolicyDialog(context) {
+                HalachaDialog(context).show()
+            }.show()
         }
         binding.btnClose.setOnClickListener { dismiss() }
     }

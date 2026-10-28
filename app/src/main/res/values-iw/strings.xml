@@ -12,15 +12,15 @@
     <string name="guides_on">📐 קווי עזר</string>
     <string name="guides_off">📐 קווי עזר: כבוי</string>
     <string name="halacha_guide_title">הלכות תפילין</string>
-    <string name="bug_report_title">דיווח על תקלה</string>
+    <string name="bug_report_title">דיווח על תקלה / משוב</string>
 
     <!-- First-Launch Disclaimer Dialog -->
     <string name="disclaimer_welcome_title">ברוכים הבאים למראת תפילין 🪞</string>
     <string name="disclaimer_edition_badge">מהדורת פיתוח • כלי עזר מבוסס AI</string>
     <string name="disclaimer_ai_title">💡 לתשומת לבכם</string>
     <string name="disclaimer_ai_desc">אפליקציה זו משתמשת בבינה מלאכותית (AI) ובראייה ממוחשבת כדי לסייע בכוונון התפילין של ראש.\n\nהטכנולוגיה עשויה לשגות בשל תנאי תאורה או זווית, ואינה מהווה פסיקה הלכתית מוחלטת אלא כלי עזר והמלצה בלבד.</string>
-    <string name="disclaimer_feedback_title">🐛 עזרו לנו להשתפר!</string>
-    <string name="disclaimer_feedback_desc">נתקלתם באי-דיוק, זיהוי שגוי, באג, או שיש לכם הצעה לשיפור?\nנשמח מאוד שתשתמשו בכפתור הדיווח (🐛) בראש המסך. כל דיווח עוזר לנו לדייק את המודל לכולם!</string>
+    <string name="disclaimer_feedback_title">🐞 עזרו לנו להשתפר!</string>
+    <string name="disclaimer_feedback_desc">נתקלתם באי-דיוק, זיהוי שגוי, באג, או שיש לכם הצעה לשיפור?\nנשמח מאוד שתשתמשו בכפתור הדיווח (🐞) בראש המסך. כל דיווח עוזר לנו לדייק את המודל לכולם!</string>
     <string name="disclaimer_confirm_btn">הבנתי, בואו נתחיל ✨</string>
 
     <!-- Halacha Dialog Actions -->
@@ -34,7 +34,7 @@
     <string name="privacy_camera_desc">המצלמה משמשת אך ורק למראה בזמן אמת ולזיהוי תפילין ונקודות ציון בפנים. הווידאו מעובד מקומית בזיכרון המכשיר (RAM) בלבד ואינו מוקלט, נשמר או נשלח לשום שרת.</string>
     <string name="privacy_no_tracking_title">🛡️ אפס מעקב ופרסום</string>
     <string name="privacy_no_tracking_desc">האפליקציה נקייה לחלוטין מפרסומות, כלי מעקב (Analytics) או יצירת חשבונות. אין איסוף של נתונים ביומטריים מזהים.</string>
-    <string name="privacy_bug_reports_title">🐛 דיווחי תקלות</string>
+    <string name="privacy_bug_reports_title">🐞 דיווחי תקלות</string>
     <string name="privacy_bug_reports_desc">צילום מסך או נתוני אבחון נשלחים אך ורק אם המשתמש יזם ולחץ על שליחת דיווח במסך הדיווח (לצורך שיפור המודל בלבד).</string>
     <string name="privacy_open_online">🌐 פתח מדיניות מלאה באינטרנט</string>
 
@@ -73,7 +73,7 @@
 
     <!-- Seder Hanachat Tefillin Dialog -->
     <string name="tefillin_order_title">סדר הנחת תפילין</string>
-    <string name="tefillin_order_nusach_label">בחר נוסח:</string>
+    <string name="tefillin_order_nusach_label">בחר נוסח תפילה:</string>
     <string name="nusach_ashkenaz">אשכנז</string>
     <string name="nusach_sefard">ספרד</string>
     <string name="nusach_edot_hamizrach">עדות המזרח</string>
@@ -119,8 +119,8 @@
     <string name="modal_rule1_text">תפילין של ראש צריכות להיות מכוונות בדיוק באמצע בין שתי העיניים, לקיום המצווה כהלכתה.</string>
     <string name="modal_rule2_title">2. מקום הנחה בגובה (מקום גידול שיער)</string>
     <string name="modal_rule2_text">בית התפילין כולו צריך לשבת במקום שבו שיער הראש מתחיל לצמוח. יש לשים לב שהקצה התחתון של התפילין אינו גולש למטה אל עור המצח החלק.</string>
-    <string name="modal_rule3_title">3. זיהוי התפילין במצלמה</string>
-    <string name="modal_rule3_text">המערכת מזהה את התפילין במרכז המצח, ומוודאת שכל שטח התפילין מונח מעל שורשי השיער.</string>
+    <string name="modal_rule3_title">3. בדיקה במצלמה</string>
+    <string name="modal_rule3_text">המערכת מזהה את התפילין, מוודאת שכל שטח הבית מונח מעל שורשי השיער ובמרכז המדויק.</string>
     <string name="close">סגור</string>
 
     <!-- Bug Report Dialog -->
@@ -135,7 +135,7 @@
     <string name="sending_report">שולח דיווח...</string>
     <string name="report_sent_success">הדיווח נשלח בהצלחה! תודה רבה.</string>
     <string name="report_send_error">שגיאה בשליחת הדיווח: %s</string>
-    <string name="report_offline_or_failed">נקודת הדיווח אינה מוגדרת או שאין חיבור. ניתן לשתף באמצעות יישום אחר.</string>
+    <string name="report_offline_or_failed">לא ניתן להתחבר לשרת הדיווח. באפשרותך לשתף באמצעות יישום אחר.</string>
     <string name="share_fallback">שתף באמצעות יישום חיצוני</string>
     <string name="share_subject">דיווח תקלה - מראת תפילין</string>
     <string name="share_chooser_title">שתף דיווח תקלה באמצעות...</string>

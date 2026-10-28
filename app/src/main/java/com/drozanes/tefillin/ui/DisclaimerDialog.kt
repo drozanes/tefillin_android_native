@@ -24,13 +24,15 @@ class DisclaimerDialog(
         setContentView(binding.root)
         window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
         setCancelable(!isFirstLaunch)
+        setOnDismissListener {
+            onDismissed?.invoke()
+        }
 
         if (!isFirstLaunch) {
             binding.btnConfirmDisclaimer.text = context.getString(R.string.close)
         }
 
         binding.btnConfirmDisclaimer.setOnClickListener {
-            onDismissed?.invoke()
             dismiss()
         }
     }

@@ -48,5 +48,7 @@ object DialogUtils {
 
         window.setLayout(targetWidth, finalHeight)
         window.setGravity(Gravity.CENTER)
+        window.addFlags(android.view.WindowManager.LayoutParams.FLAG_DIM_BEHIND)
+        window.setDimAmount(0.75f)
     }
 }

@@ -12,7 +12,10 @@ import android.view.Window
 import android.widget.Toast
 import com.drozanes.tefillin.databinding.DialogPrivacyPolicyBinding
 
-class PrivacyPolicyDialog(context: Context) : Dialog(context) {
+class PrivacyPolicyDialog(
+    context: Context,
+    private val onDismissed: (() -> Unit)? = null
+) : Dialog(context) {
 
     companion object {
         private const val ONLINE_POLICY_URL = "https://github.com/drozanes/tefillin_android_native/blob/main/PRIVACY_POLICY.md"
@@ -26,6 +29,9 @@ class PrivacyPolicyDialog(context: Context) : Dialog(context) {
         setContentView(binding.root)
         window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
         setCancelable(true)
+        setOnDismissListener {
+            onDismissed?.invoke()
+        }
 
         binding.btnOpenOnlinePolicy.setOnClickListener {
             try {
