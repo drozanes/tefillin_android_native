@@ -1,0 +1,1597 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tefillin CV Ground Truth Studio</title>
+  <style>
+    :root {
+      --bg: #0f172a;
+      --surface: #1e293b;
+      --surface-hover: #334155;
+      --surface-border: #334155;
+      --text: #f8fafc;
+      --text-muted: #94a3b8;
+      --primary: #3b82f6;
+      --primary-hover: #2563eb;
+      --success: #10b981;
+      --success-bg: rgba(16, 185, 129, 0.15);
+      --warning: #f59e0b;
+      --warning-bg: rgba(245, 158, 11, 0.15);
+      --danger: #ef4444;
+      --danger-bg: rgba(239, 68, 68, 0.15);
+      --cyan: #06b6d4;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      display: flex;
+      flex-direction: column;
+      height: 100vh;
+      overflow: hidden;
+    }
+
+    /* Header */
+    header {
+      background: var(--surface);
+      border-bottom: 1px solid var(--surface-border);
+      padding: 10px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 15px;
+      flex-shrink: 0;
+    }
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-weight: 700;
+      font-size: 1.15rem;
+      letter-spacing: -0.02em;
+    }
+    .brand span.badge {
+      font-size: 0.75rem;
+      padding: 2px 8px;
+      border-radius: 999px;
+      background: rgba(59, 130, 246, 0.2);
+      color: var(--primary);
+      font-weight: 600;
+    }
+    .nav-tabs {
+      display: flex;
+      gap: 6px;
+      background: var(--bg);
+      padding: 4px;
+      border-radius: 8px;
+    }
+    .tab-btn {
+      background: transparent;
+      border: none;
+      color: var(--text-muted);
+      padding: 6px 14px;
+      border-radius: 6px;
+      font-size: 0.9rem;
+      font-weight: 600;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.15s ease;
+    }
+    .tab-btn.active {
+      background: var(--surface);
+      color: var(--text);
+      box-shadow: 0 1px 3px rgba(0,0,0,0.3);
+    }
+    .tab-btn .count-badge {
+      font-size: 0.75rem;
+      padding: 1px 6px;
+      border-radius: 10px;
+      background: var(--surface-hover);
+    }
+    .header-actions {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .btn {
+      background: var(--surface-hover);
+      color: var(--text);
+      border: 1px solid var(--surface-border);
+      padding: 7px 14px;
+      border-radius: 6px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.15s ease;
+    }
+    .btn:hover { background: #475569; }
+    .btn-primary {
+      background: var(--primary);
+      border-color: var(--primary);
+    }
+    .btn-primary:hover { background: var(--primary-hover); }
+    .btn-success {
+      background: var(--success);
+      border-color: var(--success);
+    }
+
+    /* Main Container */
+    .main-layout {
+      display: flex;
+      flex: 1;
+      overflow: hidden;
+    }
+
+    /* Left Sidebar: Image list */
+    .sidebar {
+      width: 320px;
+      background: var(--surface);
+      border-right: 1px solid var(--surface-border);
+      display: flex;
+      flex-direction: column;
+      flex-shrink: 0;
+    }
+    .sidebar-header {
+      padding: 12px 14px;
+      border-bottom: 1px solid var(--surface-border);
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .filter-pills {
+      display: flex;
+      gap: 6px;
+    }
+    .pill {
+      flex: 1;
+      text-align: center;
+      padding: 5px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      border-radius: 6px;
+      background: var(--bg);
+      color: var(--text-muted);
+      cursor: pointer;
+      border: 1px solid transparent;
+    }
+    .pill.active {
+      background: rgba(59, 130, 246, 0.15);
+      color: var(--primary);
+      border-color: rgba(59, 130, 246, 0.3);
+    }
+    .item-list {
+      flex: 1;
+      overflow-y: auto;
+      list-style: none;
+    }
+    .list-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 14px;
+      border-bottom: 1px solid rgba(255,255,255,0.05);
+      cursor: pointer;
+      transition: background 0.12s;
+    }
+    .list-item:hover { background: var(--surface-hover); }
+    .list-item.selected {
+      background: rgba(59, 130, 246, 0.15);
+      border-left: 3px solid var(--primary);
+    }
+    .item-thumb {
+      width: 44px;
+      height: 44px;
+      border-radius: 6px;
+      object-fit: cover;
+      background: #000;
+    }
+    .item-info {
+      flex: 1;
+      min-width: 0;
+    }
+    .item-name {
+      font-size: 0.85rem;
+      font-weight: 600;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .item-sub {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      margin-top: 3px;
+    }
+    .status-badge {
+      font-size: 0.7rem;
+      font-weight: 700;
+      padding: 2px 6px;
+      border-radius: 4px;
+      text-transform: uppercase;
+      letter-spacing: 0.03em;
+    }
+    .badge-pass { background: var(--success-bg); color: var(--success); }
+    .badge-mistake { background: var(--danger-bg); color: var(--danger); }
+    .badge-aligned { background: var(--success-bg); color: var(--success); }
+    .badge-offcenter { background: var(--warning-bg); color: var(--warning); }
+    .badge-forehead { background: var(--danger-bg); color: var(--danger); }
+
+    /* Center Viewport: Canvas */
+    .viewport {
+      flex: 1;
+      background: #090d16;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      overflow: hidden;
+      user-select: none;
+    }
+    .canvas-container {
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+      height: 100%;
+      padding: 20px;
+    }
+    canvas {
+      max-width: 100%;
+      max-height: 100%;
+      object-fit: contain;
+      box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.5);
+      border-radius: 8px;
+      cursor: crosshair;
+    }
+    .viewport-overlay-hint {
+      position: absolute;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: rgba(15, 23, 42, 0.85);
+      backdrop-filter: blur(8px);
+      padding: 8px 16px;
+      border-radius: 20px;
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      border: 1px solid var(--surface-border);
+      pointer-events: none;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    /* Right Inspector / Control Panel */
+    .inspector {
+      width: 380px;
+      background: var(--surface);
+      border-left: 1px solid var(--surface-border);
+      display: flex;
+      flex-direction: column;
+      flex-shrink: 0;
+      overflow-y: auto;
+    }
+    .inspector-header {
+      padding: 16px;
+      border-bottom: 1px solid var(--surface-border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .inspector-header h2 {
+      font-size: 1rem;
+      font-weight: 700;
+    }
+    .inspector-body {
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+    }
+    .card {
+      background: var(--bg);
+      border: 1px solid var(--surface-border);
+      border-radius: 8px;
+      padding: 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .card-title {
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+    .stat-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 0.9rem;
+    }
+    .stat-val {
+      font-weight: 700;
+      font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+    }
+    .control-group {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+    .control-label {
+      font-size: 0.85rem;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .control-label span.hint {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      font-weight: 400;
+    }
+    input[type="range"] {
+      width: 100%;
+      accent-color: var(--primary);
+    }
+    input[type="number"], input[type="text"], textarea, select {
+      background: var(--bg);
+      border: 1px solid var(--surface-border);
+      color: var(--text);
+      padding: 8px 10px;
+      border-radius: 6px;
+      font-size: 0.9rem;
+      font-family: inherit;
+      width: 100%;
+    }
+    input:focus, textarea:focus, select:focus {
+      outline: 2px solid var(--primary);
+      border-color: transparent;
+    }
+    textarea {
+      resize: vertical;
+      min-height: 70px;
+    }
+
+    /* Halacha Status Buttons */
+    .status-select-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 8px;
+    }
+    .status-choice-btn {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 10px 14px;
+      border-radius: 8px;
+      background: var(--bg);
+      border: 2px solid var(--surface-border);
+      color: var(--text);
+      cursor: pointer;
+      font-size: 0.88rem;
+      font-weight: 600;
+      transition: all 0.15s ease;
+    }
+    .status-choice-btn:hover {
+      background: var(--surface-hover);
+    }
+    .status-choice-btn.selected-aligned {
+      border-color: var(--success);
+      background: var(--success-bg);
+      color: var(--success);
+    }
+    .status-choice-btn.selected-offcenter {
+      border-color: var(--warning);
+      background: var(--warning-bg);
+      color: var(--warning);
+    }
+    .status-choice-btn.selected-forehead {
+      border-color: var(--danger);
+      background: var(--danger-bg);
+      color: var(--danger);
+    }
+
+    /* Navigation Bar */
+    .nav-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      padding-top: 10px;
+      border-top: 1px solid var(--surface-border);
+    }
+
+    /* Test Output Modal */
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.7);
+      backdrop-filter: blur(4px);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 100;
+      padding: 20px;
+    }
+    .modal {
+      background: var(--surface);
+      border: 1px solid var(--surface-border);
+      border-radius: 12px;
+      width: 800px;
+      max-width: 100%;
+      max-height: 85vh;
+      display: flex;
+      flex-direction: column;
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.7);
+      overflow: hidden;
+    }
+    .modal-header {
+      padding: 14px 18px;
+      border-bottom: 1px solid var(--surface-border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .modal-body {
+      padding: 16px;
+      overflow-y: auto;
+      flex: 1;
+      background: #0b0f19;
+      color: #38bdf8;
+      font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+      font-size: 0.85rem;
+      white-space: pre-wrap;
+      line-height: 1.5;
+    }
+    .modal-footer {
+      padding: 12px 18px;
+      border-top: 1px solid var(--surface-border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .spinner {
+      display: inline-block;
+      width: 14px;
+      height: 14px;
+      border: 2px solid rgba(255,255,255,0.3);
+      border-radius: 50%;
+      border-top-color: #fff;
+      animation: spin 0.8s linear infinite;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+  </style>
+</head>
+<body>
+
+  <!-- Header -->
+  <header>
+    <div class="brand">
+      <span>✡️ Tefillin CV Studio</span>
+      <span class="badge" id="headerMistakeRate">Mistakes: 11.11%</span>
+    </div>
+
+    <div class="nav-tabs">
+      <button class="tab-btn active" id="tabHairline" onclick="switchTab('hairline')">
+        <span>💇 Hairline GT (Trichion)</span>
+        <span class="count-badge" id="badgeHairlineCount">18</span>
+      </button>
+      <button class="tab-btn" id="tabHalacha" onclick="switchTab('halacha')">
+        <span>📜 Halacha GT (Alignment)</span>
+        <span class="count-badge" id="badgeHalachaCount">10</span>
+      </button>
+    </div>
+
+    <div class="header-actions">
+      <button class="btn" id="btnUpdateBenchmark" onclick="updateBenchmark()" title="Update benchmark baseline mistake rate">
+        <span>★ Save Benchmark</span>
+      </button>
+      <button class="btn btn-primary" onclick="runNativeTests()">
+        <span>▶ Run Kotlin Tests</span>
+      </button>
+    </div>
+  </header>
+
+  <!-- Main Workspace -->
+  <div class="main-layout">
+    
+    <!-- Sidebar -->
+    <div class="sidebar">
+      <div class="sidebar-header">
+        <div class="filter-pills" id="filterPills">
+          <div class="pill active" onclick="setFilter('all')">All (<span id="countAll">0</span>)</div>
+          <div class="pill" onclick="setFilter('mistakes')">Mistakes (<span id="countMistakes">0</span>)</div>
+          <div class="pill" onclick="setFilter('passes')">Passes (<span id="countPasses">0</span>)</div>
+          <div class="pill" onclick="setFilter('excluded')">Excluded (<span id="countExcluded">0</span>)</div>
+        </div>
+      </div>
+      <ul class="item-list" id="itemList"></ul>
+    </div>
+
+    <!-- Center Viewport (Canvas) -->
+    <div class="viewport">
+      <div style="position: absolute; top: 16px; right: 16px; z-index: 10; display: flex; gap: 8px;">
+        <button class="btn" id="btnToggleGuides" onclick="toggleGuides()" style="background: rgba(15, 23, 42, 0.85); backdrop-filter: blur(8px); border-radius: 20px; font-size: 0.82rem; padding: 6px 14px; border-color: var(--primary);">
+          <span>👁️ Guide Lines: ON</span>
+        </button>
+      </div>
+      <div class="canvas-container">
+        <canvas id="cvCanvas"></canvas>
+      </div>
+      <div class="viewport-overlay-hint" id="viewportHint">
+        <span>💡 Click & drag green hairline • Press 'G' to show/hide guide lines</span>
+      </div>
+    </div>
+
+    <!-- Right Inspector / Control Panel -->
+    <div class="inspector">
+      <div class="inspector-header">
+        <h2 id="inspectorTitle">Inspector</h2>
+        <div style="display: flex; align-items: center; gap: 8px;">
+          <span id="saveIndicator" style="font-size: 0.78rem; font-weight: 700; color: var(--success); opacity: 0; transition: opacity 0.3s;">Saved ✓</span>
+          <span class="status-badge" id="inspectorBadge">STATUS</span>
+        </div>
+      </div>
+
+      <div class="inspector-body" id="hairlineControls">
+        <!-- Detection vs GT Stats -->
+        <div class="card">
+          <div class="card-title">Hairline (Trichion) Ratio</div>
+          <div class="stat-row">
+            <span>Detected by Algo:</span>
+            <span class="stat-val" style="color: var(--cyan);" id="statDetectedRatio">0.000</span>
+          </div>
+          <div class="stat-row">
+            <span>Ground Truth (GT):</span>
+            <span class="stat-val" style="color: var(--success);" id="statGTRatio">0.000</span>
+          </div>
+          <div class="stat-row">
+            <span>Difference:</span>
+            <span class="stat-val" id="statDiff">0.000</span>
+          </div>
+          <div class="stat-row">
+            <span>Tolerance (±):</span>
+            <span class="stat-val" id="statTol">±0.05</span>
+          </div>
+        </div>
+
+        <!-- Interactive Ratio Slider -->
+        <div class="control-group">
+          <div class="control-label">
+            <span>Ground Truth Ratio</span>
+            <span class="hint" id="sliderValDisplay">0.720</span>
+          </div>
+          <input type="range" id="gtRatioSlider" min="0.50" max="1.05" step="0.002" value="0.720" oninput="onRatioSliderChange(this.value)" onchange="saveHairlineGT()">
+          <div style="display: flex; gap: 8px; margin-top: 4px;">
+            <input type="number" id="gtRatioInput" step="0.005" min="0.40" max="1.20" value="0.720" onchange="onRatioInputChange(this.value)">
+            <button class="btn" onclick="snapToDetected()" title="Set GT to current algorithm detection">Snap Detected</button>
+          </div>
+        </div>
+
+        <!-- Tolerance Input -->
+        <div class="control-group">
+          <div class="control-label">
+            <span>Tolerance (±)</span>
+            <span class="hint">Allowed drift</span>
+          </div>
+          <input type="number" id="gtToleranceInput" step="0.01" min="0.01" max="0.20" value="0.05" onchange="onToleranceChange(this.value)">
+        </div>
+
+        <!-- Actions -->
+        <div style="display: flex; gap: 8px;">
+          <button class="btn btn-primary" style="flex: 1;" onclick="saveHairlineGT()">Save Hairline GT</button>
+          <button class="btn" onclick="resetCurrentItem()">Reset</button>
+          <button class="btn" id="btnExcludeHairline" onclick="toggleExcludeCurrent()" style="border-color: var(--danger); color: #f87171;">🗑️ Remove from Test</button>
+        </div>
+
+        <!-- Navigation -->
+        <div class="nav-bar">
+          <button class="btn" onclick="prevItem()">← Previous</button>
+          <span style="font-size: 0.85rem; color: var(--text-muted);" id="navPosition">1 of 18</span>
+          <button class="btn" onclick="nextItem()">Next →</button>
+        </div>
+      </div>
+
+      <!-- Halacha Controls Panel -->
+      <div class="inspector-body" id="halachaControls" style="display: none;">
+        <!-- Algorithm Status Card -->
+        <div class="card">
+          <div class="card-title">Algorithm Detection</div>
+          <div class="stat-row">
+            <span>Status:</span>
+            <span class="stat-val" id="statAlgoHalachaStatus">ALIGNED</span>
+          </div>
+          <div class="stat-row">
+            <span>Kosher:</span>
+            <span class="stat-val" id="statAlgoKosher">YES</span>
+          </div>
+          <div class="stat-row">
+            <span>Dist Above Hairline:</span>
+            <span class="stat-val" id="statAlgoDistAbove">+0.0 px</span>
+          </div>
+          <div style="font-size: 0.72rem; color: var(--text-muted); margin-top: -4px;">
+            (≥ 0 on scalp/hair; &lt; 0 touches forehead skin)
+          </div>
+          <div class="stat-row" style="margin-top: 4px;">
+            <span>Center Deviation:</span>
+            <span class="stat-val" id="statAlgoCenterOffset">0.0 px</span>
+          </div>
+          <div style="font-size: 0.72rem; color: var(--text-muted); margin-top: -4px;">
+            (Distance from eye-midline. Must be &lt; 8% of eye distance to be centered)
+          </div>
+        </div>
+
+        <!-- Ground Truth Choice -->
+        <div class="control-group">
+          <div class="control-label">
+            <span>Expected Ground Truth Status</span>
+            <span class="hint">Click to choose</span>
+          </div>
+          <div class="status-select-grid">
+            <button type="button" class="status-choice-btn" id="btnStatusAligned" onclick="setHalachaStatus('ALIGNED')">
+              <span>🟢 ALIGNED</span>
+              <span style="font-size: 0.75rem; opacity: 0.8;">תקין (שיער ובמרכז)</span>
+            </button>
+            <button type="button" class="status-choice-btn" id="btnStatusOffCenter" onclick="setHalachaStatus('OFF_CENTER')">
+              <span>🟡 OFF_CENTER</span>
+              <span style="font-size: 0.75rem; opacity: 0.8;">מוטה (כשר אך לא במרכז)</span>
+            </button>
+            <button type="button" class="status-choice-btn" id="btnStatusForehead" onclick="setHalachaStatus('FOREHEAD_ERROR')">
+              <span>🔴 FOREHEAD_ERROR</span>
+              <span style="font-size: 0.75rem; opacity: 0.8;">פסול (על המצח)</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Kosher Toggle & Notes -->
+        <div class="control-group">
+          <label style="display: flex; align-items: center; gap: 8px; font-size: 0.85rem; font-weight: 600; cursor: pointer;">
+            <input type="checkbox" id="chkExpectedKosher" style="width: auto;" onchange="onKosherToggle(this.checked)">
+            <span>Expected Kosher (כשר)</span>
+          </label>
+        </div>
+
+        <div class="control-group">
+          <div class="control-label">
+            <span>Halacha Notes / Description</span>
+          </div>
+          <textarea id="txtHalachaNotes" placeholder="Reasoning or description..." oninput="onNotesInput(this.value)" onchange="saveHalachaGT()"></textarea>
+        </div>
+
+        <!-- Actions -->
+        <div style="display: flex; gap: 8px;">
+          <button class="btn btn-primary" style="flex: 1;" onclick="saveHalachaGT()">Save Halacha GT</button>
+          <button class="btn" onclick="resetCurrentItem()">Reset</button>
+          <button class="btn" id="btnExcludeHalacha" onclick="toggleExcludeCurrent()" style="border-color: var(--danger); color: #f87171;">🗑️ Remove from Test</button>
+        </div>
+
+        <!-- Navigation -->
+        <div class="nav-bar">
+          <button class="btn" onclick="prevItem()">← Previous</button>
+          <span style="font-size: 0.85rem; color: var(--text-muted);" id="navHalachaPosition">1 of 10</span>
+          <button class="btn" onclick="nextItem()">Next →</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Test Runner Modal -->
+  <div class="modal-overlay" id="testModal">
+    <div class="modal">
+      <div class="modal-header">
+        <div style="display: flex; align-items: center; gap: 8px;">
+          <span id="testSpinner" class="spinner"></span>
+          <h3 id="testModalTitle">Executing Native Kotlin Tests...</h3>
+        </div>
+        <button class="btn" onclick="closeTestModal()">✕ Close</button>
+      </div>
+      <div class="modal-body" id="testOutput">Running ./scripts/test_algo.sh...</div>
+      <div class="modal-footer">
+        <span id="testModalStatus" style="font-size: 0.85rem; font-weight: 600;">Please wait...</span>
+        <button class="btn btn-primary" onclick="closeTestModal()">Done</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    let appData = null;
+    let currentTab = 'hairline'; // 'hairline' or 'halacha'
+    let currentFilter = 'all';  // 'all', 'mistakes', 'passes'
+    let selectedIndex = 0;
+    let currentImageObj = null;
+
+    // Dragging state on canvas
+    let isDragging = false;
+    let isDirty = false;
+    let showGuides = true;
+    let canvas = document.getElementById('cvCanvas');
+    let ctx = canvas.getContext('2d');
+
+    function toggleGuides() {
+      showGuides = !showGuides;
+      const btn = document.getElementById('btnToggleGuides');
+      if (btn) {
+        btn.innerHTML = showGuides 
+          ? '<span>👁️ Guide Lines: ON</span>' 
+          : '<span style="color: var(--text-muted);">👁️ Guide Lines: OFF</span>';
+        btn.style.borderColor = showGuides ? 'var(--primary)' : 'var(--surface-border)';
+      }
+      drawCanvas();
+    }
+
+    function showSaveIndicator(text = "Saved ✓") {
+      const ind = document.getElementById("saveIndicator");
+      if (!ind) return;
+      ind.textContent = text;
+      ind.style.opacity = "1";
+      clearTimeout(ind._timeout);
+      ind._timeout = setTimeout(() => {
+        ind.style.opacity = "0";
+      }, 1500);
+    }
+
+    // Fetch initial data
+    async function init(targetIndex = 0) {
+      try {
+        const res = await fetch('/api/data');
+        appData = await res.json();
+        renderHeader();
+        renderSidebar();
+        selectItem(targetIndex);
+      } catch (e) {
+        alert('Failed to connect to backend: ' + e);
+      }
+    }
+
+    function switchTab(tab) {
+      const filtered = getFilteredItems();
+      const prevItem = filtered[selectedIndex];
+      if (isDirty && prevItem) {
+        if (currentTab === 'hairline') saveHairlineGT(prevItem);
+        else saveHalachaGT(prevItem);
+        isDirty = false;
+      }
+      currentTab = tab;
+      document.getElementById('tabHairline').classList.toggle('active', tab === 'hairline');
+      document.getElementById('tabHalacha').classList.toggle('active', tab === 'halacha');
+      document.getElementById('hairlineControls').style.display = tab === 'hairline' ? 'flex' : 'none';
+      document.getElementById('halachaControls').style.display = tab === 'halacha' ? 'flex' : 'none';
+      document.getElementById('viewportHint').innerHTML = tab === 'hairline' 
+        ? '<span>💡 Click and drag the green hairline line on the canvas to adjust Ground Truth</span>'
+        : '<span>💡 Halacha status shows Tefillin candidate bounding box and scalp boundary</span>';
+      currentFilter = 'all';
+      selectedIndex = 0;
+      renderSidebar();
+      selectItem(0);
+    }
+
+    function renderHeader() {
+      const summary = appData.summary;
+      const pct = summary.mistake_percentage;
+      const bench = summary.benchmark_mistake_percentage;
+      const badge = document.getElementById('headerMistakeRate');
+      badge.textContent = `Hairline Mistakes: ${pct}% (Bench: ${bench}%)`;
+      badge.style.color = pct <= bench ? 'var(--success)' : 'var(--danger)';
+
+      document.getElementById('badgeHairlineCount').textContent = summary.active_faces_count || summary.total_faces;
+      document.getElementById('badgeHalachaCount').textContent = summary.active_tefillin_count || summary.total_tefillin;
+    }
+
+    function getItems() {
+      if (!appData) return [];
+      return currentTab === 'hairline' ? appData.faces : appData.tefillin;
+    }
+
+    function getFilteredItems() {
+      const items = getItems();
+      if (currentFilter === 'excluded') return items.filter(i => i.is_excluded);
+      if (currentFilter === 'all') return items.filter(i => !i.is_excluded);
+      if (currentTab === 'hairline') {
+        if (currentFilter === 'mistakes') return items.filter(i => !i.is_excluded && !i.is_pass);
+        if (currentFilter === 'passes') return items.filter(i => !i.is_excluded && i.is_pass);
+      } else {
+        if (currentFilter === 'mistakes') return items.filter(i => !i.is_excluded && !i.is_match);
+        if (currentFilter === 'passes') return items.filter(i => !i.is_excluded && i.is_match);
+      }
+      return items.filter(i => !i.is_excluded);
+    }
+
+    function setFilter(filter) {
+      currentFilter = filter;
+      document.querySelectorAll('#filterPills .pill').forEach((p, idx) => {
+        p.classList.toggle('active', (filter === 'all' && idx === 0) || (filter === 'mistakes' && idx === 1) || (filter === 'passes' && idx === 2) || (filter === 'excluded' && idx === 3));
+      });
+      renderSidebar();
+      selectItem(0);
+    }
+
+    function renderSidebar() {
+      const all = getItems();
+      const activeItems = all.filter(i => !i.is_excluded);
+      const excludedItems = all.filter(i => i.is_excluded);
+
+      const mistakes = currentTab === 'hairline' 
+        ? activeItems.filter(i => !i.is_pass).length 
+        : activeItems.filter(i => !i.is_match).length;
+      const passes = activeItems.length - mistakes;
+
+      document.getElementById('countAll').textContent = activeItems.length;
+      document.getElementById('countMistakes').textContent = mistakes;
+      document.getElementById('countPasses').textContent = passes;
+      document.getElementById('countExcluded').textContent = excludedItems.length;
+
+      const filtered = getFilteredItems();
+      const listEl = document.getElementById('itemList');
+      listEl.innerHTML = '';
+
+      if (filtered.length === 0) {
+        listEl.innerHTML = '<li style="padding: 20px; color: var(--text-muted); text-align: center; font-size: 0.85rem;">No images in this category</li>';
+        return;
+      }
+
+      filtered.forEach((item, fIdx) => {
+        const li = document.createElement('li');
+        li.className = 'list-item' + (fIdx === selectedIndex ? ' selected' : '');
+        li.onclick = () => selectItem(fIdx);
+
+        let badgeHtml = '';
+        let subText = '';
+
+        if (item.is_excluded) {
+          badgeHtml = `<span class="status-badge" style="background: rgba(148, 163, 184, 0.2); color: #cbd5e1;">EXCLUDED</span>`;
+          subText = `Excluded from tests`;
+        } else if (currentTab === 'hairline') {
+          badgeHtml = item.is_pass 
+            ? `<span class="status-badge badge-pass">PASS</span>` 
+            : `<span class="status-badge badge-mistake">MISTAKE</span>`;
+          subText = `GT: ${item.expected_ratio.toFixed(3)} | Det: ${item.detected_ratio.toFixed(3)}`;
+        } else {
+          const s = item.expected_status;
+          const cls = s === 'ALIGNED' ? 'badge-aligned' : (s === 'OFF_CENTER' ? 'badge-offcenter' : 'badge-forehead');
+          badgeHtml = `<span class="status-badge ${cls}">${s}</span>`;
+          subText = `${item.expected_kosher ? 'Kosher' : 'Passul'} ${item.is_match ? '✓' : '⚠️ Diverged'}`;
+        }
+
+        li.innerHTML = `
+          <img class="item-thumb" src="${item.image_url}" loading="lazy" alt="thumb">
+          <div class="item-info">
+            <div class="item-name" title="${item.name}">${item.name}</div>
+            <div class="item-sub">
+              ${badgeHtml}
+              <span>${subText}</span>
+            </div>
+          </div>
+        `;
+        listEl.appendChild(li);
+      });
+    }
+
+    function selectItem(index) {
+      const filtered = getFilteredItems();
+      if (!filtered.length) {
+        document.getElementById('inspectorTitle').textContent = 'No image selected';
+        return;
+      }
+
+      // Auto-save previous item if changes were made before switching
+      const prevItem = filtered[selectedIndex];
+      if (isDirty && prevItem) {
+        if (currentTab === 'hairline') {
+          saveHairlineGT(prevItem);
+        } else {
+          saveHalachaGT(prevItem);
+        }
+        isDirty = false;
+      }
+
+      selectedIndex = Math.max(0, Math.min(index, filtered.length - 1));
+
+      // Update sidebar visual selection
+      document.querySelectorAll('#itemList .list-item').forEach((el, idx) => {
+        el.classList.toggle('selected', idx === selectedIndex);
+      });
+
+      const item = filtered[selectedIndex];
+      if (item) {
+        item._session_start_ratio = item.expected_ratio;
+        item._session_start_tolerance = item.tolerance;
+        item._session_start_status = item.expected_status;
+        item._session_start_kosher = item.expected_kosher;
+        item._session_start_notes = item.notes || '';
+      }
+      document.getElementById('inspectorTitle').textContent = item.name;
+
+      // Update exclude button states
+      const btnExclude = currentTab === 'hairline' ? document.getElementById('btnExcludeHairline') : document.getElementById('btnExcludeHalacha');
+      if (item.is_excluded) {
+        btnExclude.textContent = '↩ Restore to Test';
+        btnExclude.style.borderColor = 'var(--success)';
+        btnExclude.style.color = '#34d399';
+      } else {
+        btnExclude.textContent = '🗑️ Remove from Test';
+        btnExclude.style.borderColor = 'var(--danger)';
+        btnExclude.style.color = '#f87171';
+      }
+
+      if (currentTab === 'hairline') {
+        const isPass = item.is_pass;
+        const badge = document.getElementById('inspectorBadge');
+        if (item.is_excluded) {
+          badge.textContent = 'EXCLUDED';
+          badge.className = 'status-badge';
+          badge.style.background = 'rgba(148, 163, 184, 0.2)';
+          badge.style.color = '#cbd5e1';
+        } else {
+          badge.textContent = isPass ? 'PASS' : 'MISTAKE';
+          badge.className = 'status-badge ' + (isPass ? 'badge-pass' : 'badge-mistake');
+          badge.style.background = '';
+          badge.style.color = '';
+        }
+
+        document.getElementById('statDetectedRatio').textContent = item.detected_ratio.toFixed(4);
+        document.getElementById('statGTRatio').textContent = item.expected_ratio.toFixed(4);
+        document.getElementById('statDiff').textContent = item.diff.toFixed(4);
+        document.getElementById('statTol').textContent = '±' + item.tolerance.toFixed(3);
+
+        document.getElementById('gtRatioSlider').value = item.expected_ratio;
+        document.getElementById('gtRatioInput').value = item.expected_ratio;
+        document.getElementById('sliderValDisplay').textContent = item.expected_ratio.toFixed(3);
+        document.getElementById('gtToleranceInput').value = item.tolerance;
+        document.getElementById('navPosition').textContent = `${selectedIndex + 1} of ${filtered.length}`;
+      } else {
+        const details = item.algo_details;
+        document.getElementById('statAlgoHalachaStatus').textContent = details.status;
+        document.getElementById('statAlgoKosher').textContent = details.is_kosher ? 'YES' : 'NO';
+        document.getElementById('statAlgoDistAbove').textContent = (details.dist_above >= 0 ? '+' : '') + details.dist_above + ' px';
+        const offset = Math.abs(details.horiz_offset);
+        const maxTol = details.max_center_tol;
+        const isCentered = details.is_centered;
+        const offsetEl = document.getElementById('statAlgoCenterOffset');
+        offsetEl.textContent = `${offset.toFixed(1)} px (Max: ${maxTol.toFixed(1)} px) ${isCentered ? '✓' : '⚠️'}`;
+        offsetEl.style.color = isCentered ? 'var(--success)' : 'var(--warning)';
+
+        setHalachaStatusBtnStyle(item.expected_status);
+        document.getElementById('chkExpectedKosher').checked = item.expected_kosher;
+        document.getElementById('txtHalachaNotes').value = item.notes || '';
+        document.getElementById('navHalachaPosition').textContent = `${selectedIndex + 1} of ${filtered.length}`;
+
+        const badge = document.getElementById('inspectorBadge');
+        if (item.is_excluded) {
+          badge.textContent = 'EXCLUDED';
+          badge.className = 'status-badge';
+          badge.style.background = 'rgba(148, 163, 184, 0.2)';
+          badge.style.color = '#cbd5e1';
+        } else {
+          badge.textContent = item.expected_status;
+          badge.className = 'status-badge ' + (item.expected_status === 'ALIGNED' ? 'badge-aligned' : (item.expected_status === 'OFF_CENTER' ? 'badge-offcenter' : 'badge-forehead'));
+          badge.style.background = '';
+          badge.style.color = '';
+        }
+      }
+
+      loadImageAndDraw(item);
+    }
+
+    async function toggleExcludeCurrent() {
+      const filtered = getFilteredItems();
+      const item = filtered[selectedIndex];
+      if (!item) return;
+
+      const willExclude = !item.is_excluded;
+      const actionName = willExclude ? 'Remove from' : 'Restore to';
+      if (!confirm(`${actionName} algorithm regression tests: "${item.name}"?`)) {
+        return;
+      }
+
+      try {
+        const res = await fetch('/api/exclude-image', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ name: item.name, exclude: willExclude })
+        });
+        const resp = await res.json();
+        if (resp.success) {
+          appData = resp.data;
+          renderHeader();
+          renderSidebar();
+          selectItem(Math.min(selectedIndex, getFilteredItems().length - 1));
+        }
+      } catch (e) {
+        alert('Failed to update image status: ' + e);
+      }
+    }
+
+    function prevItem() {
+      if (selectedIndex > 0) selectItem(selectedIndex - 1);
+    }
+
+    function nextItem() {
+      const filtered = getFilteredItems();
+      if (selectedIndex < filtered.length - 1) selectItem(selectedIndex + 1);
+    }
+
+    function loadImageAndDraw(item) {
+      currentImageObj = new Image();
+      currentImageObj.crossOrigin = "anonymous";
+      currentImageObj.onload = () => {
+        canvas.width = item.width;
+        canvas.height = item.height;
+        drawCanvas();
+      };
+      currentImageObj.src = item.image_url;
+    }
+
+    function getGeometry(item) {
+      const lms = item.landmarks;
+      const w = item.width;
+      const h = item.height;
+
+      const glabella = { x: lms[8][0] * w, y: lms[8][1] * h };
+      const nose = { x: lms[6][0] * w, y: lms[6][1] * h };
+      const meshTop = { x: lms[10][0] * w, y: lms[10][1] * h };
+      const eyeL = { x: lms[33][0] * w, y: lms[33][1] * h };
+      const eyeR = { x: lms[263][0] * w, y: lms[263][1] * h };
+
+      const eyeDist = Math.hypot(eyeR.x - eyeL.x, eyeR.y - eyeL.y);
+      const faceUp = { x: meshTop.x - nose.x, y: meshTop.y - nose.y };
+      const upLen = Math.max(1.0, Math.hypot(faceUp.x, faceUp.y));
+      const uUp = { x: faceUp.x / upLen, y: faceUp.y / upLen };
+      const uCross = { x: -uUp.y, y: uUp.x };
+
+      return { glabella, nose, meshTop, eyeL, eyeR, eyeDist, uUp, uCross };
+    }
+
+    function drawCanvas() {
+      if (!currentImageObj) return;
+      const filtered = getFilteredItems();
+      const item = filtered[selectedIndex];
+      if (!item) return;
+
+      const w = canvas.width;
+      const h = canvas.height;
+      ctx.clearRect(0, 0, w, h);
+      ctx.drawImage(currentImageObj, 0, 0, w, h);
+
+      if (!showGuides) return; // Clean raw photo view without guide lines
+
+      const geom = getGeometry(item);
+
+      if (currentTab === 'hairline') {
+        drawHairlineOverlay(item, geom);
+      } else {
+        drawHalachaOverlay(item, geom);
+      }
+    }
+
+    function drawHairlineOverlay(item, geom) {
+      const { glabella, eyeDist, uUp, uCross } = geom;
+      const span = eyeDist * 0.75;
+
+      const gtRatio = item.expected_ratio;
+      const tol = item.tolerance;
+      const detRatio = item.detected_ratio;
+
+      // 1. Draw Tolerance Band
+      const minRatio = gtRatio - tol;
+      const maxRatio = gtRatio + tol;
+      const p1 = { x: glabella.x + uUp.x * (minRatio * eyeDist), y: glabella.y + uUp.y * (minRatio * eyeDist) };
+      const p2 = { x: glabella.x + uUp.x * (maxRatio * eyeDist), y: glabella.y + uUp.y * (maxRatio * eyeDist) };
+
+      ctx.save();
+      ctx.fillStyle = "rgba(16, 185, 129, 0.18)";
+      ctx.beginPath();
+      ctx.moveTo(p1.x - uCross.x * span, p1.y - uCross.y * span);
+      ctx.lineTo(p1.x + uCross.x * span, p1.y + uCross.y * span);
+      ctx.lineTo(p2.x + uCross.x * span, p2.y + uCross.y * span);
+      ctx.lineTo(p2.x - uCross.x * span, p2.y - uCross.y * span);
+      ctx.closePath();
+      ctx.fill();
+      ctx.restore();
+
+      // 2. Draw Detected Hairline (Cyan Dashed)
+      const detPt = { x: glabella.x + uUp.x * (detRatio * eyeDist), y: glabella.y + uUp.y * (detRatio * eyeDist) };
+      ctx.save();
+      ctx.setLineDash([6, 6]);
+      ctx.strokeStyle = "#06b6d4";
+      ctx.lineWidth = 2.5;
+      ctx.beginPath();
+      ctx.moveTo(detPt.x - uCross.x * span, detPt.y - uCross.y * span);
+      ctx.lineTo(detPt.x + uCross.x * span, detPt.y + uCross.y * span);
+      ctx.stroke();
+
+      // Label for Detected
+      ctx.fillStyle = "#06b6d4";
+      ctx.font = "bold 13px -apple-system, sans-serif";
+      ctx.fillText(`Algo: ${detRatio.toFixed(3)}`, detPt.x + uCross.x * span + 8, detPt.y + uCross.y * span + 4);
+      ctx.restore();
+
+      // 3. Draw Ground Truth Line (Emerald Solid with Glowing Handle)
+      const gtPt = { x: glabella.x + uUp.x * (gtRatio * eyeDist), y: glabella.y + uUp.y * (gtRatio * eyeDist) };
+      ctx.save();
+      ctx.strokeStyle = item.is_pass ? "#10b981" : "#ef4444";
+      ctx.lineWidth = 3.5;
+      ctx.beginPath();
+      ctx.moveTo(gtPt.x - uCross.x * span, gtPt.y - uCross.y * span);
+      ctx.lineTo(gtPt.x + uCross.x * span, gtPt.y + uCross.y * span);
+      ctx.stroke();
+
+      // Draggable center handle
+      ctx.fillStyle = "#ffffff";
+      ctx.beginPath();
+      ctx.arc(gtPt.x, gtPt.y, 8, 0, 2 * Math.PI);
+      ctx.fill();
+      ctx.strokeStyle = item.is_pass ? "#10b981" : "#ef4444";
+      ctx.lineWidth = 3;
+      ctx.stroke();
+
+      // GT Label
+      ctx.fillStyle = item.is_pass ? "#10b981" : "#ef4444";
+      ctx.font = "bold 14px -apple-system, sans-serif";
+      ctx.fillText(`GT Hairline: ${gtRatio.toFixed(3)}`, gtPt.x - uCross.x * span - 150, gtPt.y - uCross.y * span + 4);
+
+      // Glabella reference dot
+      ctx.fillStyle = "#3b82f6";
+      ctx.beginPath();
+      ctx.arc(glabella.x, glabella.y, 5, 0, 2 * Math.PI);
+      ctx.fill();
+      ctx.restore();
+    }
+
+    function drawHalachaOverlay(item, geom) {
+      const { glabella, meshTop, eyeDist, uUp, uCross } = geom;
+      const box = item.yolo_box;
+      const details = item.algo_details;
+
+      // 1. Draw Hairline Line
+      const hairlineRatio = details.hairline_ratio;
+      const hairlinePt = { x: glabella.x + uUp.x * (hairlineRatio * eyeDist), y: glabella.y + uUp.y * (hairlineRatio * eyeDist) };
+      const span = eyeDist * 0.75;
+
+      ctx.save();
+      ctx.strokeStyle = details.is_scalp ? "#10b981" : "#ef4444";
+      ctx.lineWidth = 3;
+      ctx.beginPath();
+      ctx.moveTo(hairlinePt.x - uCross.x * span, hairlinePt.y - uCross.y * span);
+      ctx.lineTo(hairlinePt.x + uCross.x * span, hairlinePt.y + uCross.y * span);
+      ctx.stroke();
+      ctx.fillStyle = details.is_scalp ? "#10b981" : "#ef4444";
+      ctx.font = "bold 13px -apple-system, sans-serif";
+      ctx.fillText(`Hairline (Scalp Boundary)`, hairlinePt.x + uCross.x * span + 8, hairlinePt.y + uCross.y * span + 4);
+
+      // 2. Center Midline
+      ctx.setLineDash([4, 4]);
+      ctx.strokeStyle = "rgba(255, 255, 255, 0.4)";
+      ctx.lineWidth = 2;
+      ctx.beginPath();
+      ctx.moveTo(glabella.x, glabella.y);
+      ctx.lineTo(meshTop.x + uUp.x * (eyeDist * 0.5), meshTop.y + uUp.y * (eyeDist * 0.5));
+      ctx.stroke();
+      ctx.restore();
+
+      // 3. Tefillin YOLO Candidate Box
+      ctx.save();
+      const statusColor = details.status === 'ALIGNED' ? '#10b981' : (details.status === 'OFF_CENTER' ? '#f59e0b' : '#ef4444');
+      ctx.strokeStyle = statusColor;
+      ctx.lineWidth = 3.5;
+      const bx = box.x - box.w / 2;
+      const by = box.y - box.h / 2;
+      ctx.strokeRect(bx, by, box.w, box.h);
+
+      // Fill background for candidate box label
+      ctx.fillStyle = statusColor;
+      ctx.fillRect(bx, by - 24, box.w, 24);
+      ctx.fillStyle = "#ffffff";
+      ctx.font = "bold 12px -apple-system, sans-serif";
+      ctx.fillText(`Tefillin Box (${(box.confidence * 100).toFixed(0)}%) - ${details.status}`, bx + 6, by - 7);
+
+      // Lowest edge line
+      ctx.strokeStyle = "#ffffff";
+      ctx.lineWidth = 2;
+      ctx.beginPath();
+      ctx.moveTo(bx, box.bottomY);
+      ctx.lineTo(bx + box.w, box.bottomY);
+      ctx.stroke();
+
+      // Box center point
+      ctx.fillStyle = "#ffffff";
+      ctx.beginPath();
+      ctx.arc(box.x, box.y, 4, 0, 2 * Math.PI);
+      ctx.fill();
+      ctx.restore();
+    }
+
+    // Drag Interaction on Canvas
+    function getCanvasCoords(evt) {
+      const rect = canvas.getBoundingClientRect();
+      const scaleX = canvas.width / rect.width;
+      const scaleY = canvas.height / rect.height;
+      return {
+        x: (evt.clientX - rect.left) * scaleX,
+        y: (evt.clientY - rect.top) * scaleY
+      };
+    }
+
+    canvas.addEventListener('mousedown', (e) => {
+      if (currentTab !== 'hairline' || !showGuides) return;
+      isDragging = true;
+      handleCanvasDrag(e);
+    });
+
+    window.addEventListener('mousemove', (e) => {
+      if (!isDragging || currentTab !== 'hairline') return;
+      handleCanvasDrag(e);
+    });
+
+    window.addEventListener('mouseup', () => {
+      if (isDragging) {
+        isDragging = false;
+        saveHairlineGT(); // Auto-save when user releases drag
+      }
+    });
+
+    function handleCanvasDrag(e) {
+      isDirty = true;
+      const coords = getCanvasCoords(e);
+      const filtered = getFilteredItems();
+      const item = filtered[selectedIndex];
+      if (!item) return;
+
+      const geom = getGeometry(item);
+      const vecX = coords.x - geom.glabella.x;
+      const vecY = coords.y - geom.glabella.y;
+      const projDist = vecX * geom.uUp.x + vecY * geom.uUp.y;
+
+      let newRatio = projDist / geom.eyeDist;
+      newRatio = Math.max(0.40, Math.min(1.15, newRatio));
+
+      item.expected_ratio = newRatio;
+      item.diff = Math.abs(item.detected_ratio - newRatio);
+      item.is_pass = item.diff <= item.tolerance;
+
+      document.getElementById('gtRatioSlider').value = newRatio;
+      document.getElementById('gtRatioInput').value = newRatio.toFixed(3);
+      document.getElementById('sliderValDisplay').textContent = newRatio.toFixed(3);
+      document.getElementById('statGTRatio').textContent = newRatio.toFixed(4);
+      document.getElementById('statDiff').textContent = item.diff.toFixed(4);
+
+      const badge = document.getElementById('inspectorBadge');
+      badge.textContent = item.is_pass ? 'PASS' : 'MISTAKE';
+      badge.className = 'status-badge ' + (item.is_pass ? 'badge-pass' : 'badge-mistake');
+
+      drawCanvas();
+      renderSidebar();
+    }
+
+    function onRatioSliderChange(val) {
+      isDirty = true;
+      const filtered = getFilteredItems();
+      const item = filtered[selectedIndex];
+      if (!item) return;
+
+      const newRatio = parseFloat(val);
+      item.expected_ratio = newRatio;
+      item.diff = Math.abs(item.detected_ratio - newRatio);
+      item.is_pass = item.diff <= item.tolerance;
+
+      document.getElementById('gtRatioInput').value = newRatio.toFixed(3);
+      document.getElementById('sliderValDisplay').textContent = newRatio.toFixed(3);
+      document.getElementById('statGTRatio').textContent = newRatio.toFixed(4);
+      document.getElementById('statDiff').textContent = item.diff.toFixed(4);
+
+      drawCanvas();
+      renderSidebar();
+    }
+
+    function onRatioInputChange(val) {
+      const v = parseFloat(val);
+      if (!isNaN(v)) {
+        document.getElementById('gtRatioSlider').value = v;
+        onRatioSliderChange(v);
+        saveHairlineGT();
+      }
+    }
+
+    function onToleranceChange(val) {
+      const filtered = getFilteredItems();
+      const item = filtered[selectedIndex];
+      if (!item) return;
+
+      const tol = parseFloat(val);
+      item.tolerance = tol;
+      item.is_pass = item.diff <= tol;
+      document.getElementById('statTol').textContent = '±' + tol.toFixed(3);
+
+      drawCanvas();
+      renderSidebar();
+      saveHairlineGT();
+    }
+
+    function snapToDetected() {
+      const filtered = getFilteredItems();
+      const item = filtered[selectedIndex];
+      if (!item) return;
+      onRatioSliderChange(item.detected_ratio);
+      saveHairlineGT();
+    }
+
+    function resetCurrentItem() {
+      const filtered = getFilteredItems();
+      const item = filtered[selectedIndex];
+      if (!item) return;
+
+      if (currentTab === 'hairline') {
+        const hasSessionChange = item._session_start_ratio !== undefined && 
+          (Math.abs(item.expected_ratio - item._session_start_ratio) > 0.0001 || 
+           Math.abs(item.tolerance - item._session_start_tolerance) > 0.0001);
+
+        if (hasSessionChange) {
+          item.expected_ratio = item._session_start_ratio;
+          item.tolerance = item._session_start_tolerance;
+          showSaveIndicator("Reverted to initial ✓");
+        } else {
+          // Reset to algorithm detection
+          item.expected_ratio = item.detected_ratio;
+          item.tolerance = 0.05;
+          showSaveIndicator("Reset to algo detected ✓");
+        }
+
+        item.diff = Math.abs(item.detected_ratio - item.expected_ratio);
+        item.is_pass = item.diff <= item.tolerance;
+
+        document.getElementById('gtRatioSlider').value = item.expected_ratio;
+        document.getElementById('gtRatioInput').value = item.expected_ratio.toFixed(3);
+        document.getElementById('sliderValDisplay').textContent = item.expected_ratio.toFixed(3);
+        document.getElementById('gtToleranceInput').value = item.tolerance;
+        document.getElementById('statGTRatio').textContent = item.expected_ratio.toFixed(4);
+        document.getElementById('statDiff').textContent = item.diff.toFixed(4);
+        document.getElementById('statTol').textContent = '±' + item.tolerance.toFixed(3);
+
+        const badge = document.getElementById('inspectorBadge');
+        if (!item.is_excluded) {
+          badge.textContent = item.is_pass ? 'PASS' : 'MISTAKE';
+          badge.className = 'status-badge ' + (item.is_pass ? 'badge-pass' : 'badge-mistake');
+        }
+
+        isDirty = false;
+        drawCanvas();
+        renderSidebar();
+        saveHairlineGT(item);
+      } else {
+        const hasSessionChange = item._session_start_status !== undefined &&
+          (item.expected_status !== item._session_start_status ||
+           item.expected_kosher !== item._session_start_kosher ||
+           item.notes !== item._session_start_notes);
+
+        if (hasSessionChange) {
+          item.expected_status = item._session_start_status;
+          item.expected_kosher = item._session_start_kosher;
+          item.notes = item._session_start_notes;
+          showSaveIndicator("Reverted to initial ✓");
+        } else {
+          item.expected_status = item.algo_details.status;
+          item.expected_kosher = item.algo_details.is_kosher;
+          showSaveIndicator("Reset to algo detected ✓");
+        }
+
+        item.is_match = (item.algo_details.status === item.expected_status) &&
+                        (item.algo_details.is_kosher === item.expected_kosher);
+
+        setHalachaStatusBtnStyle(item.expected_status);
+        document.getElementById('chkExpectedKosher').checked = item.expected_kosher;
+        document.getElementById('txtHalachaNotes').value = item.notes || '';
+
+        const badge = document.getElementById('inspectorBadge');
+        if (!item.is_excluded) {
+          badge.textContent = item.expected_status;
+          badge.className = 'status-badge ' + (item.expected_status === 'ALIGNED' ? 'badge-aligned' : (item.expected_status === 'OFF_CENTER' ? 'badge-offcenter' : 'badge-forehead'));
+        }
+
+        isDirty = false;
+        drawCanvas();
+        renderSidebar();
+        saveHalachaGT(item);
+      }
+    }
+
+    // Save Hairline GT to server
+    async function saveHairlineGT(itemToSave = null) {
+      const filtered = getFilteredItems();
+      const item = itemToSave || (filtered[selectedIndex]);
+      if (!item) return;
+
+      try {
+        const res = await fetch('/api/save-hairline', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            name: item.name,
+            expected_ratio: item.expected_ratio,
+            tolerance: item.tolerance
+          })
+        });
+        const resp = await res.json();
+        if (resp.success) {
+          appData = resp.data;
+          renderHeader();
+          renderSidebar();
+          showSaveIndicator("Saved ✓");
+          isDirty = false;
+        }
+      } catch (e) {
+        console.error('Error saving hairline GT:', e);
+      }
+    }
+
+    // Halacha Status Selection
+    function setHalachaStatusBtnStyle(status) {
+      document.getElementById('btnStatusAligned').className = 'status-choice-btn' + (status === 'ALIGNED' ? ' selected-aligned' : '');
+      document.getElementById('btnStatusOffCenter').className = 'status-choice-btn' + (status === 'OFF_CENTER' ? ' selected-offcenter' : '');
+      document.getElementById('btnStatusForehead').className = 'status-choice-btn' + (status === 'FOREHEAD_ERROR' ? ' selected-forehead' : '');
+    }
+
+    function setHalachaStatus(status) {
+      isDirty = true;
+      const filtered = getFilteredItems();
+      const item = filtered[selectedIndex];
+      if (!item) return;
+
+      item.expected_status = status;
+      if (status === 'ALIGNED' || status === 'OFF_CENTER') {
+        item.expected_kosher = true;
+      } else {
+        item.expected_kosher = false;
+      }
+
+      document.getElementById('chkExpectedKosher').checked = item.expected_kosher;
+      setHalachaStatusBtnStyle(status);
+
+      const badge = document.getElementById('inspectorBadge');
+      badge.textContent = status;
+      badge.className = 'status-badge ' + (status === 'ALIGNED' ? 'badge-aligned' : (status === 'OFF_CENTER' ? 'badge-offcenter' : 'badge-forehead'));
+
+      item.is_match = (item.algo_details.status === status) && (item.algo_details.is_kosher === item.expected_kosher);
+      renderSidebar();
+      saveHalachaGT(item);
+    }
+
+    function onKosherToggle(checked) {
+      const filtered = getFilteredItems();
+      const item = filtered[selectedIndex];
+      if (!item) return;
+      item.expected_kosher = checked;
+      item.is_match = (item.algo_details.status === item.expected_status) && (item.algo_details.is_kosher === checked);
+      renderSidebar();
+      isDirty = true;
+      saveHalachaGT(item);
+    }
+
+    function onNotesInput(val) {
+      const filtered = getFilteredItems();
+      const item = filtered[selectedIndex];
+      if (!item) return;
+      item.notes = val;
+      isDirty = true;
+    }
+
+    async function saveHalachaGT(itemToSave = null) {
+      const filtered = getFilteredItems();
+      const item = itemToSave || (filtered[selectedIndex]);
+      if (!item) return;
+
+      const isKosher = itemToSave ? itemToSave.expected_kosher : document.getElementById('chkExpectedKosher').checked;
+      const notes = itemToSave ? (itemToSave.notes || "") : document.getElementById('txtHalachaNotes').value;
+
+      try {
+        const res = await fetch('/api/save-halacha', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            name: item.name,
+            expected_status: item.expected_status,
+            expected_kosher: isKosher,
+            notes: notes
+          })
+        });
+        const resp = await res.json();
+        if (resp.success) {
+          appData = resp.data;
+          renderHeader();
+          renderSidebar();
+          showSaveIndicator("Saved ✓");
+          isDirty = false;
+        }
+      } catch (e) {
+        console.error('Error saving halacha GT:', e);
+      }
+    }
+
+    // Update Benchmark
+    async function updateBenchmark() {
+      try {
+        const res = await fetch('/api/update-benchmark', { method: 'POST' });
+        const resp = await res.json();
+        if (resp.success) {
+          alert(`Benchmark updated successfully!\nBest mistake percentage: ${resp.benchmark.best_mistake_percentage}% (${resp.benchmark.best_mistake_count} mistakes)`);
+          init();
+        }
+      } catch (e) {
+        alert('Failed to update benchmark: ' + e);
+      }
+    }
+
+    // Test runner modal
+    async function runNativeTests() {
+      const modal = document.getElementById('testModal');
+      const output = document.getElementById('testOutput');
+      const spinner = document.getElementById('testSpinner');
+      const title = document.getElementById('testModalTitle');
+      const status = document.getElementById('testModalStatus');
+
+      modal.style.display = 'flex';
+      output.textContent = 'Running: ./gradlew testDebugUnitTest (via test_algo.sh)...\nPlease wait ~1-2 seconds...';
+      spinner.style.display = 'inline-block';
+      title.textContent = 'Executing Native Kotlin Test Suite...';
+      status.textContent = 'Gradle executing...';
+
+      try {
+        const res = await fetch('/api/run-tests', { method: 'POST' });
+        const resp = await res.json();
+        spinner.style.display = 'none';
+        output.textContent = resp.output;
+
+        if (resp.passed) {
+          title.textContent = '🎉 All 29 Unit & Regression Tests Passed!';
+          status.textContent = 'Status: SUCCESS (Exit Code 0)';
+          status.style.color = 'var(--success)';
+        } else {
+          title.textContent = '❌ Test Failure Detected';
+          status.textContent = `Status: FAILED (Exit Code ${resp.exit_code})`;
+          status.style.color = 'var(--danger)';
+        }
+      } catch (e) {
+        spinner.style.display = 'none';
+        output.textContent = 'Error executing tests: ' + e;
+        title.textContent = 'Execution Error';
+      }
+    }
+
+    function closeTestModal() {
+      document.getElementById('testModal').style.display = 'none';
+    }
+
+    // Keyboard Shortcuts
+    window.addEventListener('keydown', (e) => {
+      if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
+
+      if (e.key === 'ArrowLeft' || e.key === 'a') prevItem();
+      else if (e.key === 'ArrowRight' || e.key === 'd') nextItem();
+      else if (e.key === 'ArrowUp' && currentTab === 'hairline') {
+        const filtered = getFilteredItems();
+        if (filtered[selectedIndex]) onRatioSliderChange(filtered[selectedIndex].expected_ratio + 0.005);
+      } else if (e.key === 'ArrowDown' && currentTab === 'hairline') {
+        const filtered = getFilteredItems();
+        if (filtered[selectedIndex]) onRatioSliderChange(filtered[selectedIndex].expected_ratio - 0.005);
+      } else if (e.key === '1' && currentTab === 'halacha') setHalachaStatus('ALIGNED');
+      else if (e.key === '2' && currentTab === 'halacha') setHalachaStatus('OFF_CENTER');
+      else if (e.key === '3' && currentTab === 'halacha') setHalachaStatus('FOREHEAD_ERROR');
+      else if (e.key === 'g' || e.key === 'G') toggleGuides();
+    });
+
+    window.onload = init;
+  </script>
+</body>
+</html>

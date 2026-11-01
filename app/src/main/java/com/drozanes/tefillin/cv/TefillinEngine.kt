@@ -56,6 +56,16 @@ object TefillinEngine {
     )
 
     /**
+     * Interface to decouple pixel sampling from Android Bitmap,
+     * allowing standard JVM tests (e.g. BufferedImage) to execute the exact production algorithm.
+     */
+    interface PixelReader {
+        val width: Int
+        val height: Int
+        fun getPixel(x: Int, y: Int): Int
+    }
+
+    /**
      * 1. Helper: Adaptive Visual Hairline Detection
      * Samples forehead skin tone above Glabella and scans along the central facial symmetry axis (uUp)
      * to find the true physiological boundary where forehead skin ends and hair roots begin.
@@ -69,7 +79,24 @@ object TefillinEngine {
         eyeDist: Float,
         pitchAngle: Float
     ): Float? {
-        if (bitmap == null || width < 10 || height < 10) return null
+        val reader = if (bitmap != null) object : PixelReader {
+            override val width: Int get() = bitmap.width
+            override val height: Int get() = bitmap.height
+            override fun getPixel(x: Int, y: Int): Int = bitmap.getPixel(x, y)
+        } else null
+        return detectVisualHairline(reader, width, height, glabellaPt, uUp, eyeDist, pitchAngle)
+    }
+
+    fun detectVisualHairline(
+        pixelReader: PixelReader?,
+        width: Int,
+        height: Int,
+        glabellaPt: Point2D,
+        uUp: Point2D,
+        eyeDist: Float,
+        pitchAngle: Float
+    ): Float? {
+        if (pixelReader == null || width < 10 || height < 10) return null
         try {
             val refRad = PITCH_REF_ANGLE_DEG * (Math.PI / 180f).toFloat()
             val pitchFactor = max(MIN_PITCH_FACTOR, cos(refRad + pitchAngle) / cos(refRad))
@@ -81,11 +108,11 @@ object TefillinEngine {
             fun getGray(px: Float, py: Float): Int {
                 val rx = px.roundToInt()
                 val ry = py.roundToInt()
-                if (rx < 0 || rx >= bitmap.width || ry < 0 || ry >= bitmap.height) return -1
-                val pixel = bitmap.getPixel(rx, ry)
-                val r = Color.red(pixel)
-                val g = Color.green(pixel)
-                val b = Color.blue(pixel)
+                if (rx < 0 || rx >= pixelReader.width || ry < 0 || ry >= pixelReader.height) return -1
+                val pixel = pixelReader.getPixel(rx, ry)
+                val r = (pixel shr 16) and 0xFF
+                val g = (pixel shr 8) and 0xFF
+                val b = pixel and 0xFF
                 return (r * 77 + g * 150 + b * 29) shr 8
             }
 
@@ -167,6 +194,22 @@ object TefillinEngine {
         bitmap: Bitmap? = null,
         stabilizer: GeometryStabilizer? = null
     ): FaceGeometry? {
+        val reader = if (bitmap != null) object : PixelReader {
+            override val width: Int get() = bitmap.width
+            override val height: Int get() = bitmap.height
+            override fun getPixel(x: Int, y: Int): Int = bitmap.getPixel(x, y)
+        } else null
+        return analyzeFaceGeometry(landmarks, width, height, hairlineUserAdj, reader, stabilizer)
+    }
+
+    fun analyzeFaceGeometry(
+        landmarks: List<LandmarkPoint>,
+        width: Int,
+        height: Int,
+        hairlineUserAdj: Float = 0f,
+        pixelReader: PixelReader?,
+        stabilizer: GeometryStabilizer? = null
+    ): FaceGeometry? {
         if (landmarks.size < 468) return null
 
         // Key Anthropometric Landmarks
@@ -203,7 +246,7 @@ object TefillinEngine {
         val pitchFactor = max(MIN_PITCH_FACTOR, cos(refRad + pitchAngle) / cos(refRad))
 
         // Adaptive visual hairline detection
-        var visualHairDist = detectVisualHairline(bitmap, width, height, glabellaPt, uUp, eyeDist, pitchAngle)
+        var visualHairDist = detectVisualHairline(pixelReader, width, height, glabellaPt, uUp, eyeDist, pitchAngle)
 
         // Temporal visual consistency if stabilizer is provided
         if (stabilizer != null) {
@@ -237,23 +280,21 @@ object TefillinEngine {
         val midfaceDist = max(rawMidfaceDist, eyeDist * MIN_MIDFACE_RATIO)
         val anatomicalTrichionDist = midfaceDist * 1.08f
 
-        // Dynamic Clamping Bounds:
-        // Anti-Poni / Anti-Cap Visor: Hair roots cannot physically grow below 90% of anatomical midface
-        val minTrichionDist = max(eyeDist * MIN_HAIRLINE_RATIO * pitchFactor, anatomicalTrichionDist * TRICHION_MIN_FACTOR)
-        // Anti-Balding: Caps hairline so receding hair doesn't force tefillin past the crown
-        val maxTrichionDist = min(eyeDist * 0.90f, anatomicalTrichionDist * TRICHION_MAX_FACTOR)
-
+        // Halachic Anchor: Anatomical Facial Third (Shulchan Aruch O.C. 27:9)
+        // Constrains visual deviation to the physiological plausibility window (±0.05 * eyeDist)
+        // to prevent hanging bangs, forehead shadows, or receding baldness from distorting placement.
+        val maxDeviation = eyeDist * 0.05f
         val boundedVisualDist = if (visualHairDist != null) {
-            visualHairDist.coerceIn(minTrichionDist, maxTrichionDist)
+            val bounded = visualHairDist.coerceIn(
+                anatomicalTrichionDist - maxDeviation,
+                anatomicalTrichionDist + maxDeviation
+            )
+            0.40f * anatomicalTrichionDist + 0.60f * bounded
         } else {
-            null
+            anatomicalTrichionDist
         }
 
-        val distFromGlabella = if (boundedVisualDist != null) {
-            boundedVisualDist + (hairlineUserAdj * 0.15f * eyeDist)
-        } else {
-            anatomicalTrichionDist + (hairlineUserAdj * 0.20f * eyeDist)
-        }
+        val distFromGlabella = boundedVisualDist + (hairlineUserAdj * 0.15f * eyeDist)
 
         val hairlinePt = Point2D(
             glabellaPt.x + uUp.x * distFromGlabella,

@@ -1,0 +1,1055 @@
+{
+  "excluded_images": [
+    "1-7.jpg",
+    "images (1).jpeg",
+    "images (3).jpeg",
+    "selfie_005_Caucasian_Selfie.jpg",
+    "selfie_008_Caucasian_Selfie.jpg",
+    "selfie_009_Caucasian_Selfie.jpg",
+    "selfie_016_Casual_Selfie.jpg",
+    "selfie_017_Casual_Selfie.jpg",
+    "selfie_019_Casual_Selfie.jpg",
+    "selfie_022_Black_African.jpg",
+    "selfie_034_South_Asian_Indian.jpg",
+    "selfie_038_South_Asian_Indian.jpg",
+    "selfie_039_South_Asian_Indian.jpg",
+    "selfie_046_East_Asian_Japanese.jpg",
+    "selfie_047_East_Asian_Japanese.jpg",
+    "selfie_048_East_Asian_Japanese.jpg",
+    "selfie_049_East_Asian_Japanese.jpg",
+    "selfie_050_East_Asian_Japanese.jpg",
+    "selfie_054_Latino_Brazilian.jpg",
+    "selfie_062_Middle_Eastern_Israeli.jpg",
+    "selfie_067_Middle_Eastern_Israeli.jpg",
+    "selfie_090_Bearded.jpg"
+  ],
+  "halacha_gt": {
+    "images (6).jpeg": {
+      "notes": "Sample from cropped",
+      "expected_status": "ALIGNED",
+      "expected_kosher": true
+    },
+    "tefillin_selfie_3_1788290657655.jpg": {
+      "notes": "Sample from cropped",
+      "expected_status": "FOREHEAD_ERROR",
+      "expected_kosher": false
+    },
+    "PXL_20260915_043727455.jpg": {
+      "notes": "Sample from Photos-1-001",
+      "expected_status": "ALIGNED",
+      "expected_kosher": true
+    },
+    "tefillin_black_skin_1_upper_1788325681803.jpg": {
+      "notes": "Sample from cropped",
+      "expected_status": "ALIGNED",
+      "expected_kosher": true
+    },
+    "PXL_20260915_043753629.jpg": {
+      "notes": "Sample from Photos-1-001",
+      "expected_status": "ALIGNED",
+      "expected_kosher": true
+    },
+    "tefillin_selfie_2_1788290629675.jpg": {
+      "notes": "Sample from cropped",
+      "expected_status": "FOREHEAD_ERROR",
+      "expected_kosher": false
+    },
+    "PXL_20260915_043732663.jpg": {
+      "notes": "Sample from Photos-1-001",
+      "expected_status": "ALIGNED",
+      "expected_kosher": true
+    },
+    "1785455446669.jpeg": {
+      "notes": "Sample from cropped",
+      "expected_status": "ALIGNED",
+      "expected_kosher": true
+    },
+    "images (3).jpeg": {
+      "notes": "Sample from cropped",
+      "expected_status": "FOREHEAD_ERROR",
+      "expected_kosher": false
+    },
+    "cropped_images (9).jpg": {
+      "expected_status": "ALIGNED",
+      "description": "תפילין במקום שיער (נער צעיר) - תקין",
+      "expected_kosher": true
+    },
+    "87149858_1010737025975581_3766723109281857536_n.jpg": {
+      "notes": "Sample from cropped",
+      "expected_status": "ALIGNED",
+      "expected_kosher": true
+    },
+    "PXL_20260915_043722600.jpg": {
+      "notes": "Sample from Photos-1-001",
+      "expected_status": "ALIGNED",
+      "expected_kosher": true
+    },
+    "images (2).jpeg": {
+      "notes": "Sample from cropped",
+      "expected_status": "ALIGNED",
+      "expected_kosher": true
+    },
+    "tefillin_black_skin_2_1788291312033.jpg": {
+      "notes": "Sample from cropped",
+      "expected_status": "FOREHEAD_ERROR",
+      "expected_kosher": false
+    },
+    "oardefault.jpg": {
+      "notes": "Sample from cropped",
+      "expected_status": "OFF_CENTER",
+      "expected_kosher": true
+    },
+    "PXL_20260915_043720085.jpg": {
+      "notes": "Sample from Photos-1-001",
+      "expected_status": "ALIGNED",
+      "expected_kosher": true
+    },
+    "PXL_20260915_043722024.jpg": {
+      "notes": "Sample from Photos-1-001",
+      "expected_status": "ALIGNED",
+      "expected_kosher": true
+    },
+    "tefillin_black_skin_2_subtle_down_1788332456263.jpg": {
+      "notes": "Sample from cropped",
+      "expected_status": "FOREHEAD_ERROR",
+      "expected_kosher": false
+    },
+    "PXL_20260915_043731534.jpg": {
+      "notes": "Sample from Photos-1-001",
+      "expected_status": "OFF_CENTER",
+      "expected_kosher": true
+    },
+    "tefillin_face_selfie_1_1788291092838.jpg": {
+      "notes": "Sample from cropped",
+      "expected_status": "FOREHEAD_ERROR",
+      "expected_kosher": false
+    },
+    "Gemini_Generated_Image_uhpnc3uhpnc3uhpn.jpg": {
+      "notes": "Sample from .",
+      "expected_status": "FOREHEAD_ERROR",
+      "expected_kosher": false
+    },
+    "Gemini_Generated_Image_ewgh47ewgh47ewgh.jpg": {
+      "expected_status": "FOREHEAD_ERROR",
+      "description": "פסול - תפילין על המצח",
+      "expected_kosher": false
+    },
+    "PXL_20260915_043754279.jpg": {
+      "notes": "Sample from Photos-1-001",
+      "expected_status": "ALIGNED",
+      "expected_kosher": true
+    },
+    "tefillin_black_skin_2_subtle_left_1788332466982.jpg": {
+      "notes": "Sample from cropped",
+      "expected_status": "FOREHEAD_ERROR",
+      "expected_kosher": false
+    },
+    "images (7).jpeg": {
+      "notes": "Sample from cropped",
+      "expected_status": "OFF_CENTER",
+      "expected_kosher": true
+    },
+    "tefillin_black_hair_1788291290906.jpg": {
+      "notes": "Sample from cropped",
+      "expected_status": "FOREHEAD_ERROR",
+      "expected_kosher": false
+    },
+    "PXL_20260915_043755195.jpg": {
+      "notes": "Sample from Photos-1-001",
+      "expected_status": "ALIGNED",
+      "expected_kosher": true
+    },
+    "photo_2016-06-06_08-45-34.jpg": {
+      "notes": "Sample from cropped",
+      "expected_status": "ALIGNED",
+      "expected_kosher": true
+    },
+    "tefillin_face_selfie_3_1788291129144.jpg": {
+      "notes": "Sample from cropped",
+      "expected_status": "FOREHEAD_ERROR",
+      "expected_kosher": false
+    },
+    "cropped_images (2).jpg": {
+      "notes": "Test notes",
+      "expected_status": "OFF_CENTER",
+      "description": "תפילין במקום שיער (מוטה מעט ימינה - OFF_CENTER, כשר)",
+      "expected_kosher": true
+    },
+    "f001478e-3cb2-4a2d-97fa-8ef089c17faf_tumb_730X500.webp": {
+      "notes": "Sample from cropped",
+      "expected_status": "ALIGNED",
+      "expected_kosher": true
+    },
+    "images (4).jpeg": {
+      "notes": "Sample from cropped",
+      "expected_status": "ALIGNED",
+      "expected_kosher": true
+    },
+    "tefillin_face_2_subtle_right_1788332333450.jpg": {
+      "notes": "Sample from cropped",
+      "expected_status": "FOREHEAD_ERROR",
+      "expected_kosher": false
+    },
+    "cropped_images (8).jpg": {
+      "expected_status": "ALIGNED",
+      "description": "תפילין במקום שיער (רב עם טלית וזקן) - תקין",
+      "expected_kosher": true
+    },
+    "Gemini_Generated_Image_rt4pv4rt4pv4rt4p.jpg": {
+      "notes": "Sample from .",
+      "expected_status": "FOREHEAD_ERROR",
+      "expected_kosher": false
+    },
+    "tefillin_black_skin_2_upper_1788325694205.jpg": {
+      "notes": "Sample from cropped",
+      "expected_status": "FOREHEAD_ERROR",
+      "expected_kosher": false
+    },
+    "cropped_images (5).jpg": {
+      "expected_status": "ALIGNED",
+      "description": "תפילין במקום שיער (עומר אדם) - תקין",
+      "expected_kosher": true
+    },
+    "PXL_20260915_043732095.jpg": {
+      "notes": "Sample from Photos-1-001",
+      "expected_status": "ALIGNED",
+      "expected_kosher": true
+    },
+    "PXL_20260915_043727972.jpg": {
+      "notes": "Sample from Photos-1-001",
+      "expected_status": "ALIGNED",
+      "expected_kosher": true
+    },
+    "PXL_20260915_043721366.jpg": {
+      "notes": "Sample from Photos-1-001",
+      "expected_status": "ALIGNED",
+      "expected_kosher": true
+    },
+    "images (1).jpeg": {
+      "notes": "Sample from cropped",
+      "expected_status": "OFF_CENTER",
+      "expected_kosher": true
+    },
+    "PXL_20260915_043754512.jpg": {
+      "notes": "Sample from Photos-1-001",
+      "expected_status": "ALIGNED",
+      "expected_kosher": true
+    },
+    "tefillin_face_selfie_2_1788291102643.jpg": {
+      "notes": "Sample from cropped",
+      "expected_status": "FOREHEAD_ERROR",
+      "expected_kosher": false
+    },
+    "PXL_20260915_043721010.jpg": {
+      "notes": "Sample from Photos-1-001",
+      "expected_status": "ALIGNED",
+      "expected_kosher": true
+    },
+    "photo_2016-06-06_08-45-27.jpg": {
+      "notes": "Sample from cropped",
+      "expected_status": "ALIGNED",
+      "expected_kosher": true
+    },
+    "PXL_20260915_043755412.jpg": {
+      "notes": "Sample from Photos-1-001",
+      "expected_status": "ALIGNED",
+      "expected_kosher": true
+    },
+    "images (8).jpeg": {
+      "notes": "Sample from cropped",
+      "expected_status": "ALIGNED",
+      "expected_kosher": true
+    },
+    "PXL_20260915_043730040.jpg": {
+      "notes": "Sample from Photos-1-001",
+      "expected_status": "ALIGNED",
+      "expected_kosher": true
+    },
+    "PXL_20260915_043753420.jpg": {
+      "notes": "Sample from Photos-1-001",
+      "expected_status": "ALIGNED",
+      "expected_kosher": true
+    },
+    "27abe667-6d9b-4ba8-9dd1-28eda947d33d.jpg": {
+      "notes": "Sample from cropped",
+      "expected_status": "ALIGNED",
+      "expected_kosher": true
+    },
+    "tefillin_face_2_subtle_down_1788332311013.jpg": {
+      "notes": "Sample from cropped",
+      "expected_status": "FOREHEAD_ERROR",
+      "expected_kosher": false
+    },
+    "tefillin_pos_higher_1788291593784.jpg": {
+      "notes": "Sample from cropped",
+      "expected_status": "ALIGNED",
+      "expected_kosher": true
+    },
+    "cropped_images (6).jpg": {
+      "expected_status": "FOREHEAD_ERROR",
+      "description": "פסול - התפילין ירדו מתחת לקו השיער ויושבות על המצח",
+      "expected_kosher": false
+    },
+    "PXL_20260915_043724054.jpg": {
+      "notes": "Sample from Photos-1-001",
+      "expected_status": "ALIGNED",
+      "expected_kosher": true
+    },
+    "photo_2016-06-06_08-47-19.jpg": {
+      "notes": "Sample from cropped",
+      "expected_status": "OFF_CENTER",
+      "expected_kosher": true
+    },
+    "PXL_20260915_043718952.jpg": {
+      "notes": "Sample from Photos-1-001",
+      "expected_status": "ALIGNED",
+      "expected_kosher": true
+    },
+    "tefillin_subtle_down_1788325303098.jpg": {
+      "notes": "Sample from cropped",
+      "expected_status": "FOREHEAD_ERROR",
+      "expected_kosher": false
+    },
+    "tefillin_subtle_up_1788325292566.jpg": {
+      "notes": "Sample from cropped",
+      "expected_status": "FOREHEAD_ERROR",
+      "expected_kosher": false
+    },
+    "tefillin_subtle_right_1788325325738.jpg": {
+      "notes": "Sample from cropped",
+      "expected_status": "FOREHEAD_ERROR",
+      "expected_kosher": false
+    },
+    "images (5).jpeg": {
+      "notes": "Sample from cropped",
+      "expected_status": "OFF_CENTER",
+      "expected_kosher": true
+    },
+    "24-06-2018-20-38-39-20180624_114137-740x416.jpg": {
+      "notes": "Sample from cropped",
+      "expected_status": "ALIGNED",
+      "expected_kosher": true
+    },
+    "cropped_images (4).jpg": {
+      "expected_status": "FOREHEAD_ERROR",
+      "description": "פסול - תפילין מונחות על כובע מצחייה/חציצה ונוגעות במצח",
+      "expected_kosher": false
+    },
+    "cropped_images (1).jpg": {
+      "notes": "Sample from .",
+      "expected_status": "OFF_CENTER",
+      "expected_kosher": true
+    },
+    "311219_tumb_730X500.jpg": {
+      "notes": "Sample from cropped",
+      "expected_status": "FOREHEAD_ERROR",
+      "expected_kosher": false
+    },
+    "PXL_20260915_043731051.jpg": {
+      "notes": "Sample from Photos-1-001",
+      "expected_status": "OFF_CENTER",
+      "expected_kosher": true
+    },
+    "tefillin_face_2_subtle_up_1788332299696.jpg": {
+      "notes": "Sample from cropped",
+      "expected_status": "FOREHEAD_ERROR",
+      "expected_kosher": false
+    },
+    "cropped_images (7).jpg": {
+      "expected_status": "ALIGNED",
+      "description": "תפילין במקום שיער (גלאח/שיער קצר) - תקין",
+      "expected_kosher": true
+    },
+    "tefillin_black_skin_1_1788291300615.jpg": {
+      "notes": "Sample from cropped",
+      "expected_status": "FOREHEAD_ERROR",
+      "expected_kosher": false
+    },
+    "tefillin_selfie_1_1788290593288.jpg": {
+      "notes": "Sample from cropped",
+      "expected_status": "FOREHEAD_ERROR",
+      "expected_kosher": false
+    },
+    "cropped_images.jpg": {
+      "notes": "",
+      "expected_status": "OFF_CENTER",
+      "description": "תפילין במקום שיער (נער מביט למעלה - OFF_CENTER, כשר)",
+      "expected_kosher": true
+    },
+    "PXL_20260915_043756564.jpg": {
+      "notes": "Sample from Photos-1-001",
+      "expected_status": "ALIGNED",
+      "expected_kosher": true
+    },
+    "PXL_20260915_043730870.jpg": {
+      "notes": "Sample from Photos-1-001",
+      "expected_status": "OFF_CENTER",
+      "expected_kosher": true
+    },
+    "images (9).jpeg": {
+      "notes": "Sample from cropped",
+      "expected_status": "FOREHEAD_ERROR",
+      "expected_kosher": false
+    },
+    "PXL_20260915_043729822.jpg": {
+      "notes": "Sample from Photos-1-001",
+      "expected_status": "ALIGNED",
+      "expected_kosher": true
+    },
+    "tefillin_black_skin_2_subtle_up_1788332445095.jpg": {
+      "notes": "Sample from cropped",
+      "expected_status": "FOREHEAD_ERROR",
+      "expected_kosher": false
+    },
+    "1-7.jpg": {
+      "notes": "Sample from cropped",
+      "expected_status": "FOREHEAD_ERROR",
+      "expected_kosher": false
+    },
+    "tefillin_subtle_left_1788325314100.jpg": {
+      "notes": "Sample from cropped",
+      "expected_status": "FOREHEAD_ERROR",
+      "expected_kosher": false
+    },
+    "tefillin_face_2_subtle_left_1788332322420.jpg": {
+      "notes": "Sample from cropped",
+      "expected_status": "FOREHEAD_ERROR",
+      "expected_kosher": false
+    },
+    "images.jpeg": {
+      "notes": "Sample from cropped",
+      "expected_status": "ALIGNED",
+      "expected_kosher": true
+    },
+    "Gemini_Generated_Image_sqr8m3sqr8m3sqr8.jpg": {
+      "expected_status": "ALIGNED",
+      "description": "Tefillin worn correctly",
+      "expected_kosher": true
+    },
+    "oar2.jpg": {
+      "notes": "Sample from cropped",
+      "expected_status": "ALIGNED",
+      "expected_kosher": true
+    },
+    "PXL_20260915_043723074.jpg": {
+      "notes": "Sample from Photos-1-001",
+      "expected_status": "ALIGNED",
+      "expected_kosher": true
+    },
+    "PXL_20260915_043723578.jpg": {
+      "notes": "Sample from Photos-1-001",
+      "expected_status": "OFF_CENTER",
+      "expected_kosher": true
+    },
+    "Gemini_Generated_Image_se5r8wse5r8wse5r.jpg": {
+      "notes": "Sample from .",
+      "expected_status": "FOREHEAD_ERROR",
+      "expected_kosher": false
+    }
+  },
+  "hairline_gt": {
+    "selfie_081_Bearded.jpg": {
+      "description": "Bearded - full dark beard",
+      "expected_ratio": 0.83,
+      "tolerance": 0.05
+    },
+    "selfie_111_Middle_Eastern.jpg": {
+      "expected_ratio": 0.74,
+      "tolerance": 0.05
+    },
+    "selfie_039_South_Asian_Indian.jpg": {
+      "expected_ratio": 0.7,
+      "tolerance": 0.05
+    },
+    "selfie_052_Latino_Brazilian.jpg": {
+      "expected_ratio": 0.71,
+      "tolerance": 0.05
+    },
+    "selfie_004_Caucasian_Selfie.jpg": {
+      "expected_ratio": 0.73,
+      "tolerance": 0.05
+    },
+    "selfie_098_Long_Hair.jpg": {
+      "expected_ratio": 0.668,
+      "tolerance": 0.05
+    },
+    "selfie_031_South_Asian_Indian.jpg": {
+      "description": "South Asian Indian - thick black hair",
+      "expected_ratio": 0.825,
+      "tolerance": 0.05
+    },
+    "selfie_023_Black_African.jpg": {
+      "expected_ratio": 0.73,
+      "tolerance": 0.05
+    },
+    "selfie_053_Latino_Brazilian.jpg": {
+      "expected_ratio": 0.75,
+      "tolerance": 0.05
+    },
+    "selfie_079_Bald_Shaved.jpg": {
+      "expected_ratio": 0.79,
+      "tolerance": 0.05
+    },
+    "selfie_093_Long_Hair.jpg": {
+      "description": "Long Hair - long dark hair pulled back",
+      "expected_ratio": 0.71,
+      "tolerance": 0.05
+    },
+    "selfie_018_Casual_Selfie.jpg": {
+      "expected_ratio": 0.74,
+      "tolerance": 0.05
+    },
+    "selfie_125_Latino.jpg": {
+      "expected_ratio": 0.77,
+      "tolerance": 0.05
+    },
+    "selfie_022_Black_African.jpg": {
+      "description": "Black African - close crop",
+      "expected_ratio": 0.64,
+      "tolerance": 0.05
+    },
+    "selfie_038_South_Asian_Indian.jpg": {
+      "expected_ratio": 0.6,
+      "tolerance": 0.05
+    },
+    "selfie_076_Bald_Shaved.jpg": {
+      "expected_ratio": 0.85,
+      "tolerance": 0.05
+    },
+    "selfie_104_Caucasian.jpg": {
+      "expected_ratio": 0.73,
+      "tolerance": 0.05
+    },
+    "selfie_003_Caucasian_Selfie.jpg": {
+      "expected_ratio": 0.635,
+      "tolerance": 0.05
+    },
+    "selfie_050_East_Asian_Japanese.jpg": {
+      "expected_ratio": 0.79,
+      "tolerance": 0.05
+    },
+    "selfie_061_Middle_Eastern_Israeli.jpg": {
+      "description": "Middle Eastern Israeli - dark curly hair",
+      "expected_ratio": 0.68,
+      "tolerance": 0.05
+    },
+    "selfie_019_Casual_Selfie.jpg": {
+      "expected_ratio": 0.63,
+      "tolerance": 0.05
+    },
+    "selfie_096_Long_Hair.jpg": {
+      "expected_ratio": 0.83,
+      "tolerance": 0.05
+    },
+    "selfie_118_Latino.jpg": {
+      "expected_ratio": 0.77,
+      "tolerance": 0.05
+    },
+    "selfie_045_East_Asian_Japanese.jpg": {
+      "expected_ratio": 0.775,
+      "tolerance": 0.05
+    },
+    "selfie_110_Caucasian.jpg": {
+      "expected_ratio": 0.78,
+      "tolerance": 0.05
+    },
+    "selfie_109_Caucasian.jpg": {
+      "expected_ratio": 0.78,
+      "tolerance": 0.05
+    },
+    "selfie_021_Black_African.jpg": {
+      "expected_ratio": 0.71,
+      "tolerance": 0.05
+    },
+    "selfie_054_Latino_Brazilian.jpg": {
+      "expected_ratio": 0.62,
+      "tolerance": 0.05
+    },
+    "selfie_033_South_Asian_Indian.jpg": {
+      "expected_ratio": 0.72,
+      "tolerance": 0.05
+    },
+    "selfie_049_East_Asian_Japanese.jpg": {
+      "expected_ratio": 0.865,
+      "tolerance": 0.05
+    },
+    "selfie_112_Middle_Eastern.jpg": {
+      "expected_ratio": 0.75,
+      "tolerance": 0.05
+    },
+    "selfie_070_Middle_Eastern_Israeli.jpg": {
+      "expected_ratio": 0.81,
+      "tolerance": 0.05
+    },
+    "selfie_065_Middle_Eastern_Israeli.jpg": {
+      "expected_ratio": 0.68,
+      "tolerance": 0.05
+    },
+    "selfie_001_Caucasian_Selfie.jpg": {
+      "expected_ratio": 0.725,
+      "tolerance": 0.05
+    },
+    "selfie_060_Latino_Brazilian.jpg": {
+      "expected_ratio": 0.74,
+      "tolerance": 0.05
+    },
+    "selfie_043_East_Asian_Japanese.jpg": {
+      "expected_ratio": 0.86,
+      "tolerance": 0.05
+    },
+    "selfie_103_Caucasian.jpg": {
+      "expected_ratio": 0.74,
+      "tolerance": 0.05
+    },
+    "selfie_073_Bald_Shaved.jpg": {
+      "expected_ratio": 0.675,
+      "tolerance": 0.05
+    },
+    "selfie_119_Latino.jpg": {
+      "expected_ratio": 0.78,
+      "tolerance": 0.05
+    },
+    "selfie_101_African.jpg": {
+      "expected_ratio": 0.78,
+      "tolerance": 0.05
+    },
+    "selfie_066_Middle_Eastern_Israeli.jpg": {
+      "expected_ratio": 0.71,
+      "tolerance": 0.05
+    },
+    "selfie_102_African.jpg": {
+      "expected_ratio": 0.79,
+      "tolerance": 0.05
+    },
+    "selfie_044_East_Asian_Japanese.jpg": {
+      "expected_ratio": 0.74,
+      "tolerance": 0.05
+    },
+    "selfie_025_Black_African.jpg": {
+      "expected_ratio": 0.67,
+      "tolerance": 0.05
+    },
+    "selfie_123_African.jpg": {
+      "expected_ratio": 0.76,
+      "tolerance": 0.05
+    },
+    "selfie_099_Long_Hair.jpg": {
+      "expected_ratio": 0.83,
+      "tolerance": 0.05
+    },
+    "selfie_124_African.jpg": {
+      "expected_ratio": 0.76,
+      "tolerance": 0.05
+    },
+    "selfie_059_Latino_Brazilian.jpg": {
+      "expected_ratio": 0.73,
+      "tolerance": 0.05
+    },
+    "selfie_088_Bearded.jpg": {
+      "expected_ratio": 0.745,
+      "tolerance": 0.05
+    },
+    "selfie_114_Middle_Eastern.jpg": {
+      "expected_ratio": 0.73,
+      "tolerance": 0.05
+    },
+    "selfie_011_Casual_Selfie.jpg": {
+      "expected_ratio": 0.7,
+      "tolerance": 0.05
+    },
+    "selfie_085_Bearded.jpg": {
+      "expected_ratio": 0.675,
+      "tolerance": 0.05
+    },
+    "selfie_127_Middle_Eastern.jpg": {
+      "expected_ratio": 0.75,
+      "tolerance": 0.05
+    },
+    "selfie_016_Casual_Selfie.jpg": {
+      "expected_ratio": 0.61,
+      "tolerance": 0.05
+    },
+    "selfie_083_Bearded.jpg": {
+      "expected_ratio": 0.71,
+      "tolerance": 0.05
+    },
+    "selfie_087_Bearded.jpg": {
+      "expected_ratio": 0.7,
+      "tolerance": 0.05
+    },
+    "selfie_082_Bearded.jpg": {
+      "description": "Bearded - long hair and beard",
+      "expected_ratio": 0.77,
+      "tolerance": 0.05
+    },
+    "selfie_086_Bearded.jpg": {
+      "expected_ratio": 0.72,
+      "tolerance": 0.05
+    },
+    "selfie_002_Caucasian_Selfie.jpg": {
+      "expected_ratio": 0.72,
+      "tolerance": 0.05
+    },
+    "selfie_009_Caucasian_Selfie.jpg": {
+      "expected_ratio": 0.64,
+      "tolerance": 0.05
+    },
+    "selfie_122_South_Asian.jpg": {
+      "expected_ratio": 0.81,
+      "tolerance": 0.05
+    },
+    "selfie_084_Bearded.jpg": {
+      "expected_ratio": 0.76,
+      "tolerance": 0.05
+    },
+    "selfie_042_East_Asian_Japanese.jpg": {
+      "description": "East Asian Japanese - angled view",
+      "expected_ratio": 0.68,
+      "tolerance": 0.05
+    },
+    "selfie_105_Caucasian.jpg": {
+      "expected_ratio": 0.69,
+      "tolerance": 0.05
+    },
+    "selfie_069_Middle_Eastern_Israeli.jpg": {
+      "expected_ratio": 0.78,
+      "tolerance": 0.05
+    },
+    "selfie_075_Bald_Shaved.jpg": {
+      "expected_ratio": 0.8,
+      "tolerance": 0.05
+    },
+    "selfie_058_Latino_Brazilian.jpg": {
+      "expected_ratio": 0.68,
+      "tolerance": 0.05
+    },
+    "selfie_078_Bald_Shaved.jpg": {
+      "expected_ratio": 0.675,
+      "tolerance": 0.05
+    },
+    "selfie_072_Bald_Shaved.jpg": {
+      "description": "Bald Shaved - light stubble on scalp",
+      "expected_ratio": 0.74,
+      "tolerance": 0.05
+    },
+    "selfie_113_Middle_Eastern.jpg": {
+      "expected_ratio": 0.71,
+      "tolerance": 0.05
+    },
+    "selfie_047_East_Asian_Japanese.jpg": {
+      "expected_ratio": 0.78,
+      "tolerance": 0.05
+    },
+    "selfie_057_Latino_Brazilian.jpg": {
+      "expected_ratio": 0.69,
+      "tolerance": 0.05
+    },
+    "selfie_012_Casual_Selfie.jpg": {
+      "expected_ratio": 0.64,
+      "tolerance": 0.05
+    },
+    "selfie_008_Caucasian_Selfie.jpg": {
+      "expected_ratio": 0.68,
+      "tolerance": 0.05
+    },
+    "selfie_048_East_Asian_Japanese.jpg": {
+      "expected_ratio": 0.74,
+      "tolerance": 0.05
+    },
+    "selfie_028_Black_African.jpg": {
+      "expected_ratio": 0.76,
+      "tolerance": 0.05
+    },
+    "selfie_034_South_Asian_Indian.jpg": {
+      "expected_ratio": 0.67,
+      "tolerance": 0.05
+    },
+    "selfie_014_Casual_Selfie.jpg": {
+      "expected_ratio": 0.6,
+      "tolerance": 0.05
+    },
+    "selfie_010_Caucasian_Selfie.jpg": {
+      "expected_ratio": 0.68,
+      "tolerance": 0.05
+    },
+    "selfie_067_Middle_Eastern_Israeli.jpg": {
+      "expected_ratio": 0.66,
+      "tolerance": 0.05
+    },
+    "selfie_121_South_Asian.jpg": {
+      "expected_ratio": 0.82,
+      "tolerance": 0.05
+    },
+    "selfie_030_Black_African.jpg": {
+      "expected_ratio": 0.74,
+      "tolerance": 0.05
+    },
+    "selfie_013_Casual_Selfie.jpg": {
+      "expected_ratio": 0.63,
+      "tolerance": 0.05
+    },
+    "selfie_027_Black_African.jpg": {
+      "expected_ratio": 0.75,
+      "tolerance": 0.05
+    },
+    "selfie_092_Long_Hair.jpg": {
+      "expected_ratio": 0.65,
+      "tolerance": 0.05
+    },
+    "selfie_007_Caucasian_Selfie.jpg": {
+      "expected_ratio": 0.685,
+      "tolerance": 0.05
+    },
+    "selfie_100_Long_Hair.jpg": {
+      "expected_ratio": 0.72,
+      "tolerance": 0.05
+    },
+    "selfie_117_Latino.jpg": {
+      "expected_ratio": 0.8,
+      "tolerance": 0.05
+    },
+    "selfie_055_Latino_Brazilian.jpg": {
+      "expected_ratio": 0.8,
+      "tolerance": 0.05
+    },
+    "selfie_064_Middle_Eastern_Israeli.jpg": {
+      "expected_ratio": 0.85,
+      "tolerance": 0.05
+    },
+    "selfie_037_South_Asian_Indian.jpg": {
+      "expected_ratio": 0.72,
+      "tolerance": 0.05
+    },
+    "selfie_046_East_Asian_Japanese.jpg": {
+      "expected_ratio": 0.77,
+      "tolerance": 0.05
+    },
+    "selfie_095_Long_Hair.jpg": {
+      "expected_ratio": 0.79,
+      "tolerance": 0.05
+    },
+    "selfie_026_Black_African.jpg": {
+      "expected_ratio": 0.78,
+      "tolerance": 0.05
+    },
+    "selfie_090_Bearded.jpg": {
+      "expected_ratio": 0.57,
+      "tolerance": 0.05
+    },
+    "selfie_063_Middle_Eastern_Israeli.jpg": {
+      "expected_ratio": 0.71,
+      "tolerance": 0.05
+    },
+    "selfie_107_Caucasian.jpg": {
+      "expected_ratio": 0.8,
+      "tolerance": 0.05
+    },
+    "selfie_120_Latino.jpg": {
+      "expected_ratio": 0.77,
+      "tolerance": 0.05
+    },
+    "selfie_126_Latino.jpg": {
+      "expected_ratio": 0.78,
+      "tolerance": 0.05
+    },
+    "selfie_006_Caucasian_Selfie.jpg": {
+      "expected_ratio": 0.73,
+      "tolerance": 0.05
+    },
+    "selfie_116_Latino.jpg": {
+      "expected_ratio": 0.71,
+      "tolerance": 0.05
+    },
+    "selfie_108_Caucasian.jpg": {
+      "expected_ratio": 0.79,
+      "tolerance": 0.05
+    },
+    "selfie_062_Middle_Eastern_Israeli.jpg": {
+      "description": "Middle Eastern Israeli - front selfie",
+      "expected_ratio": 0.64,
+      "tolerance": 0.05
+    },
+    "selfie_015_Casual_Selfie.jpg": {
+      "expected_ratio": 0.65,
+      "tolerance": 0.05
+    },
+    "selfie_094_Long_Hair.jpg": {
+      "expected_ratio": 0.775,
+      "tolerance": 0.05
+    },
+    "selfie_115_Latino.jpg": {
+      "expected_ratio": 0.67,
+      "tolerance": 0.05
+    },
+    "selfie_080_Bald_Shaved.jpg": {
+      "expected_ratio": 0.805,
+      "tolerance": 0.05
+    },
+    "selfie_106_Caucasian.jpg": {
+      "expected_ratio": 0.7,
+      "tolerance": 0.05
+    },
+    "selfie_017_Casual_Selfie.jpg": {
+      "expected_ratio": 0.63,
+      "tolerance": 0.05
+    },
+    "selfie_005_Caucasian_Selfie.jpg": {
+      "expected_ratio": 0.59,
+      "tolerance": 0.05
+    },
+    "selfie_041_East_Asian_Japanese.jpg": {
+      "description": "East Asian Japanese - straight hair",
+      "expected_ratio": 0.69,
+      "tolerance": 0.05
+    },
+    "selfie_074_Bald_Shaved.jpg": {
+      "expected_ratio": 0.735,
+      "tolerance": 0.05
+    },
+    "selfie_024_Black_African.jpg": {
+      "expected_ratio": 0.63,
+      "tolerance": 0.05
+    },
+    "selfie_071_Bald_Shaved.jpg": {
+      "description": "Bald Shaved - shaved head (known challenging edge case)",
+      "expected_ratio": 0.625,
+      "tolerance": 0.05
+    },
+    "selfie_077_Bald_Shaved.jpg": {
+      "expected_ratio": 0.77,
+      "tolerance": 0.05
+    },
+    "selfie_020_Casual_Selfie.jpg": {
+      "expected_ratio": 0.7,
+      "tolerance": 0.05
+    },
+    "selfie_068_Middle_Eastern_Israeli.jpg": {
+      "expected_ratio": 0.82,
+      "tolerance": 0.05
+    },
+    "selfie_056_Latino_Brazilian.jpg": {
+      "expected_ratio": 0.76,
+      "tolerance": 0.05
+    },
+    "selfie_040_South_Asian_Indian.jpg": {
+      "expected_ratio": 0.76,
+      "tolerance": 0.05
+    }
+  },
+  "dataset_split": {
+    "test_faces": [
+      "selfie_002_Caucasian_Selfie.jpg",
+      "selfie_007_Caucasian_Selfie.jpg",
+      "selfie_010_Caucasian_Selfie.jpg",
+      "selfie_013_Casual_Selfie.jpg",
+      "selfie_014_Casual_Selfie.jpg",
+      "selfie_018_Casual_Selfie.jpg",
+      "selfie_021_Black_African.jpg",
+      "selfie_023_Black_African.jpg",
+      "selfie_025_Black_African.jpg",
+      "selfie_026_Black_African.jpg",
+      "selfie_037_South_Asian_Indian.jpg",
+      "selfie_041_East_Asian_Japanese.jpg",
+      "selfie_044_East_Asian_Japanese.jpg",
+      "selfie_052_Latino_Brazilian.jpg",
+      "selfie_053_Latino_Brazilian.jpg",
+      "selfie_056_Latino_Brazilian.jpg",
+      "selfie_063_Middle_Eastern_Israeli.jpg",
+      "selfie_064_Middle_Eastern_Israeli.jpg",
+      "selfie_071_Bald_Shaved.jpg",
+      "selfie_072_Bald_Shaved.jpg",
+      "selfie_078_Bald_Shaved.jpg",
+      "selfie_080_Bald_Shaved.jpg",
+      "selfie_082_Bearded.jpg",
+      "selfie_084_Bearded.jpg",
+      "selfie_087_Bearded.jpg",
+      "selfie_093_Long_Hair.jpg",
+      "selfie_094_Long_Hair.jpg",
+      "selfie_098_Long_Hair.jpg",
+      "selfie_107_Caucasian.jpg",
+      "selfie_108_Caucasian.jpg",
+      "selfie_110_Caucasian.jpg",
+      "selfie_113_Middle_Eastern.jpg",
+      "selfie_114_Middle_Eastern.jpg",
+      "selfie_116_Latino.jpg",
+      "selfie_118_Latino.jpg",
+      "selfie_122_South_Asian.jpg",
+      "selfie_123_African.jpg",
+      "selfie_126_Latino.jpg",
+      "selfie_127_Middle_Eastern.jpg"
+    ],
+    "train_faces": [
+      "selfie_001_Caucasian_Selfie.jpg",
+      "selfie_003_Caucasian_Selfie.jpg",
+      "selfie_004_Caucasian_Selfie.jpg",
+      "selfie_006_Caucasian_Selfie.jpg",
+      "selfie_011_Casual_Selfie.jpg",
+      "selfie_012_Casual_Selfie.jpg",
+      "selfie_015_Casual_Selfie.jpg",
+      "selfie_020_Casual_Selfie.jpg",
+      "selfie_024_Black_African.jpg",
+      "selfie_027_Black_African.jpg",
+      "selfie_028_Black_African.jpg",
+      "selfie_030_Black_African.jpg",
+      "selfie_031_South_Asian_Indian.jpg",
+      "selfie_033_South_Asian_Indian.jpg",
+      "selfie_040_South_Asian_Indian.jpg",
+      "selfie_042_East_Asian_Japanese.jpg",
+      "selfie_043_East_Asian_Japanese.jpg",
+      "selfie_045_East_Asian_Japanese.jpg",
+      "selfie_055_Latino_Brazilian.jpg",
+      "selfie_057_Latino_Brazilian.jpg",
+      "selfie_058_Latino_Brazilian.jpg",
+      "selfie_059_Latino_Brazilian.jpg",
+      "selfie_060_Latino_Brazilian.jpg",
+      "selfie_061_Middle_Eastern_Israeli.jpg",
+      "selfie_065_Middle_Eastern_Israeli.jpg",
+      "selfie_066_Middle_Eastern_Israeli.jpg",
+      "selfie_068_Middle_Eastern_Israeli.jpg",
+      "selfie_069_Middle_Eastern_Israeli.jpg",
+      "selfie_070_Middle_Eastern_Israeli.jpg",
+      "selfie_073_Bald_Shaved.jpg",
+      "selfie_074_Bald_Shaved.jpg",
+      "selfie_075_Bald_Shaved.jpg",
+      "selfie_076_Bald_Shaved.jpg",
+      "selfie_077_Bald_Shaved.jpg",
+      "selfie_079_Bald_Shaved.jpg",
+      "selfie_081_Bearded.jpg",
+      "selfie_083_Bearded.jpg",
+      "selfie_085_Bearded.jpg",
+      "selfie_086_Bearded.jpg",
+      "selfie_088_Bearded.jpg",
+      "selfie_092_Long_Hair.jpg",
+      "selfie_095_Long_Hair.jpg",
+      "selfie_096_Long_Hair.jpg",
+      "selfie_099_Long_Hair.jpg",
+      "selfie_100_Long_Hair.jpg",
+      "selfie_101_African.jpg",
+      "selfie_102_African.jpg",
+      "selfie_103_Caucasian.jpg",
+      "selfie_104_Caucasian.jpg",
+      "selfie_105_Caucasian.jpg",
+      "selfie_106_Caucasian.jpg",
+      "selfie_109_Caucasian.jpg",
+      "selfie_111_Middle_Eastern.jpg",
+      "selfie_112_Middle_Eastern.jpg",
+      "selfie_115_Latino.jpg",
+      "selfie_117_Latino.jpg",
+      "selfie_119_Latino.jpg",
+      "selfie_120_Latino.jpg",
+      "selfie_121_South_Asian.jpg",
+      "selfie_124_African.jpg",
+      "selfie_125_Latino.jpg"
+    ]
+  },
+  "benchmark": {
+    "last_updated": "2026-11-01T19:48:00.584103",
+    "notes": "Baseline for full dataset of 100 active faces (33 mistakes, 33.0%)",
+    "best_mistake_percentage": 22,
+    "total_tefillin": 81,
+    "best_halacha_mistake_count": 10,
+    "best_halacha_mistake_percentage": 12.35,
+    "total_faces": 100,
+    "best_mistake_count": 22
+  }
+}

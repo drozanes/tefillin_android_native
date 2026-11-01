@@ -81,3 +81,52 @@ Output APK is located at:
 ./gradlew test
 ```
 All unit tests verify Halachic edge cases (scalp placement, forehead touch, off-center deviation, angle limits, and deadband stabilization).
+
+### Run Algorithm & Vision Regression Suite
+Tests the full computer vision, MediaPipe 478 landmark detection, visual hairline contrast scanning, and YOLOv8 halachic alignment on diverse face selfies and men wearing tefillin:
+```bash
+./scripts/test_algo.sh
+```
+* **Face Images (Trichion / Hairline):** Verifies hairline ratio and anatomical boundaries on diverse ethnic profiles and hairstyles (Caucasian, Black/African, Asian, Bald/Shaved, Long Hair, Bearded).
+* **Tefillin Images (Halachic Alignment):** Evaluates candidate boxes against face geometry and verifies verdicts (`ALIGNED`, `FOREHEAD_ERROR`, `OFF_CENTER`) against ground truth.
+* **Pure Kotlin Execution:** The tests execute the **actual compiled production Kotlin code** (`TefillinEngine.kt`) in under 1 second via Gradle without storing any images inside the repository.
+* **Non-Increasing Mistake Rate Benchmark:** The hairline suite accounts for known challenging edge cases (e.g. bald heads, bangs/poni). The test **passes as long as the mistake rate does not increase** above the recorded best benchmark. If an algorithm improvement lowers the mistake rate, the new record is automatically saved!
+* **Interactive Web Studio for Ground Truth:**
+  Launch the local web visualizer to review images, interactively drag the hairline GT on the face, toggle Halacha statuses, and run tests:
+  ```bash
+  ./scripts/gt_studio.sh
+  ```
+  Opens at `http://127.0.0.1:8080`. Allows:
+  - **Hairline GT Tab:** Click and drag directly on the image/canvas to move the hairline Ground Truth, adjust tolerance, or snap to the algorithm's detected value.
+  - **Halacha GT Tab:** Inspect tefillin candidate boxes on the head, view distance above hairline and center offset metrics, and toggle expected statuses (`ALIGNED`, `OFF_CENTER`, `FOREHEAD_ERROR`).
+  - **Excluding / Removing Images:** Click the `🗑️ Remove from Test` button on any image to exclude it from automated regression tests, or view the `Excluded` filter to restore it anytime (`↩ Restore to Test`).
+  - **Test Runner Modal:** Run the native Kotlin unit test suite directly from the browser with 1 click.
+
+* **CLI Ground Truth & Benchmark Management:**
+  You can also inspect or modify Ground Truth via CLI or by editing `app/src/test/resources/algo_ground_truth.json`:
+  ```bash
+  # View full diagnostic table (detected vs GT, mistake rate vs benchmark)
+  python3 scripts/manage_gt.py
+
+  # Exclude or restore an image from tests
+  python3 scripts/manage_gt.py --exclude "sample_name.jpg"
+  python3 scripts/manage_gt.py --restore "sample_name.jpg"
+  python3 scripts/manage_gt.py --list-excluded
+
+  # Set expected hairline ratio for a face
+  python3 scripts/manage_gt.py --set-hairline selfie_071 0.72
+
+  # Set expected Halacha status for a tefillin sample (ALIGNED / FOREHEAD_ERROR / OFF_CENTER)
+  python3 scripts/manage_gt.py --set-halacha "cropped_images (5).jpg" ALIGNED
+
+  # Save current mistake rate as the new benchmark
+  python3 scripts/manage_gt.py --update-benchmark
+  ```
+* **Updating Fixtures:** If new images are added to `tefillin_app`, extract updated test vectors using:
+  ```bash
+  python3 scripts/extract_fixtures.py
+  ```
+* **Pre-commit Automation:** The Git pre-commit hook automatically triggers this test suite whenever any file in `app/src/main/java/com/drozanes/tefillin/cv/` or `mediapipe/` or model assets are modified. To reinstall or verify the hook:
+  ```bash
+  ./scripts/install_git_hooks.sh
+  ```
