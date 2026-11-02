@@ -60,7 +60,7 @@ class TefillinEngineTest {
     @Test
     fun testForeheadErrorWhenTouchingBelowHairline() {
         val geometry = createMockGeometry(hairlineY = 200f)
-        // Lowest edge slipped down to Y=210 (below hairline on forehead skin)
+        // Lowest edge slipped down to Y=210 (below hairline on forehead skin, past -5px margin)
         val winner = TefillinBox(
             x = 320f,
             y = 180f,
@@ -72,6 +72,47 @@ class TefillinEngineTest {
         val result = TefillinEngine.evaluateAlignment(winner, geometry)
         assertEquals(AlignmentStatus.FOREHEAD_ERROR, result.status)
         assertFalse(result.isKosher)
+        assertFalse(result.warning)
+    }
+
+    @Test
+    fun testBorderlineWarningWhenSlightlyBelowHairline() {
+        val geometry = createMockGeometry(hairlineY = 200f, eyeDist = 100f)
+        // Lowest edge at Y=203 (3px below hairline, within ±5px borderline margin):
+        // Should respond with yellow warning rather than strict forehead error
+        val winner = TefillinBox(
+            x = 320f,
+            y = 175f,
+            boxWidth = 40f,
+            boxHeight = 40f,
+            bottomY = 203f
+        )
+
+        val result = TefillinEngine.evaluateAlignment(winner, geometry)
+        assertEquals(AlignmentStatus.ALIGNED, result.status)
+        assertTrue(result.warning)
+        assertTrue(result.isKosher)
+        assertEquals("⚠️ Borderline", result.direction)
+    }
+
+    @Test
+    fun testBorderlineWarningWhenSlightlyAboveHairline() {
+        val geometry = createMockGeometry(hairlineY = 200f, eyeDist = 100f)
+        // Lowest edge at Y=198 (2px above hairline, within ±5px borderline margin):
+        // Should respond with yellow warning rather than strict green perfect
+        val winner = TefillinBox(
+            x = 320f,
+            y = 170f,
+            boxWidth = 40f,
+            boxHeight = 40f,
+            bottomY = 198f
+        )
+
+        val result = TefillinEngine.evaluateAlignment(winner, geometry)
+        assertEquals(AlignmentStatus.ALIGNED, result.status)
+        assertTrue(result.warning)
+        assertTrue(result.isKosher)
+        assertEquals("⚠️ Borderline", result.direction)
     }
 
     @Test

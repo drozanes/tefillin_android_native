@@ -55,8 +55,8 @@
     <string name="move_left_sub">לכוונן מעט שמאלה (לצד שמאל שלכם) למרכז מדויק בין העיניים</string>
     <string name="move_right_title">➡️ כדאי להזיז מעט ימינה</string>
     <string name="move_right_sub">לכוונן מעט ימינה (לצד ימין שלכם) למרכז מדויק בין העיניים</string>
-    <string name="borderline_title">⚠️ קרוב מאוד למצח</string>
-    <string name="borderline_sub">התפילין במקום שיער אך קרובות מאוד לגבול המצח.</string>
+    <string name="borderline_title">⚠️ קרוב לקו השיער</string>
+    <string name="borderline_sub">התפילין קרובות מאוד לגבול קו השיער – כדאי לוודא שהן מונחות במלואן על מקום גידול השיער.</string>
     <string name="perfect_title">✨ התפילין מונחות כהלכה!</string>
     <string name="perfect_sub">התפילין במרכז המדויק ומעל קו השיער.</string>
     <string name="camera_angle_title">📐 כווננו את גובה המצלמה</string>

@@ -151,7 +151,10 @@ def compute_halacha_detection(tefillin_fixture, default_ratio=0.70):
 
     lowest_edge_vec = np.array([box["x"] - hairline_pt[0], box["bottomY"] - hairline_pt[1]])
     dist_above = lowest_edge_vec[0] * u_up[0] + lowest_edge_vec[1] * u_up[1]
-    is_scalp = dist_above >= 0.0
+
+    # Hairline boundary margin (±5% of eye distance): avoids strict errors when close to hairline
+    margin = eye_dist * 0.05
+    is_clearly_below = dist_above < -margin
 
     a = glabella
     b = mesh_top
@@ -163,7 +166,7 @@ def compute_halacha_detection(tefillin_fixture, default_ratio=0.70):
 
     is_centered = abs(horiz_offset) < (eye_dist * 0.08)
 
-    if not is_scalp:
+    if is_clearly_below:
         return "FOREHEAD_ERROR", False
     elif not is_centered:
         return "OFF_CENTER", True

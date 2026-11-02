@@ -464,7 +464,7 @@ class MainActivity : AppCompatActivity() {
         }
 
         // Deliver tactile feedback on state transition (e.g. perfect alignment confirmation, forehead error alert)
-        hapticHelper.onAlignmentChanged(alignment.status)
+        hapticHelper.onAlignmentChanged(alignment.status, alignment.warning)
 
         when (alignment.status) {
             AlignmentStatus.CAMERA_TOO_LOW -> {

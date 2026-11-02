@@ -50,6 +50,12 @@ class OverlayView @JvmOverloads constructor(
         style = Paint.Style.STROKE
     }
 
+    private val boxPaintCaution = Paint(Paint.ANTI_ALIAS_FLAG).apply {
+        color = Color.parseColor("#F59E0B")
+        strokeWidth = 6f
+        style = Paint.Style.STROKE
+    }
+
     private val boxPaintError = Paint(Paint.ANTI_ALIAS_FLAG).apply {
         color = Color.parseColor("#EF4444")
         strokeWidth = 6f
@@ -131,8 +137,21 @@ class OverlayView @JvmOverloads constructor(
             val h = winner.boxHeight * scale
 
             val isError = alignmentResult?.status == AlignmentStatus.FOREHEAD_ERROR
-            val activeBoxPaint = if (isError) boxPaintError else boxPaintAligned
-            val activeColor = if (isError) Color.parseColor("#EF4444") else Color.parseColor("#22C55E")
+            val isCaution = alignmentResult?.warning == true ||
+                            alignmentResult?.status == AlignmentStatus.OFF_CENTER ||
+                            alignmentResult?.status == AlignmentStatus.CAMERA_TOO_LOW ||
+                            alignmentResult?.status == AlignmentStatus.CAMERA_TOO_HIGH
+
+            val activeBoxPaint = when {
+                isError -> boxPaintError
+                isCaution -> boxPaintCaution
+                else -> boxPaintAligned
+            }
+            val activeColor = when {
+                isError -> Color.parseColor("#EF4444")
+                isCaution -> Color.parseColor("#F59E0B")
+                else -> Color.parseColor("#22C55E")
+            }
 
             bottomEdgePaint.color = activeColor
             centerDotPaint.color = activeColor

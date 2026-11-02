@@ -55,8 +55,8 @@
     <string name="move_left_sub">Move slightly to your left for exact center alignment between the eyes.</string>
     <string name="move_right_title">➡️ Please adjust slightly to the right</string>
     <string name="move_right_sub">Move slightly to your right for exact center alignment between the eyes.</string>
-    <string name="borderline_title">⚠️ Very Close to Forehead</string>
-    <string name="borderline_sub">Tefillin rests on the hair area, but is very close to the hairline boundary.</string>
+    <string name="borderline_title">⚠️ Very Close to Hairline</string>
+    <string name="borderline_sub">Tefillin is very close to the hairline boundary – please ensure it is resting fully on the hair area.</string>
     <string name="perfect_title">✨ Tefillin Properly Aligned!</string>
     <string name="perfect_sub">The Tefillin is centered and resting strictly on the hair growth area.</string>
     <string name="camera_angle_title">📐 Adjust Camera Height</string>

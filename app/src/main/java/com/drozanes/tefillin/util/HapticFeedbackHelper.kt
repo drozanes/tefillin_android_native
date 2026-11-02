@@ -23,19 +23,26 @@ class HapticFeedbackHelper(context: Context) {
     }
 
     private var lastStatus: AlignmentStatus? = null
+    private var lastWarning: Boolean = false
 
-    fun onAlignmentChanged(newStatus: AlignmentStatus) {
-        if (newStatus == lastStatus) return
+    fun onAlignmentChanged(newStatus: AlignmentStatus, warning: Boolean = false) {
+        if (newStatus == lastStatus && warning == lastWarning) return
         val previous = lastStatus
         lastStatus = newStatus
+        lastWarning = warning
 
         // Do not vibrate on initial app start or missing vibrator hardware
         if (previous == null || vibrator == null || !vibrator.hasVibrator()) return
 
         when (newStatus) {
             AlignmentStatus.ALIGNED -> {
-                // Short, crisp positive confirmation pulse (Kosher placement achieved)
-                vibrate(35, VibrationEffect.DEFAULT_AMPLITUDE)
+                if (warning) {
+                    // Subtle cautionary tick for borderline hairline placement
+                    vibrate(20, 100)
+                } else {
+                    // Short, crisp positive confirmation pulse (Strictly kosher placement achieved)
+                    vibrate(35, VibrationEffect.DEFAULT_AMPLITUDE)
+                }
             }
             AlignmentStatus.FOREHEAD_ERROR -> {
                 // Double alert pulse: invalid forehead placement (Passul alert)

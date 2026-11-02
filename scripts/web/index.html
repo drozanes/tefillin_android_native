@@ -963,7 +963,8 @@
         const details = item.algo_details;
         document.getElementById('statAlgoHalachaStatus').textContent = details.status;
         document.getElementById('statAlgoKosher').textContent = details.is_kosher ? 'YES' : 'NO';
-        document.getElementById('statAlgoDistAbove').textContent = (details.dist_above >= 0 ? '+' : '') + details.dist_above + ' px';
+        const borderlineNote = details.is_borderline ? ` (Borderline ±${details.borderline_margin}px ⚠️)` : '';
+        document.getElementById('statAlgoDistAbove').textContent = (details.dist_above >= 0 ? '+' : '') + details.dist_above + ' px' + borderlineNote;
         const offset = Math.abs(details.horiz_offset);
         const maxTol = details.max_center_tol;
         const isCentered = details.is_centered;

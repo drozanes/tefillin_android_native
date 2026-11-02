@@ -37,7 +37,8 @@ object TefillinEngine {
     // --- Halachic Alignment & Candidate Box Verification ---
     // Stiff center tolerance: ~8% of eye distance (~5mm real-world deviation) for exact middle alignment
     const val HALACHIC_CENTER_TOLERANCE_RATIO = 0.08f
-    const val HALACHIC_BORDERLINE_MARGIN_RATIO = 0.04f
+    // Borderline margin around hairline (±5% of eye distance): avoids strict false alarms when close to hairline
+    const val HALACHIC_BORDERLINE_MARGIN_RATIO = 0.05f
     const val CAMERA_PITCH_TOO_LOW_DEG = 35f
     const val CAMERA_PITCH_TOO_HIGH_DEG = -20f
     const val BOX_EYEBROW_EXCLUSION_MARGIN_RATIO = 0.05f
@@ -412,7 +413,13 @@ object TefillinEngine {
         // Positive = Lowest edge is ABOVE hairline on scalp (Kosher).
         // Negative = Lowest edge is BELOW hairline on forehead skin (Passul).
         val distAboveHairline = lowestEdgeVector.x * uUp.x + lowestEdgeVector.y * uUp.y
-        val isEntirelyOnScalp = distAboveHairline >= 0f
+
+        // Hairline boundary margin (±5% of eye distance):
+        // Accounts for visual hairline variance so we respond with a gentle yellow warning
+        // rather than strictly declaring OK or wrong when tefillin are slightly above or below hairline.
+        val borderlineMargin = eyeDist * HALACHIC_BORDERLINE_MARGIN_RATIO
+        val isClearlyBelowHairline = distAboveHairline < -borderlineMargin
+        val isBorderlineHairline = abs(distAboveHairline) <= borderlineMargin
 
         // Horizontal offset from middle of eyes using surface axis (Glabella -> MeshTop)
         val a = geometry.glabellaPt
@@ -442,18 +449,24 @@ object TefillinEngine {
             status = AlignmentStatus.CAMERA_TOO_HIGH
             warning = true
             direction = "📐 Camera too high"
-        } else if (!isEntirelyOnScalp) {
+        } else if (isClearlyBelowHairline) {
+            // Strictly wrong: clearly resting on forehead skin below borderline margin
             status = AlignmentStatus.FOREHEAD_ERROR
+            warning = false
             direction = "⬆️ Move Up"
         } else if (!isCentered) {
             status = AlignmentStatus.OFF_CENTER
+            warning = isBorderlineHairline
             direction = if (horizOffsetLocal > 0) "⬅️ Move Left" else "➡️ Move Right"
         } else {
             status = AlignmentStatus.ALIGNED
-            if (distAboveHairline < (eyeDist * HALACHIC_BORDERLINE_MARGIN_RATIO)) {
+            if (isBorderlineHairline) {
+                // Slightly above or below hairline: Respond with yellow warning message
                 warning = true
                 direction = "⚠️ Borderline"
             } else {
+                // Clearly above hairline on scalp: Strictly aligned & verified
+                warning = false
                 direction = "✅ Aligned"
             }
         }
@@ -462,7 +475,7 @@ object TefillinEngine {
             status = status,
             warning = warning,
             direction = direction,
-            isKosher = isEntirelyOnScalp && !isCameraTooLow && !isCameraTooHigh,
+            isKosher = !isClearlyBelowHairline && !isCameraTooLow && !isCameraTooHigh,
             isCentered = isCentered,
             distAboveHairline = distAboveHairline.roundToInt().toFloat(),
             horizOffset = horizOffsetLocal.roundToInt().toFloat(),

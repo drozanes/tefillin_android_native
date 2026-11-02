@@ -67,7 +67,9 @@ def get_halacha_details(tefillin_fixture, default_ratio=0.70):
 
     lowest_edge_vec = np.array([box["x"] - hairline_pt[0], box["bottomY"] - hairline_pt[1]])
     dist_above = float(lowest_edge_vec[0] * u_up[0] + lowest_edge_vec[1] * u_up[1])
-    is_scalp = dist_above >= 0.0
+    margin = eye_dist * 0.05
+    is_clearly_below = dist_above < -margin
+    is_borderline = abs(dist_above) <= margin
 
     a = glabella
     b = mesh_top
@@ -80,7 +82,7 @@ def get_halacha_details(tefillin_fixture, default_ratio=0.70):
     max_center_tol = eye_dist * 0.08
     is_centered = abs(horiz_offset) < max_center_tol
 
-    if not is_scalp:
+    if is_clearly_below:
         status = "FOREHEAD_ERROR"
         is_kosher = False
     elif not is_centered:
@@ -93,9 +95,11 @@ def get_halacha_details(tefillin_fixture, default_ratio=0.70):
     return {
         "status": status,
         "is_kosher": is_kosher,
+        "is_borderline": bool(is_borderline),
+        "borderline_margin": round(margin, 2),
         "hairline_ratio": float(hairline_ratio),
         "dist_above": round(dist_above, 2),
-        "is_scalp": bool(is_scalp),
+        "is_scalp": bool(dist_above >= 0.0),
         "horiz_offset": round(horiz_offset, 2),
         "max_center_tol": round(max_center_tol, 2),
         "is_centered": bool(is_centered),
