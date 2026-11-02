@@ -746,6 +746,9 @@
 
     // Fetch initial data
     async function init(targetIndex = 0) {
+      if (typeof targetIndex !== 'number' || isNaN(targetIndex)) {
+        targetIndex = 0;
+      }
       try {
         const res = await fetch('/api/data');
         appData = await res.json();
@@ -880,7 +883,10 @@
       });
     }
 
-    function selectItem(index) {
+    function selectItem(index = 0) {
+      if (typeof index !== 'number' || isNaN(index)) {
+        index = 0;
+      }
       const filtered = getFilteredItems();
       if (!filtered.length) {
         document.getElementById('inspectorTitle').textContent = 'No image selected';
@@ -898,7 +904,7 @@
         isDirty = false;
       }
 
-      selectedIndex = Math.max(0, Math.min(index, filtered.length - 1));
+      selectedIndex = Math.max(0, Math.min(Math.floor(index), filtered.length - 1));
 
       // Update sidebar visual selection
       document.querySelectorAll('#itemList .list-item').forEach((el, idx) => {
@@ -906,13 +912,14 @@
       });
 
       const item = filtered[selectedIndex];
-      if (item) {
-        item._session_start_ratio = item.expected_ratio;
-        item._session_start_tolerance = item.tolerance;
-        item._session_start_status = item.expected_status;
-        item._session_start_kosher = item.expected_kosher;
-        item._session_start_notes = item.notes || '';
-      }
+      if (!item) return;
+
+      item._session_start_ratio = item.expected_ratio;
+      item._session_start_tolerance = item.tolerance;
+      item._session_start_status = item.expected_status;
+      item._session_start_kosher = item.expected_kosher;
+      item._session_start_notes = item.notes || '';
+
       document.getElementById('inspectorTitle').textContent = item.name;
 
       // Update exclude button states
@@ -1591,7 +1598,7 @@
       else if (e.key === 'g' || e.key === 'G') toggleGuides();
     });
 
-    window.onload = init;
+    window.onload = () => init(0);
   </script>
 </body>
 </html>
