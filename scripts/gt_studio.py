@@ -379,12 +379,21 @@ class GTStudioHandler(BaseHTTPRequestHandler):
             total = data["summary"]["total_faces"]
             pct = data["summary"]["mistake_percentage"]
 
-            gt_data["benchmark"] = {
-                "best_mistake_percentage": pct,
-                "best_mistake_count": mistakes,
-                "total_faces": total,
-                "notes": f"Updated via GT Studio (mistake rate {pct}%)",
-            }
+            bm = gt_data.setdefault("benchmark", {})
+            bm["best_mistake_percentage"] = pct
+            bm["best_mistake_count"] = mistakes
+            bm["total_faces"] = total
+            bm["notes"] = f"Updated via GT Studio (mistake rate {pct}%)"
+            bm["last_updated"] = datetime.now().isoformat()
+
+            active_tef = data["summary"].get("active_tefillin_count", 0)
+            halacha_matches = data["summary"].get("halacha_matches", 0)
+            if active_tef > 0:
+                halacha_mistakes = active_tef - halacha_matches
+                bm["best_halacha_mistake_count"] = halacha_mistakes
+                bm["best_halacha_mistake_percentage"] = round((halacha_mistakes / active_tef) * 100.0, 2)
+                bm["total_tefillin"] = active_tef
+
             manage_gt.save_json(GT_FILE, gt_data)
             self.send_json(200, {"success": True, "benchmark": gt_data["benchmark"]})
             return

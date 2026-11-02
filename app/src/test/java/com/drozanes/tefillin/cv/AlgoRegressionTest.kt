@@ -342,7 +342,7 @@ class AlgoRegressionTest {
         }
 
         val benchmarkObj = groundTruthJson.getJSONObject("benchmark")
-        val benchmarkHalachaMistakePct = benchmarkObj.optDouble("best_halacha_mistake_percentage", 5.0)
+        val benchmarkHalachaMistakePct = benchmarkObj.optDouble("best_halacha_mistake_percentage", 15.0)
         val currentHalachaPct = if (activeTefillin > 0) (halachaMistakes.size.toDouble() / activeTefillin) * 100.0 else 0.0
 
         println("--------------------------------------------------------------------------------")

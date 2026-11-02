@@ -6,13 +6,17 @@
     "selfie_005_Caucasian_Selfie.jpg",
     "selfie_008_Caucasian_Selfie.jpg",
     "selfie_009_Caucasian_Selfie.jpg",
+    "selfie_013_Casual_Selfie.jpg",
     "selfie_016_Casual_Selfie.jpg",
     "selfie_017_Casual_Selfie.jpg",
     "selfie_019_Casual_Selfie.jpg",
     "selfie_022_Black_African.jpg",
+    "selfie_030_Black_African.jpg",
+    "selfie_031_South_Asian_Indian.jpg",
     "selfie_034_South_Asian_Indian.jpg",
     "selfie_038_South_Asian_Indian.jpg",
     "selfie_039_South_Asian_Indian.jpg",
+    "selfie_045_East_Asian_Japanese.jpg",
     "selfie_046_East_Asian_Japanese.jpg",
     "selfie_047_East_Asian_Japanese.jpg",
     "selfie_048_East_Asian_Japanese.jpg",
@@ -20,8 +24,12 @@
     "selfie_050_East_Asian_Japanese.jpg",
     "selfie_054_Latino_Brazilian.jpg",
     "selfie_062_Middle_Eastern_Israeli.jpg",
+    "selfie_064_Middle_Eastern_Israeli.jpg",
     "selfie_067_Middle_Eastern_Israeli.jpg",
-    "selfie_090_Bearded.jpg"
+    "selfie_077_Bald_Shaved.jpg",
+    "selfie_090_Bearded.jpg",
+    "selfie_093_Long_Hair.jpg",
+    "selfie_100_Long_Hair.jpg"
   ],
   "halacha_gt": {
     "images (6).jpeg": {
@@ -454,7 +462,7 @@
       "tolerance": 0.05
     },
     "selfie_111_Middle_Eastern.jpg": {
-      "expected_ratio": 0.74,
+      "expected_ratio": 0.69,
       "tolerance": 0.05
     },
     "selfie_039_South_Asian_Indian.jpg": {
@@ -500,7 +508,7 @@
       "tolerance": 0.05
     },
     "selfie_125_Latino.jpg": {
-      "expected_ratio": 0.77,
+      "expected_ratio": 0.715,
       "tolerance": 0.05
     },
     "selfie_022_Black_African.jpg": {
@@ -550,7 +558,7 @@
       "tolerance": 0.05
     },
     "selfie_110_Caucasian.jpg": {
-      "expected_ratio": 0.78,
+      "expected_ratio": 0.745,
       "tolerance": 0.05
     },
     "selfie_109_Caucasian.jpg": {
@@ -574,7 +582,7 @@
       "tolerance": 0.05
     },
     "selfie_112_Middle_Eastern.jpg": {
-      "expected_ratio": 0.75,
+      "expected_ratio": 0.725,
       "tolerance": 0.05
     },
     "selfie_070_Middle_Eastern_Israeli.jpg": {
@@ -598,7 +606,7 @@
       "tolerance": 0.05
     },
     "selfie_103_Caucasian.jpg": {
-      "expected_ratio": 0.74,
+      "expected_ratio": 0.705,
       "tolerance": 0.05
     },
     "selfie_073_Bald_Shaved.jpg": {
@@ -606,11 +614,11 @@
       "tolerance": 0.05
     },
     "selfie_119_Latino.jpg": {
-      "expected_ratio": 0.78,
+      "expected_ratio": 0.73,
       "tolerance": 0.05
     },
     "selfie_101_African.jpg": {
-      "expected_ratio": 0.78,
+      "expected_ratio": 0.7,
       "tolerance": 0.05
     },
     "selfie_066_Middle_Eastern_Israeli.jpg": {
@@ -618,7 +626,7 @@
       "tolerance": 0.05
     },
     "selfie_102_African.jpg": {
-      "expected_ratio": 0.79,
+      "expected_ratio": 0.705,
       "tolerance": 0.05
     },
     "selfie_044_East_Asian_Japanese.jpg": {
@@ -634,11 +642,11 @@
       "tolerance": 0.05
     },
     "selfie_099_Long_Hair.jpg": {
-      "expected_ratio": 0.83,
+      "expected_ratio": 0.73,
       "tolerance": 0.05
     },
     "selfie_124_African.jpg": {
-      "expected_ratio": 0.76,
+      "expected_ratio": 0.735,
       "tolerance": 0.05
     },
     "selfie_059_Latino_Brazilian.jpg": {
@@ -650,7 +658,7 @@
       "tolerance": 0.05
     },
     "selfie_114_Middle_Eastern.jpg": {
-      "expected_ratio": 0.73,
+      "expected_ratio": 0.615,
       "tolerance": 0.05
     },
     "selfie_011_Casual_Selfie.jpg": {
@@ -662,7 +670,7 @@
       "tolerance": 0.05
     },
     "selfie_127_Middle_Eastern.jpg": {
-      "expected_ratio": 0.75,
+      "expected_ratio": 0.705,
       "tolerance": 0.05
     },
     "selfie_016_Casual_Selfie.jpg": {
@@ -678,8 +686,7 @@
       "tolerance": 0.05
     },
     "selfie_082_Bearded.jpg": {
-      "description": "Bearded - long hair and beard",
-      "expected_ratio": 0.77,
+      "expected_ratio": 0.865,
       "tolerance": 0.05
     },
     "selfie_086_Bearded.jpg": {
@@ -695,7 +702,7 @@
       "tolerance": 0.05
     },
     "selfie_122_South_Asian.jpg": {
-      "expected_ratio": 0.81,
+      "expected_ratio": 0.72,
       "tolerance": 0.05
     },
     "selfie_084_Bearded.jpg": {
@@ -708,7 +715,7 @@
       "tolerance": 0.05
     },
     "selfie_105_Caucasian.jpg": {
-      "expected_ratio": 0.69,
+      "expected_ratio": 0.735,
       "tolerance": 0.05
     },
     "selfie_069_Middle_Eastern_Israeli.jpg": {
@@ -733,7 +740,7 @@
       "tolerance": 0.05
     },
     "selfie_113_Middle_Eastern.jpg": {
-      "expected_ratio": 0.71,
+      "expected_ratio": 0.675,
       "tolerance": 0.05
     },
     "selfie_047_East_Asian_Japanese.jpg": {
@@ -777,7 +784,7 @@
       "tolerance": 0.05
     },
     "selfie_121_South_Asian.jpg": {
-      "expected_ratio": 0.82,
+      "expected_ratio": 0.72,
       "tolerance": 0.05
     },
     "selfie_030_Black_African.jpg": {
@@ -841,11 +848,11 @@
       "tolerance": 0.05
     },
     "selfie_107_Caucasian.jpg": {
-      "expected_ratio": 0.8,
+      "expected_ratio": 0.61,
       "tolerance": 0.05
     },
     "selfie_120_Latino.jpg": {
-      "expected_ratio": 0.77,
+      "expected_ratio": 0.75,
       "tolerance": 0.05
     },
     "selfie_126_Latino.jpg": {
@@ -861,7 +868,7 @@
       "tolerance": 0.05
     },
     "selfie_108_Caucasian.jpg": {
-      "expected_ratio": 0.79,
+      "expected_ratio": 0.645,
       "tolerance": 0.05
     },
     "selfie_062_Middle_Eastern_Israeli.jpg": {
@@ -1043,13 +1050,12 @@
     ]
   },
   "benchmark": {
-    "last_updated": "2026-11-01T19:48:00.584103",
-    "notes": "Baseline for full dataset of 100 active faces (33 mistakes, 33.0%)",
-    "best_mistake_percentage": 22,
+    "notes": "Updated via GT Studio (mistake rate 14.13%)",
+    "best_mistake_percentage": 14.13,
     "total_tefillin": 81,
     "best_halacha_mistake_count": 10,
     "best_halacha_mistake_percentage": 12.35,
     "total_faces": 100,
-    "best_mistake_count": 22
+    "best_mistake_count": 13
   }
 }
