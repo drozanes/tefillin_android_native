@@ -12,6 +12,8 @@
 /captures
 .externalNativeBuild
 .cxx
+.venv/
+
 local.properties
 app/build/
 build/

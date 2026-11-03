@@ -110,3 +110,19 @@ dependencies {
     androidTestImplementation 'androidx.test.ext:junit:1.2.1'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.6.1'
 }
+
+tasks.register('playStatus', Exec) {
+    description = 'Checks Google Play tracks and release status'
+    group = 'publishing'
+    workingDir rootProject.projectDir
+    commandLine './scripts/play', 'status'
+}
+
+tasks.register('playDeployInternal', Exec) {
+    description = 'Builds release AAB and uploads to Internal Testing track'
+    group = 'publishing'
+    dependsOn 'bundleRelease'
+    workingDir rootProject.projectDir
+    commandLine './scripts/play', 'upload', '--track', 'internal'
+}
+

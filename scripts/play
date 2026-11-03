@@ -1,0 +1,13 @@
+#!/usr/bin/env bash
+set -e
+
+DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+VENV_PY="$DIR/.venv/bin/python3"
+
+if [ ! -f "$VENV_PY" ]; then
+    echo "Initializing python virtualenv..."
+    python3 -m venv "$DIR/.venv"
+    "$DIR/.venv/bin/pip" install --upgrade pip google-api-python-client google-auth
+fi
+
+exec "$VENV_PY" "$DIR/scripts/play_console.py" "$@"
