@@ -18,6 +18,7 @@ local.properties
 app/build/
 build/
 *.apk
+*.aab
 *.keystore
 *.jks
 play-service-account.json
