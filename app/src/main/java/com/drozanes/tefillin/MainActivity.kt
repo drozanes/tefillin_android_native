@@ -453,14 +453,58 @@ class MainActivity : AppCompatActivity() {
     private fun updateUiWithAlignment(alignment: AlignmentResult) {
         val winner = alignment.winner
         if (winner == null) {
-            hapticHelper.onAlignmentChanged(AlignmentStatus.NO_TEFILLIN)
-            binding.statusDot.setBackgroundResource(R.drawable.dot_searching)
-            binding.tvStatus.text = getString(R.string.no_tefillin)
-            binding.tvDirectionArrow.text = "🔳"
-            binding.tvGuidanceTitle.text = getString(R.string.no_tefillin)
-            binding.tvGuidanceSub.text = getString(R.string.no_tefillin_sub)
-            binding.tvKnotGuideLink.visibility = View.GONE
-            return
+            when (alignment.status) {
+                AlignmentStatus.CAMERA_TOO_LOW -> {
+                    hapticHelper.onAlignmentChanged(alignment.status, alignment.warning)
+                    binding.statusDot.setBackgroundResource(R.drawable.dot_caution)
+                    binding.tvStatus.text = getString(R.string.camera_too_low)
+                    binding.tvDirectionArrow.text = "📐"
+                    binding.tvGuidanceTitle.text = getString(R.string.camera_angle_title)
+                    binding.tvGuidanceSub.text = getString(R.string.camera_too_low_sub)
+                    binding.tvKnotGuideLink.visibility = View.GONE
+                    return
+                }
+                AlignmentStatus.CAMERA_TOO_HIGH -> {
+                    hapticHelper.onAlignmentChanged(alignment.status, alignment.warning)
+                    binding.statusDot.setBackgroundResource(R.drawable.dot_caution)
+                    binding.tvStatus.text = getString(R.string.camera_too_high)
+                    binding.tvDirectionArrow.text = "📐"
+                    binding.tvGuidanceTitle.text = getString(R.string.camera_angle_title)
+                    binding.tvGuidanceSub.text = getString(R.string.camera_too_high_sub)
+                    binding.tvKnotGuideLink.visibility = View.GONE
+                    return
+                }
+                AlignmentStatus.CAMERA_ANGLED_SIDEWAYS -> {
+                    hapticHelper.onAlignmentChanged(alignment.status, alignment.warning)
+                    binding.statusDot.setBackgroundResource(R.drawable.dot_caution)
+                    binding.tvStatus.text = getString(R.string.camera_angled_sideways)
+                    binding.tvDirectionArrow.text = "📐"
+                    binding.tvGuidanceTitle.text = getString(R.string.camera_angled_sideways_title)
+                    binding.tvGuidanceSub.text = getString(R.string.camera_angled_sideways_sub)
+                    binding.tvKnotGuideLink.visibility = View.GONE
+                    return
+                }
+                AlignmentStatus.HEAD_TILTED -> {
+                    hapticHelper.onAlignmentChanged(alignment.status, alignment.warning)
+                    binding.statusDot.setBackgroundResource(R.drawable.dot_caution)
+                    binding.tvStatus.text = getString(R.string.head_tilted)
+                    binding.tvDirectionArrow.text = "📐"
+                    binding.tvGuidanceTitle.text = getString(R.string.head_tilted_title)
+                    binding.tvGuidanceSub.text = getString(R.string.head_tilted_sub)
+                    binding.tvKnotGuideLink.visibility = View.GONE
+                    return
+                }
+                else -> {
+                    hapticHelper.onAlignmentChanged(AlignmentStatus.NO_TEFILLIN)
+                    binding.statusDot.setBackgroundResource(R.drawable.dot_searching)
+                    binding.tvStatus.text = getString(R.string.no_tefillin)
+                    binding.tvDirectionArrow.text = "🔳"
+                    binding.tvGuidanceTitle.text = getString(R.string.no_tefillin)
+                    binding.tvGuidanceSub.text = getString(R.string.no_tefillin_sub)
+                    binding.tvKnotGuideLink.visibility = View.GONE
+                    return
+                }
+            }
         }
 
         // Deliver tactile feedback on state transition (e.g. perfect alignment confirmation, forehead error alert)
@@ -481,6 +525,22 @@ class MainActivity : AppCompatActivity() {
                 binding.tvDirectionArrow.text = "📐"
                 binding.tvGuidanceTitle.text = getString(R.string.camera_angle_title)
                 binding.tvGuidanceSub.text = getString(R.string.camera_too_high_sub)
+                binding.tvKnotGuideLink.visibility = View.GONE
+            }
+            AlignmentStatus.CAMERA_ANGLED_SIDEWAYS -> {
+                binding.statusDot.setBackgroundResource(R.drawable.dot_caution)
+                binding.tvStatus.text = getString(R.string.camera_angled_sideways)
+                binding.tvDirectionArrow.text = "📐"
+                binding.tvGuidanceTitle.text = getString(R.string.camera_angled_sideways_title)
+                binding.tvGuidanceSub.text = getString(R.string.camera_angled_sideways_sub)
+                binding.tvKnotGuideLink.visibility = View.GONE
+            }
+            AlignmentStatus.HEAD_TILTED -> {
+                binding.statusDot.setBackgroundResource(R.drawable.dot_caution)
+                binding.tvStatus.text = getString(R.string.head_tilted)
+                binding.tvDirectionArrow.text = "📐"
+                binding.tvGuidanceTitle.text = getString(R.string.head_tilted_title)
+                binding.tvGuidanceSub.text = getString(R.string.head_tilted_sub)
                 binding.tvKnotGuideLink.visibility = View.GONE
             }
             AlignmentStatus.FOREHEAD_ERROR -> {

@@ -64,6 +64,12 @@
     <string name="camera_too_low_sub">יש להחזיק את המכשיר מול הפנים בגובה העיניים</string>
     <string name="camera_too_high">📐 מצלמה גבוהה מדי</string>
     <string name="camera_too_high_sub">יש להחזיק את המכשיר מול הפנים בגובה העיניים</string>
+    <string name="camera_angled_sideways">📐 יש להביט ישר אל המצלמה</string>
+    <string name="camera_angled_sideways_title">📐 המצלמה צריכה להיות מול הראש</string>
+    <string name="camera_angled_sideways_sub">הביטו ישר והחזיקו את המכשיר ישירות מול הראש ולא מהצד</string>
+    <string name="head_tilted">📐 יישרו את הראש</string>
+    <string name="head_tilted_title">📐 יש ליישר את הראש</string>
+    <string name="head_tilted_sub">הראש מוטה הצידה – החזיקו את הראש ישר מול המצלמה</string>
 
     <!-- Status Badges -->
     <string name="touches_forehead_alert">⬆️ להרים למעלה</string>

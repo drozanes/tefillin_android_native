@@ -64,6 +64,12 @@
     <string name="camera_too_low_sub">Please hold the device directly in front of your face at eye level.</string>
     <string name="camera_too_high">📐 Camera Too High</string>
     <string name="camera_too_high_sub">Please hold the device directly in front of your face at eye level.</string>
+    <string name="camera_angled_sideways">📐 Look directly at the camera</string>
+    <string name="camera_angled_sideways_title">📐 Camera Needs to be in Front of Your Head</string>
+    <string name="camera_angled_sideways_sub">Please face forward and hold the device directly in front of your head.</string>
+    <string name="head_tilted">📐 Straighten your head</string>
+    <string name="head_tilted_title">📐 Keep Head Level</string>
+    <string name="head_tilted_sub">Your head is tilted sideways – please straighten your head.</string>
 
     <!-- Status Badges -->
     <string name="touches_forehead_alert">⬆️ Raise Upward</string>

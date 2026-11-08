@@ -259,7 +259,12 @@ def set_hairline(fixtures, gt_data, query, ratio, tolerance=None):
 
 def set_halacha(fixtures, gt_data, query, status):
     status = status.upper().strip()
-    valid_statuses = ["ALIGNED", "FOREHEAD_ERROR", "OFF_CENTER", "CAMERA_TOO_LOW", "CAMERA_TOO_HIGH", "NO_TEFILLIN"]
+    valid_statuses = [
+        "ALIGNED", "FOREHEAD_ERROR", "OFF_CENTER",
+        "CAMERA_TOO_LOW", "CAMERA_TOO_HIGH",
+        "CAMERA_ANGLED_SIDEWAYS", "HEAD_TILTED",
+        "NO_TEFILLIN"
+    ]
     if status not in valid_statuses:
         print(f"Error: Invalid status '{status}'. Valid options: {', '.join(valid_statuses)}")
         return False

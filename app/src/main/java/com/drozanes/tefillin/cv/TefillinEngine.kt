@@ -39,8 +39,10 @@ object TefillinEngine {
     const val HALACHIC_CENTER_TOLERANCE_RATIO = 0.08f
     // Borderline margin around hairline (±5% of eye distance): avoids strict false alarms when close to hairline
     const val HALACHIC_BORDERLINE_MARGIN_RATIO = 0.05f
-    const val CAMERA_PITCH_TOO_LOW_DEG = 35f
-    const val CAMERA_PITCH_TOO_HIGH_DEG = -20f
+    const val CAMERA_PITCH_TOO_LOW_DEG = 30.0f
+    const val CAMERA_PITCH_TOO_HIGH_DEG = -18.0f
+    const val CAMERA_MAX_YAW_DEG = 15.0f
+    const val CAMERA_MAX_ROLL_DEG = 15.0f
     const val BOX_EYEBROW_EXCLUSION_MARGIN_RATIO = 0.05f
     const val BOX_CEILING_MAX_DISTANCE_RATIO = 3.5f
     const val BOX_HORIZONTAL_MAX_DEVIATION_RATIO = 0.70f
@@ -246,6 +248,20 @@ object TefillinEngine {
         val refRad = PITCH_REF_ANGLE_DEG * (Math.PI / 180f).toFloat()
         val pitchFactor = max(MIN_PITCH_FACTOR, cos(refRad + pitchAngle) / cos(refRad))
 
+        // Roll Angle
+        val rollAngle = atan2(uEye.y, uEye.x)
+
+        // 3D Head Yaw Angle from Cheek Tragus landmarks (454 right, 234 left)
+        val leftCheek = landmarks.getOrNull(234)
+        val rightCheek = landmarks.getOrNull(454)
+        val yawAngle = if (leftCheek != null && rightCheek != null) {
+            val dxCheeks = (rightCheek.x - leftCheek.x) * width
+            val dzCheeks = (rightCheek.z - leftCheek.z) * width
+            atan2(dzCheeks, dxCheeks)
+        } else {
+            atan2((eyeRight.z - eyeLeft.z) * width, eyeVector.x)
+        }
+
         // Adaptive visual hairline detection
         var visualHairDist = detectVisualHairline(pixelReader, width, height, glabellaPt, uUp, eyeDist, pitchAngle)
 
@@ -321,7 +337,9 @@ object TefillinEngine {
             uUp = uUp,
             pitchAngle = pitchAngle,
             pitchCompression = pitchCompression,
-            eyebrowLevelY = eyebrowLevelY
+            eyebrowLevelY = eyebrowLevelY,
+            yawAngle = yawAngle,
+            rollAngle = rollAngle
         )
 
         return stabilizer?.update(rawGeometry) ?: rawGeometry
@@ -388,11 +406,43 @@ object TefillinEngine {
      * 3. Evaluate Halachic Alignment (Distance from Hairline & Horizontal Symmetry)
      */
     fun evaluateAlignment(winner: TefillinBox?, geometry: FaceGeometry?): AlignmentResult {
-        if (winner == null || geometry == null) {
+        if (geometry == null) {
             return AlignmentResult(
                 status = AlignmentStatus.NO_TEFILLIN,
                 warning = false,
                 direction = "",
+                isKosher = false,
+                isCentered = false,
+                distAboveHairline = 0f,
+                horizOffset = 0f,
+                winner = null
+            )
+        }
+
+        // Camera Pose / Head Angle Limits
+        val pitchDeg = (geometry.pitchAngle * 180f) / Math.PI.toFloat()
+        val yawDeg = (geometry.yawAngle * 180f) / Math.PI.toFloat()
+        val rollDeg = (geometry.rollAngle * 180f) / Math.PI.toFloat()
+
+        val isCameraTooLow = pitchDeg > CAMERA_PITCH_TOO_LOW_DEG
+        val isCameraTooHigh = pitchDeg < CAMERA_PITCH_TOO_HIGH_DEG
+        val isCameraAngledSideways = abs(yawDeg) > CAMERA_MAX_YAW_DEG
+        val isHeadTilted = abs(rollDeg) > CAMERA_MAX_ROLL_DEG
+
+        val hasAngleViolation = isCameraTooLow || isCameraTooHigh || isCameraAngledSideways || isHeadTilted
+
+        if (winner == null) {
+            val angleStatus = when {
+                isCameraTooLow -> AlignmentStatus.CAMERA_TOO_LOW
+                isCameraTooHigh -> AlignmentStatus.CAMERA_TOO_HIGH
+                isCameraAngledSideways -> AlignmentStatus.CAMERA_ANGLED_SIDEWAYS
+                isHeadTilted -> AlignmentStatus.HEAD_TILTED
+                else -> AlignmentStatus.NO_TEFILLIN
+            }
+            return AlignmentResult(
+                status = angleStatus,
+                warning = hasAngleViolation,
+                direction = if (hasAngleViolation) "📐 Angle Limit" else "",
                 isKosher = false,
                 isCentered = false,
                 distAboveHairline = 0f,
@@ -432,11 +482,6 @@ object TefillinEngine {
         }
         val isCentered = abs(horizOffsetLocal) < (eyeDist * HALACHIC_CENTER_TOLERANCE_RATIO)
 
-        // Camera Pose / Angle Limits
-        val pitchDeg = (geometry.pitchAngle * 180f) / Math.PI.toFloat()
-        val isCameraTooLow = pitchDeg > CAMERA_PITCH_TOO_LOW_DEG
-        val isCameraTooHigh = pitchDeg < CAMERA_PITCH_TOO_HIGH_DEG
-
         var status = AlignmentStatus.ALIGNED
         var warning = false
         var direction = ""
@@ -454,6 +499,14 @@ object TefillinEngine {
             status = AlignmentStatus.FOREHEAD_ERROR
             warning = false
             direction = "⬆️ Move Up"
+        } else if (isCameraAngledSideways) {
+            status = AlignmentStatus.CAMERA_ANGLED_SIDEWAYS
+            warning = true
+            direction = "📐 Camera not frontal"
+        } else if (isHeadTilted) {
+            status = AlignmentStatus.HEAD_TILTED
+            warning = true
+            direction = "📐 Straighten head"
         } else if (!isCentered) {
             status = AlignmentStatus.OFF_CENTER
             warning = isBorderlineHairline
@@ -475,7 +528,7 @@ object TefillinEngine {
             status = status,
             warning = warning,
             direction = direction,
-            isKosher = !isClearlyBelowHairline && !isCameraTooLow && !isCameraTooHigh,
+            isKosher = !isClearlyBelowHairline && !hasAngleViolation,
             isCentered = isCentered,
             distAboveHairline = distAboveHairline.roundToInt().toFloat(),
             horizOffset = horizOffsetLocal.roundToInt().toFloat(),

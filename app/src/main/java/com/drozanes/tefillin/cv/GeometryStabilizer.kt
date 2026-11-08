@@ -125,6 +125,11 @@ class GeometryStabilizer(
             stabEyeDist = prev.eyeDist + 0.25f * (rawGeometry.eyeDist - prev.eyeDist)
         }
 
+        // 6. Stabilize 3D Angles (Pitch, Yaw, Roll)
+        val stabPitchAngle = stabilizeAngle(prev.pitchAngle, rawGeometry.pitchAngle, angleDeadbandRad)
+        val stabYawAngle = stabilizeAngle(prev.yawAngle, rawGeometry.yawAngle, angleDeadbandRad)
+        val stabRollAngle = stabilizeAngle(prev.rollAngle, rawGeometry.rollAngle, angleDeadbandRad)
+
         val stabilized = rawGeometry.copy(
             glabellaPt = stabGlabella,
             meshTopPt = stabMeshTop,
@@ -132,7 +137,10 @@ class GeometryStabilizer(
             hairlinePt = stabHairline,
             uEye = stabUEye,
             uUp = stabUUp,
-            eyeDist = stabEyeDist
+            eyeDist = stabEyeDist,
+            pitchAngle = stabPitchAngle,
+            yawAngle = stabYawAngle,
+            rollAngle = stabRollAngle
         )
 
         prevGeometry = stabilized

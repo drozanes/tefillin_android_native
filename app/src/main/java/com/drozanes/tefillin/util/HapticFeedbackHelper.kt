@@ -52,7 +52,8 @@ class HapticFeedbackHelper(context: Context) {
                 // Subtle corrective tick
                 vibrate(20, 120)
             }
-            AlignmentStatus.CAMERA_TOO_LOW, AlignmentStatus.CAMERA_TOO_HIGH -> {
+            AlignmentStatus.CAMERA_TOO_LOW, AlignmentStatus.CAMERA_TOO_HIGH,
+            AlignmentStatus.CAMERA_ANGLED_SIDEWAYS, AlignmentStatus.HEAD_TILTED -> {
                 vibrate(25, 100)
             }
             AlignmentStatus.NO_TEFILLIN -> {

@@ -13,7 +13,9 @@ class TefillinEngineTest {
         glabellaY: Float = 280f,
         midX: Float = 320f,
         eyeDist: Float = 100f,
-        pitchAngle: Float = 0f
+        pitchAngle: Float = 0f,
+        yawAngle: Float = 0f,
+        rollAngle: Float = 0f
     ): FaceGeometry {
         val glabella = Point2D(midX, glabellaY)
         val meshTop = Point2D(midX, 150f)
@@ -34,7 +36,9 @@ class TefillinEngineTest {
             uUp = uUp,
             pitchAngle = pitchAngle,
             pitchCompression = 1.0f,
-            eyebrowLevelY = glabellaY
+            eyebrowLevelY = glabellaY,
+            yawAngle = yawAngle,
+            rollAngle = rollAngle
         )
     }
 
@@ -162,11 +166,50 @@ class TefillinEngineTest {
         assertEquals(AlignmentStatus.CAMERA_TOO_LOW, lowResult.status)
         assertFalse(lowResult.isKosher)
 
-        // Camera too high (< -20 deg)
+        // Camera too high (< -18 deg)
         val highGeom = createMockGeometry(pitchAngle = (-25.0 * PI / 180.0).toFloat())
         val highResult = TefillinEngine.evaluateAlignment(winner, highGeom)
         assertEquals(AlignmentStatus.CAMERA_TOO_HIGH, highResult.status)
         assertFalse(highResult.isKosher)
+
+        // Camera angled sideways (yaw > 15 deg)
+        val sidewaysGeom = createMockGeometry(yawAngle = (20.0 * PI / 180.0).toFloat())
+        val sidewaysResult = TefillinEngine.evaluateAlignment(winner, sidewaysGeom)
+        assertEquals(AlignmentStatus.CAMERA_ANGLED_SIDEWAYS, sidewaysResult.status)
+        assertFalse(sidewaysResult.isKosher)
+        assertTrue(sidewaysResult.warning)
+
+        // Head tilted sideways (roll > 15 deg)
+        val tiltedGeom = createMockGeometry(rollAngle = (20.0 * PI / 180.0).toFloat())
+        val tiltedResult = TefillinEngine.evaluateAlignment(winner, tiltedGeom)
+        assertEquals(AlignmentStatus.HEAD_TILTED, tiltedResult.status)
+        assertFalse(tiltedResult.isKosher)
+        assertTrue(tiltedResult.warning)
+    }
+
+    @Test
+    fun testAngleWarningsPrioritizedEvenWhenWinnerNull() {
+        // When winner == null, angle violations must still be flagged
+        val lowGeom = createMockGeometry(pitchAngle = (35.0 * PI / 180.0).toFloat())
+        val lowResult = TefillinEngine.evaluateAlignment(null, lowGeom)
+        assertEquals(AlignmentStatus.CAMERA_TOO_LOW, lowResult.status)
+        assertTrue(lowResult.warning)
+
+        val sidewaysGeom = createMockGeometry(yawAngle = (25.0 * PI / 180.0).toFloat())
+        val sidewaysResult = TefillinEngine.evaluateAlignment(null, sidewaysGeom)
+        assertEquals(AlignmentStatus.CAMERA_ANGLED_SIDEWAYS, sidewaysResult.status)
+        assertTrue(sidewaysResult.warning)
+
+        val tiltedGeom = createMockGeometry(rollAngle = (-22.0 * PI / 180.0).toFloat())
+        val tiltedResult = TefillinEngine.evaluateAlignment(null, tiltedGeom)
+        assertEquals(AlignmentStatus.HEAD_TILTED, tiltedResult.status)
+        assertTrue(tiltedResult.warning)
+
+        // Frontal pose without winner returns standard NO_TEFILLIN
+        val normalGeom = createMockGeometry()
+        val normalResult = TefillinEngine.evaluateAlignment(null, normalGeom)
+        assertEquals(AlignmentStatus.NO_TEFILLIN, normalResult.status)
+        assertFalse(normalResult.warning)
     }
 
     @Test

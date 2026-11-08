@@ -9,7 +9,14 @@ import org.junit.Test
 
 class GeometryStabilizerTest {
 
-    private fun createGeometry(hairlineX: Float, hairlineY: Float, eyeDist: Float = 100f): FaceGeometry {
+    private fun createGeometry(
+        hairlineX: Float,
+        hairlineY: Float,
+        eyeDist: Float = 100f,
+        pitchAngle: Float = 0f,
+        yawAngle: Float = 0f,
+        rollAngle: Float = 0f
+    ): FaceGeometry {
         return FaceGeometry(
             glabellaPt = Point2D(320f, 280f),
             midEyesPt = Point2D(320f, 290f),
@@ -21,10 +28,29 @@ class GeometryStabilizerTest {
             eyeDist = eyeDist,
             uEye = Point2D(1f, 0f),
             uUp = Point2D(0f, -1f),
-            pitchAngle = 0f,
+            pitchAngle = pitchAngle,
             pitchCompression = 1f,
-            eyebrowLevelY = 280f
+            eyebrowLevelY = 280f,
+            yawAngle = yawAngle,
+            rollAngle = rollAngle
         )
+    }
+
+    @Test
+    fun testYawAndRollAngleStabilization() {
+        val stabilizer = GeometryStabilizer(angleDeadbandDeg = 0.6f)
+        val initial = createGeometry(320f, 200f, yawAngle = 0.10f, rollAngle = 0.05f)
+        val stab1 = stabilizer.update(initial)
+        assertNotNull(stab1)
+        assertEquals(0.10f, stab1!!.yawAngle, 0.001f)
+        assertEquals(0.05f, stab1.rollAngle, 0.001f)
+
+        // Micro angle jitter < 0.6 deg (~0.010 rad): should stay at previous angle
+        val jittered = createGeometry(320f, 200f, yawAngle = 0.105f, rollAngle = 0.055f)
+        val stab2 = stabilizer.update(jittered)
+        assertNotNull(stab2)
+        assertEquals(0.10f, stab2!!.yawAngle, 0.001f)
+        assertEquals(0.05f, stab2.rollAngle, 0.001f)
     }
 
     @Test

@@ -18,7 +18,9 @@ data class FaceGeometry(
     val uUp: Point2D,
     val pitchAngle: Float,
     val pitchCompression: Float,
-    val eyebrowLevelY: Float
+    val eyebrowLevelY: Float,
+    val yawAngle: Float = 0f,
+    val rollAngle: Float = 0f
 )
 
 data class TefillinBox(
@@ -37,6 +39,8 @@ enum class AlignmentStatus {
     NO_TEFILLIN,
     CAMERA_TOO_LOW,
     CAMERA_TOO_HIGH,
+    CAMERA_ANGLED_SIDEWAYS,
+    HEAD_TILTED,
     FOREHEAD_ERROR,
     OFF_CENTER,
     ALIGNED

@@ -179,9 +179,9 @@
     },
     "cropped_images (2).jpg": {
       "notes": "Test notes",
-      "expected_status": "OFF_CENTER",
+      "expected_status": "CAMERA_ANGLED_SIDEWAYS",
       "description": "תפילין במקום שיער (מוטה מעט ימינה - OFF_CENTER, כשר)",
-      "expected_kosher": true
+      "expected_kosher": false
     },
     "f001478e-3cb2-4a2d-97fa-8ef089c17faf_tumb_730X500.webp": {
       "notes": "Sample from cropped",
@@ -305,8 +305,8 @@
     },
     "photo_2016-06-06_08-47-19.jpg": {
       "notes": "Sample from cropped",
-      "expected_status": "OFF_CENTER",
-      "expected_kosher": true
+      "expected_status": "CAMERA_ANGLED_SIDEWAYS",
+      "expected_kosher": false
     },
     "PXL_20260915_043718952.jpg": {
       "notes": "Sample from Photos-1-001",
@@ -355,8 +355,8 @@
     },
     "PXL_20260915_043731051.jpg": {
       "notes": "Sample from Photos-1-001",
-      "expected_status": "OFF_CENTER",
-      "expected_kosher": true
+      "expected_status": "CAMERA_ANGLED_SIDEWAYS",
+      "expected_kosher": false
     },
     "tefillin_face_2_subtle_up_1788332299696.jpg": {
       "notes": "Sample from cropped",
@@ -391,8 +391,8 @@
     },
     "PXL_20260915_043730870.jpg": {
       "notes": "Sample from Photos-1-001",
-      "expected_status": "OFF_CENTER",
-      "expected_kosher": true
+      "expected_status": "CAMERA_ANGLED_SIDEWAYS",
+      "expected_kosher": false
     },
     "images (9).jpeg": {
       "notes": "Sample from cropped",
